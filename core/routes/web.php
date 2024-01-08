@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VerificationController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,14 @@ Route::get('test-afro', function () {
     ]);
 
     dd($response->json());
+});
+
+Route::get('logout-pms', function(Request $request){
+    
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    
+    return redirect($request->callback);
 });
 
 require __DIR__ . '/auth.php';
