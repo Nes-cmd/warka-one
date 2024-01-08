@@ -3,12 +3,42 @@
 
     <div x-data="{
         authwith : $persist('{{ old('authwith')?old('authwith'):$authwith }}'),
-        resendin : 90,
-        }" 
-        x-init="setInterval(() => {
-                this.resendin = this.resendin - 1;
-              }, 1000);
-        ">
+        resendin :  $persist(60),
+        resetResend(id) {
+            if(id == 'resendsms'){
+                $wire.resendSMS();
+            }
+            if(id == 'resendemail'){
+                $wire.resendEmail();
+            }
+
+            var resendButton = document.getElementById(id)
+           
+            resendButton.disabled = true
+
+            resendButton.classList.add('bg-gray-400')
+            resendButton.classList.remove('bg-gray-700')
+
+            const countdown = setInterval(() => {
+                if (this.resendin === 0) {
+                    clearInterval(countdown);
+                    resendButton.innerText = `Resend` 
+                    resendButton.disabled = false
+
+                    resendButton.classList.add('bg-gray-700')
+                    resendButton.classList.remove('bg-gray-400')
+
+                    this.resendin = 60
+                } 
+                else {
+                    this.resendin--;
+                    resendButton.innerText = `Resend in ${this.resendin} s`
+                }
+
+            }, 1000);
+        }
+        }"
+        >
 
 
         <div class="relative mb-4" x-show="authwith == 'email'">
@@ -17,7 +47,8 @@
                 wire:model="email" required />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
             <div class="absolute right-3 top-[43%] ">
-                <button wire:click="resendEmail" class="border rounded px-3 py-1 text-white bg-gray-700">Resend</button>
+                <button id="resendemail" wire:click="resendEmail" x-on:click="resetResend('resendemail')" class="border rounded px-3 py-1 text-white bg-gray-700"
+                    >Resend</button>
             </div>
         </div>
 
@@ -48,9 +79,9 @@
                     </div>
                 </div>
 
-                <div class="absolute right-3 z-10 top-2">
-                    <button wire:click="resendSMS" class="border rounded px-3 py-1 text-white bg-gray-700 text-sm"
-                        x-text="'Resend in('+resendin+'s)'"></button>
+                <div class="absolute right-3 z-10 top-2" wire:ignore>
+                    <button id="resendsms"  x-on:click="resetResend('resendsms')" class="bg-gray-700 border rounded px-3 py-1 text-white text-sm"
+                       >Resend</button>
                 </div>
 
             </div>
@@ -73,4 +104,31 @@
             </x-primary-button>
         </div>
     </div>
+
+    <script>
+
+        // function resetResend(id) {
+        //     var seconds = 10;
+        //     var resendButton = document.getElementById(id)
+        //     resendButton.disabled = true;
+        //     resendButton.classList.remove('bg-gray-700')
+        //     resendButton.classList.add('bg-gray-400')
+        //     const countdown = setInterval(() => {
+        //         if (seconds === 0) {
+        //             clearInterval(countdown);
+        //             resendButton.innerText = `Resend`
+        //             resendButton.disabled = false
+        //             resendButton.classList.remove('bg-gray-400')
+        //             resendButton.classList.add('bg-gray-700')
+        //             console.log("Countdown finished!");
+        //         } 
+        //         else {
+        //             seconds--;
+        //             resendButton.innerText = `Resend in ${seconds} s`
+        //         }
+
+        //     }, 1000);
+        // }
+    </script>
+
 </div>
