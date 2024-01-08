@@ -1,20 +1,24 @@
 <div>
     @if($otpIsFor == 'reset-password')
     <div class="mb-4 text-sm text-gray-600">
-        {{ __('Forgot your password? No problem. Just let us know your phone/email address and we will phone or email
-        you a password reset code that will allow you to choose a new one.') }}
+        {{ __('Don\'t worry if you forgot your password. Simply provide us with your phone/email, and we\'ll send a verification code. Once verified, you can easily reset your password.') }}
+    </div>
+    @else 
+    <div class="mb-4 text-sm text-gray-600">
+        {{ __('Quick and easy: Verify your email/phone, and we\'ll authenticate you in no time.') }}
     </div>
     @endif
 
+
     <div x-data="{
-        authwith : '{{ $authwith }}'
+        authwith : $persist( '{{ old('authwith')? old('authwith') : $authwith }}' )
         }">
 
         <div class="border border-radius-2 rounded flex justify-around py-2 mb-4">
             <button :class="authwith == 'phone'?'bg-gray-600 text-white':'bg-gray-100 text-gray-900'" class=" w-[40%] py-2 rounded"
-                x-on:click="() => {authwith = 'phone'; $wire.authwith = 'phone'}">Phone</button>
+                x-on:click="() => {authwith = 'phone'}">Phone</button>
             <button :class="authwith == 'email'?'bg-gray-600 text-white':'bg-gray-100 text-gray-900'" class="w-[40%] py-2 rounded"
-                x-on:click="() => {authwith = 'email'; $wire.authwith = 'email'}">Email</button>
+                x-on:click="() => {authwith = 'email'}">Email</button>
         </div>
 
         <!-- Email Address -->
@@ -87,7 +91,12 @@
         <x-input-error x-show="authwith == 'phone'" :messages="$errors->get('phone')" class="mt-2" />
 
 
-        <div class="flex items-center justify-end mt-4">
+        <div class="flex items-center justify-between mt-4">
+            @if (Route::has('login'))
+                <a href="{{ route('login',) }}" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    {{ __('Already have account?') }} Click here
+                </a>
+            @endif
             <x-primary-button wire:click="getCode" class="ms-3 py-2">
                 <span wire:loading class="loader mx-2"></span>
                 {{ __('Get code') }}

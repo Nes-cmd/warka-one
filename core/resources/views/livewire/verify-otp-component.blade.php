@@ -2,12 +2,13 @@
     <x-auth-session-status class="mb-4" :status="session('authstatus')" />
 
     <div x-data="{
-        authwith : '{{ $authwith }}',
+        authwith : $persist('{{ old('authwith')?old('authwith'):$authwith }}'),
         resendin : 90,
-        }" x-init="setInterval(() => {
+        }" 
+        x-init="setInterval(() => {
                 this.resendin = this.resendin - 1;
-              }, 1000);">
-
+              }, 1000);
+        ">
 
 
         <div class="relative mb-4" x-show="authwith == 'email'">

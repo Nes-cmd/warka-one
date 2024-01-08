@@ -3,15 +3,22 @@
     <x-auth-session-status class="mb-4" :status="session('authstatus')" />
     
     <form method="POST" action="{{ route('login') }}">
-       
+   
         <div x-data="{
-            authwith : '{{ old('authwith')?old('authwith'):$authwith }}'
-            }">
+                authwith: $persist('{{ old('authwith')?old('authwith'):$authwith }}')
+            }"
+           
+            >
             @csrf
-            <input type="hidden" name="authwith" :value="authwith" id="">
+            <input type="hidden" name="authwith" :value="authwith">
             <div class="border border-radius-2 rounded flex justify-around py-2 mb-4">
-                <button type="button" :class="authwith == 'phone'?'bg-blue-600':'bg-gray-600'" class=" text-white w-[40%] py-2 rounded" x-on:click="() => {authwith = 'phone'}">Phone</button>
-                <button type="button" :class="authwith == 'email'?'bg-blue-600':'bg-gray-600'" class="text-white w-[40%] py-2 rounded" x-on:click="() => {authwith = 'email'}">Email</button>
+
+            <button :class="authwith == 'phone'?'bg-gray-600 text-white':'bg-gray-100 text-gray-900'" class=" w-[40%] py-2 rounded"
+                x-on:click="() => {authwith = 'phone'}">Phone
+            </button>
+            <button :class="authwith == 'email'?'bg-gray-600 text-white':'bg-gray-100 text-gray-900'" class="w-[40%] py-2 rounded"
+                x-on:click="() => {authwith = 'email'}">Email
+            </button>
             </div>
 
             <!-- Email Address -->
@@ -24,7 +31,6 @@
             <div class="h-16" x-show="authwith == 'phone'">
                 <x-input-label for="phone" :value="__('Phone')" />
                 <div class="relative mb-8">
-
                     <x-text-input id="phone" class="block mt-1 w-[71%] absolute right-0 rounded-l-none py-2" type="tel" name="phone" value="{{ old('phone')}}" />
 
                     <div class="absolute left-0 py-1 w-[30%]">
@@ -89,7 +95,7 @@
             </div>
 
             <div class="flex items-center justify-between mt-4">
-                 @if (Route::has('register'))
+                @if (Route::has('register'))
                 <a href="{{ route('get-otp', ['for' => 'register']) }}" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     {{ __('Dont have account?') }}
                 </a>
