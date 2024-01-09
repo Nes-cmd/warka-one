@@ -46,8 +46,8 @@
             <x-text-input id="email" class="block mt-1 w-full bg-gray-200" type="email" name="email" disabled
                 wire:model="email" required />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
-            <div class="absolute right-3 top-[43%] ">
-                <button id="resendemail" wire:click="resendEmail" x-on:click="resetResend('resendemail')" class="border rounded px-3 py-1 text-white bg-gray-700"
+            <div class="absolute right-3 top-[43%] " wire:ignore>
+                <button id="resendemail" x-on:click="resetResend('resendemail')" class="border rounded px-3 py-1 text-white bg-gray-700"
                     >Resend</button>
             </div>
         </div>

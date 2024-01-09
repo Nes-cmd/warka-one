@@ -11,16 +11,22 @@
 
 
     <div x-data="{
-        authwith : $persist( '{{ old('authwith')? old('authwith') : $authwith }}' )
-        }">
+        authwith : $persist( '{{ $authwith }}' )
+        }"
+
+        x-init="
+        $wire.authwith = this.authwith;
+        "
+        >
+
 
         <div class="border border-radius-2 rounded flex justify-around py-2 mb-4">
             <button :class="authwith == 'phone'?'bg-gray-600 text-white':'bg-gray-100 text-gray-900'" class=" w-[40%] py-2 rounded"
-                x-on:click="() => {authwith = 'phone'}">Phone</button>
+                x-on:click="() => {authwith = 'phone'}; $wire.authwith='phone'">Phone</button>
             <button :class="authwith == 'email'?'bg-gray-600 text-white':'bg-gray-100 text-gray-900'" class="w-[40%] py-2 rounded"
-                x-on:click="() => {authwith = 'email'}">Email</button>
+                x-on:click="() => {authwith = 'email'}; $wire.authwith='email'">Email</button>
         </div>
-
+        
         <!-- Email Address -->
         <div class="relative mb-4" x-show="authwith == 'email'">
             <x-input-label for="email" :value="__('Email')" />

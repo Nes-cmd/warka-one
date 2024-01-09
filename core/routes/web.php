@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::view('/', 'welcome');
+Route::view('mail', 'emailtemp');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
