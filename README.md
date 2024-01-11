@@ -9,7 +9,7 @@
 
     git clone https://github.com/Nes-cmd/warka-one.git
 
-    cd core
+cd core
 
     composer install
 
