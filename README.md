@@ -7,7 +7,7 @@
 ## To begin installation run the following commands
 ## Step 1
 
-`git clone https://github.com/Nes-cmd/warka-one.git`
+    git clone https://github.com/Nes-cmd/warka-one.git
 
 `cd core`
 
