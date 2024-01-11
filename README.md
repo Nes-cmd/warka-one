@@ -9,11 +9,11 @@
 
     git clone https://github.com/Nes-cmd/warka-one.git
 
-`cd core`
+    cd core
 
-`composer install`
+    composer install
 
-`npm install`
+    npm install
 
 ## Step 2
 
@@ -25,9 +25,9 @@
 
 import the database proveded to your database
 
-`npm run dev`
+    npm run dev
 
-`php artsan serve --port=9000`
+    php artsan serve --port=9000
 
 ## Step 4
 
