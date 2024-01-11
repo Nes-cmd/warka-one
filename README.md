@@ -7,30 +7,30 @@
 ## To begin installation run the following commands
 ## Step 1
 
-    `git clone https://github.com/Nes-cmd/warka-one.git`
+`git clone https://github.com/Nes-cmd/warka-one.git`
 
-    `cd core`
+`cd core`
 
-    `composer install`
+`composer install`
 
-    `npm install`
+`npm install`
 
 ## Step 2
 
-    ### create .env file and copy .env-example to .env
+### create .env file and copy .env-example to .env
 
-    ### fill your database information there, other parameters, I will provide in .env-example
+### fill your database information there, other parameters, I will provide in .env-example
 
 ## Step 3
 
-    import the database proveded to your database
+import the database proveded to your database
 
-    `npm run dev`
+`npm run dev`
 
-    `php artsan serve --port=9000`
+`php artsan serve --port=9000`
 
 ## Step 4
 
-    ### To start the project make sure that you first started the `warka-one` project, Because this project uses it for authentication. And it is recomended to start the project on port `9000` 
+### To start the project make sure that you first started the `warka-one` project, Because this project uses it for authentication. And it is recomended to start the project on port `9000` 
 
 ## If everything is ok, browse `localhost:9000`
