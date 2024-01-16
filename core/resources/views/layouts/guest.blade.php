@@ -12,6 +12,8 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
+    <link rel="icon" href="{{ asset('assets/kerbrands/ker-min.png')}}">
+
     <!-- Scripts -->
     @livewireStyles 
     @livewireScripts
@@ -52,6 +54,8 @@
             {{ $slot }}
         </div>
     </div>
+
+    
 </body>
 
 </html>

@@ -8,15 +8,16 @@
                 authwith: $persist('{{ old('authwith')?old('authwith'):$authwith }}')
             }"
            
+            
             >
             @csrf
-            <input type="hidden" name="authwith" :value="authwith">
+            <input type="hidden" name="authwith" x-model="authwith">
             <div class="border border-radius-2 rounded flex justify-around py-2 mb-4">
 
-            <button :class="authwith == 'phone'?'bg-gray-600 text-white':'bg-gray-100 text-gray-900'" class=" w-[40%] py-2 rounded"
+            <button type="button" :class="authwith == 'phone'?'bg-gray-600 text-white':'bg-gray-100 text-gray-900'" class=" w-[40%] py-2 rounded"
                 x-on:click="() => {authwith = 'phone'}">Phone
             </button>
-            <button :class="authwith == 'email'?'bg-gray-600 text-white':'bg-gray-100 text-gray-900'" class="w-[40%] py-2 rounded"
+            <button type="button" :class="authwith == 'email'?'bg-gray-600 text-white':'bg-gray-100 text-gray-900'" class="w-[40%] py-2 rounded"
                 x-on:click="() => {authwith = 'email'}">Email
             </button>
             </div>

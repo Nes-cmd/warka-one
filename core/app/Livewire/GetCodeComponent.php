@@ -48,9 +48,10 @@ class GetCodeComponent extends Component
             $this->validate([
                 'email' => ['required', 'email', $this->otpIsFor == 'register' ? 'unique:users,email' : 'exists:users,email']
             ]);
-
+           
             $status = SendVerivication::make()->via('mail')->receiver($this->email)->send();
         }
+       
         if ($status) {
            
             session()->put('authflow', [

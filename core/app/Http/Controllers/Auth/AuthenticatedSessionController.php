@@ -63,7 +63,7 @@ class AuthenticatedSessionController extends Controller
     public function destroy(Request $request): RedirectResponse
     {
        
-        Http::post('localhost:8000/highorder-logout');
+        
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
