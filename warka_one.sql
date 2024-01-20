@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 17, 2024 at 06:27 AM
+-- Generation Time: Jan 20, 2024 at 07:31 AM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -116,12 +116,14 @@ INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes
 ('0716e55d42a01df73bb9bb765fe9f64363f38134be3fb2778cc8a89558cd2efde2934e6812d0f2f3', '98ef2e7a-366a-4b69-9c1d-61bb0b7be6d8', '9b1b4e65-7e03-4198-8b4e-7ab96e714de7', NULL, '[]', 0, '2024-01-16 17:49:53', '2024-01-16 17:49:53', '2025-01-16 20:49:53'),
 ('0ae02d951d26944c09f4975887bc79cce73dc7e5511d48772a315b046b64089f1ef191ca973e0584', '1d239e3b-435c-4a27-9fa6-3dab8b2e20ce', '9b1b4d7b-dfd6-489a-b338-78043207b6bf', NULL, '[]', 0, '2024-01-16 17:32:37', '2024-01-16 17:32:37', '2025-01-16 20:32:37'),
 ('3b9fb42823699e2ea12eac56ee8c6ebd6710552146a0fa3321779be6dcdb2b193d227036e4895938', 'afd60c21-e7b6-4d97-80b0-6599e9ae1624', '9b1b4d7b-dfd6-489a-b338-78043207b6bf', NULL, '[]', 0, '2024-01-16 17:37:02', '2024-01-16 17:37:02', '2025-01-16 20:37:02'),
+('57d36e6be9def9a0006b7bded6cea288e91380c5640ae38f9eb42e5839264cc53d5fa524e51dcb2e', '98ef2e7a-366a-4b69-9c1d-61bb0b7be6d8', '9b1889f3-fe9d-4ba8-943f-c2d0c0923e49', 'MySecret', '[]', 0, '2024-01-19 17:09:29', '2024-01-19 17:09:29', '2025-01-19 20:09:29'),
 ('662a838e7fd4b1c7d65757e3b924ed9f5bb13d72e72dcf8caabdf2cae548a1e26bb9d3a35314ea21', '98ef2e7a-366a-4b69-9c1d-61bb0b7be6d8', '9b1b4d7b-dfd6-489a-b338-78043207b6bf', NULL, '[]', 0, '2024-01-16 17:17:02', '2024-01-16 17:17:02', '2025-01-16 20:17:02'),
 ('67c79f66811c404a0fc39c1817bd9a13a05011f6a39f7a5f6a0bbfa26ca6e21e01712ef4ca617daf', '98ef2e7a-366a-4b69-9c1d-61bb0b7be6d8', '9b1b4d7b-dfd6-489a-b338-78043207b6bf', NULL, '[]', 0, '2024-01-16 17:17:38', '2024-01-16 17:17:38', '2025-01-16 20:17:38'),
 ('a55e3e9f0c616e99e9602cf7a4f742c66c35e80da33d92168eab2acb3a5cb43810c8bb80272dc980', '98ef2e7a-366a-4b69-9c1d-61bb0b7be6d8', '9b1b4d7b-dfd6-489a-b338-78043207b6bf', NULL, '[]', 0, '2024-01-16 17:08:49', '2024-01-16 17:08:49', '2025-01-16 20:08:49'),
 ('c874acf72bac236134b8d5f9f1ee393a077643d474078a17d49b86955cf0b8050081382b30069de3', '98ef2e7a-366a-4b69-9c1d-61bb0b7be6d8', '9b1b4d7b-dfd6-489a-b338-78043207b6bf', NULL, '[]', 0, '2024-01-16 17:33:19', '2024-01-16 17:33:19', '2025-01-16 20:33:19'),
 ('cc01b8b0ccd6f2cfc86a32e6afdcff14091e2358df3a0547fa9b505fcb31e052403e1579428255c1', '98ef2e7a-366a-4b69-9c1d-61bb0b7be6d8', '9b1b4e65-7e03-4198-8b4e-7ab96e714de7', NULL, '[]', 0, '2024-01-16 17:47:34', '2024-01-16 17:47:34', '2025-01-16 20:47:34'),
-('d30cd7d6c9845db4a476069603a27d7d72c3c37e685fa903e306daf9370eef464b3c5a19579d01f8', '98ef2e7a-366a-4b69-9c1d-61bb0b7be6d8', '9b1b4d7b-dfd6-489a-b338-78043207b6bf', NULL, '[]', 0, '2024-01-16 17:14:03', '2024-01-16 17:14:03', '2025-01-16 20:14:03');
+('d30cd7d6c9845db4a476069603a27d7d72c3c37e685fa903e306daf9370eef464b3c5a19579d01f8', '98ef2e7a-366a-4b69-9c1d-61bb0b7be6d8', '9b1b4d7b-dfd6-489a-b338-78043207b6bf', NULL, '[]', 0, '2024-01-16 17:14:03', '2024-01-16 17:14:03', '2025-01-16 20:14:03'),
+('e43201d5f225478af61860a300ee58990404e08c514abbdc3e8b66e190cae0644cb65b64295ca524', '98ef2e7a-366a-4b69-9c1d-61bb0b7be6d8', '9b1889f3-fe9d-4ba8-943f-c2d0c0923e49', 'MySecret', '[]', 0, '2024-01-17 05:36:40', '2024-01-17 05:36:41', '2025-01-17 08:36:40');
 
 -- --------------------------------------------------------
 
@@ -290,8 +292,11 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `email`, `phone`, `email_verified_at`, `phone_verified_at`, `password`, `country_id`, `remember_token`, `created_at`, `updated_at`) VALUES
 ('1d239e3b-435c-4a27-9fa6-3dab8b2e20ce', 'Addis ababew', 'mydreemname@gmail.com', NULL, '2024-01-16 17:32:35', NULL, '$2y$12$FQgBFoJOUmMUw4np0F7gSOfF5fiXysIGjxaG7yGh.Eid28JJPORCe', NULL, NULL, '2024-01-16 17:32:35', '2024-01-16 17:32:35'),
-('98ef2e7a-366a-4b69-9c1d-61bb0b7be6d8', 'Nesru', 'nesrusadik0@gmail.com', NULL, '2024-01-16 16:55:03', NULL, '$2y$12$mmhST6hlM/eDn1PoXB0Dn.t3qiw39Ptwpr.EHpHagfXGDH.HTuMLy', NULL, NULL, '2024-01-16 16:55:04', '2024-01-16 16:55:04'),
-('afd60c21-e7b6-4d97-80b0-6599e9ae1624', 'vomuhiziwa', 'nesrusadik6@gmail.com', '956001894', NULL, NULL, '$2y$12$j4CtL2QghTgc7WYDLMwq1u2vlZLu0Vdil9JhUjeFZg12e63bgOLMy', NULL, NULL, '2024-01-16 17:34:57', '2024-01-16 17:36:48');
+('7d8ae4a8-22ee-4d7f-b2ed-6e36bca43a85', 'Nesru 2', 'nesrusadik0@gmail.com', NULL, '2024-01-20 03:05:31', NULL, '$2y$12$HfHqQ4BcnY5234mQfz3zP.ASUh0ItnEJaxOBojTzaUusYOU7ynmGe', NULL, NULL, '2024-01-20 03:05:32', '2024-01-20 03:05:32'),
+('98ef2e7a-366a-4b69-9c1d-61bb0b7be6d8', 'Nesru', 'nesrusadik@gmail.com', NULL, '2024-01-16 16:55:03', NULL, '$2y$12$mmhST6hlM/eDn1PoXB0Dn.t3qiw39Ptwpr.EHpHagfXGDH.HTuMLy', NULL, NULL, '2024-01-16 16:55:04', '2024-01-16 16:55:04'),
+('afd60c21-e7b6-4d97-80b0-6599e9ae1624', 'vomuhiziwa', 'nesrusadik6@gmail.com', '956001894', NULL, NULL, '$2y$12$j4CtL2QghTgc7WYDLMwq1u2vlZLu0Vdil9JhUjeFZg12e63bgOLMy', NULL, NULL, '2024-01-16 17:34:57', '2024-01-16 17:36:48'),
+('f7ae5939-0ff5-49b8-815f-70893228bffd', 'Preston Barker', 'lurakewul@mailinator.com', '940678727', NULL, NULL, '$2y$12$7NOsLVZ06EFuJiUh.Ox9vuTWmFgz6qKIr949SdA7oj7c21p93mQbm', NULL, NULL, '2024-01-18 17:28:16', '2024-01-18 17:28:16'),
+('fb672d38-47ac-4279-8e7a-597803f18fb0', 'Nesru 3', NULL, '940678725', NULL, '2024-01-20 03:26:34', '$2y$12$V1LnL3Zwx8fIGRRfYeh1q.H97XLNkR8T9jPfh/SmSItnYUPqjNBre', NULL, NULL, '2024-01-20 03:26:34', '2024-01-20 03:26:34');
 
 -- --------------------------------------------------------
 
@@ -442,7 +447,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `verification_codes`
 --
 ALTER TABLE `verification_codes`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints for dumped tables
