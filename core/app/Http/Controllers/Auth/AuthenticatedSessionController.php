@@ -51,10 +51,6 @@ class AuthenticatedSessionController extends Controller
         }
 
         throw ValidationException::withMessages([$authwith => 'These credientials didn\'t match our records']);
-
-        // session()->flash('authstatus', ['type' => 'error', 'message'=> 'These credientials didn\'t match our records']);
-        // return back();
-        
     }
 
     /**
@@ -62,8 +58,6 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-       
-        
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

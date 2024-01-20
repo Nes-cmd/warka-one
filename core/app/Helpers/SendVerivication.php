@@ -21,7 +21,7 @@ class SendVerivication {
             $this->via = $via;
             return $this;
         }
-        throw new Exception('unknown transmitter');
+        throw new Exception('unknown transmitter '. $via);
     }
     public function receiver(string $to) {
         $this->receiver = $to;

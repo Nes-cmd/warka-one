@@ -8,7 +8,7 @@
                 <p style="margin-bottom: 30px;">Thank you for signing up. Please use the following verification code
                     to verify your email:</p>
                 <div
-                    style="background-color: #007bff; color: #ffffff; font-size: 26px; font-weight: bold; border-radius: 8px; padding: 12px; text-align: center; margin-bottom: 30px;">
+                    style="background-color: #fbbf24; color: #ffffff; font-size: 26px; font-weight: bold; border-radius: 8px; padding: 12px; text-align: center; margin-bottom: 30px;">
                     <span style="display: block;">{{ $verificationCode }}</span>
                 </div>
                 <p style="margin-bottom: 30px;">Use this code to verify your email and complete the registration
