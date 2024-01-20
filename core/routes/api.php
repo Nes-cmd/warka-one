@@ -12,6 +12,7 @@ Route::get('countries', function(){
 Route::post('get-verification-code', [AuthController::class, 'getVerificationCode']);
 Route::post('verify-code', [AuthController::class, 'verifyCode']);
 Route::post('create-user', [AuthController::class, 'register']);
+Route::post('reset-password', [AuthController::class, 'resetPassword']);
 
 Route::post('ext-login', [AuthController::class, 'login']);
 
