@@ -20,7 +20,6 @@ class AuthController extends Controller
 {
     public function login(LoginRequest $request)
     {
-
         if ($request->from != 'ker-wallet') {
             return response([
                 'status' => 'fail',
@@ -122,6 +121,8 @@ class AuthController extends Controller
                 'email_verified_at' => $request->authwith == 'email' ? now() : null,
             ]);
 
+            $tokens = $user->createToken('API-TOKEN');
+
             $verification->delete();
 
             DB::commit();
@@ -130,6 +131,7 @@ class AuthController extends Controller
                 'status' => 'success',
                 'message' => 'You have registered on sso server successfully!, Now you can use these credentials to access in one of our applications',
                 'user' => $user,
+                'tokens' => $tokens,
             ]);
         } catch (Exception $e) {
             DB::rollBack();
