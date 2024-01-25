@@ -9,7 +9,7 @@
 
     git clone https://github.com/Nes-cmd/warka-one.git
     
-    cd core
+    cd warka-one/core
 
     composer install
 
@@ -19,11 +19,11 @@
 
 ### create .env file and copy .env-example to .env
 
-### fill your database information there, other parameters, I will provide in .env-example
+### fill your database information there. regarding about other parameters, I will provide in .env-example
 
 ## Step 3
 
-import the database proveded to your database
+import the database proveded in this repo to your database (don't run php artisan migrate)
 
     npm run dev
 
