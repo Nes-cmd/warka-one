@@ -106,6 +106,9 @@ class AuthController extends Controller
             $candidate = $request->authwith == 'email' ? $request->email : $country->dial_code . $request->phone;
 
             $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
+            if($verification == null){
+                throw new Exception("Please verify your {$request->authwith} first");
+            }
             if ($verification->status != 'verified') {
 
                 throw new Exception("This {$request->authwith} was not verified");
@@ -139,7 +142,7 @@ class AuthController extends Controller
             return response([
                 'status' => 'error',
                 'message' => $e->getMessage(),
-            ]);
+            ], 423);
         }
     }
 
