@@ -43,7 +43,7 @@
         <div class="h-12" x-show="authwith == 'phone'">
             <div class="relative mb-8">
                 <x-text-input wire:model.lazy="phone" id="phone"
-                    class="block mt-1 w-[71%] absolute right-0 rounded-l-none py-2" type="tel" name="phone"
+                    class="block mt-1 md:w-[71%] w-[67%] absolute right-0 rounded-l-none py-2 pl-3" type="tel" name="phone"
                     :value="old('phone')" required />
 
                 <div class="absolute left-0 py-1 w-[30%]">

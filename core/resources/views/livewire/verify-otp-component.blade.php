@@ -1,6 +1,8 @@
 <div>
     <x-auth-session-status class="mb-4" :status="session('authstatus')" />
-
+    <div class="mb-4 text-sm text-gray-600">
+        {{ "We have sent a 4-digit code to your $authwith , Use that code to verify "}}
+    </div>
     <div x-data="{
         authwith : $persist('{{ old('authwith')?old('authwith'):$authwith }}'),
         resendin :  $persist(60),
@@ -57,7 +59,7 @@
             <x-input-label for="phone" :value="__('Phone')" />
             <div class="relative">
                 <x-text-input id="phone" disabled
-                    class="bg-gray-200 block mt-1 w-[71%] absolute right-0 rounded-l-none py-2" type="tel" name="phone"
+                    class="bg-gray-200 block mt-1 w-[71%]  absolute right-0 rounded-l-none py-2 pl-5 md:pl-3" type="tel" name="phone"
                     wire:model="phone" required />
 
                 <div class="absolute left-0 py-1 w-[30%]">
@@ -97,7 +99,7 @@
 
 
         <div class="flex items-center justify-between mt-4">
-            <a href="{{ route('get-otp') }}" class="border rounded-lg px-3 py-1 text-white bg-gray-500">&lt; Change</a>
+            <a href="/authflow/get-otp?for={{$verificationFor}}" class="border rounded-lg px-3 py-1 text-white bg-gray-500">&lt; Change</a>
             <x-primary-button wire:click="verify" class="ms-3 py-2">
                 <span wire:loading class="loader mx-1"></span>
                 {{ __('Verify') }}
