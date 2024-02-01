@@ -35,7 +35,7 @@ class SendVerivication {
             $status = Mail::to($this->receiver)->send(new VerificationCode($verificationCode));
         }
         elseif($this->via == 'sms'){
-            $status = SmsSend::send($this->receiver, "Your verification code for WARKA is $verificationCode");
+            $status = SmsSend::send($this->receiver, "Your verification code is $verificationCode");
         }
 
         return ModelsVerificationCode::create([

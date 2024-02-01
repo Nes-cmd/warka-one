@@ -14,6 +14,7 @@ class SmsSend {
     }
 
     public static function sendThroughFaris(string $toPhone, string $message){
+        if($toPhone[0] == '+') $toPhone = substr($toPhone, 1);
         $postdata =  json_encode([
             "accessKey" => env('SMS_ACCESS'),
             "secretKey" => env('SMS_SECRET'),
