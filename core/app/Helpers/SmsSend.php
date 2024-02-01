@@ -5,8 +5,39 @@ namespace App\Helpers;
 use Illuminate\Support\Facades\Http;
 
 class SmsSend {
-    public static function send($to, $message){
-        // if()
+    public static function send(string $to, string $message, string $via = 'faris'){
+        if($via == 'afro'){
+            return self::sendThroughAfro($to, $message);
+        }
+        
+        return self::sendThroughFaris($to, $message);
+    }
+
+    public static function sendThroughFaris(string $toPhone, string $message){
+        $postdata =  json_encode([
+            "accessKey" => env('SMS_ACCESS'),
+            "secretKey" => env('SMS_SECRET'),
+            "from" => "Ker Tech",
+            "to" => $toPhone,
+            "message" => $message,
+            "callbackUrl" =>"https://example.com"
+         ]);
+
+        $opts = array('http' => [
+            'method' => 'POST',
+            'header' => 'Content-Type: application/json',
+            // 'header'  => 'Content-Type: application/x-www-form-urlencoded', if want to send request like form
+            'content' => $postdata
+        ]);
+
+        $context = stream_context_create($opts);
+
+        $result = file_get_contents('http://api.kmicloud.com/sms/send/v1/notify', false, $context);
+
+        return json_decode($result);
+    }
+
+    public static function  sendThroughAfro(string $to, string $message){
         $response =  Http::withHeaders([
             'Authorization' => 'Bearer '. env('AFRO_KEY'),
             'Content-type'  => 'application/json',
@@ -18,6 +49,7 @@ class SmsSend {
             'callback' => url('/')
         ]);
 
-        return $response->json();
+        return $response;
     }
 }
+

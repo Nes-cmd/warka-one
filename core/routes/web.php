@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\SmsSend;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Http\Request;
@@ -38,3 +39,9 @@ curl -XPOST -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZGVudGlmaWVyIjoid
     -d '{"from":"e80ad9d8-adf3-463f-80f4-7c4b39f7f164","sender":"9786","to":"0940678725","message":"Selaaam","callback":"http://example.com"}' \
     'https://api.afromessage.com/api/send'
 */
+
+Route::get('sms-test', function(){
+    $op = SmsSend::sendSMS("251940678725", "Selam there, Your confirmation code is 4236");
+
+    dd($op);
+});
