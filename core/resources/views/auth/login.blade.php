@@ -1,30 +1,30 @@
 <x-guest-layout>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('authstatus')" />
-    
-    <form method="POST" action="{{ route('login') }}">
-   
+
+    <div class="flex-col flex gap-6">
+        <p class="text-2xl font-semibold">Welcome back!</p>
+        <p class="text-2xl font-semibold">Log in</p>
+    </div>
+
+    <form method="POST" action="{{ route('login') }}" class="mt-8">
+
         <div x-data="{
                 authwith: $persist('{{ old('authwith')?old('authwith'):$authwith }}')
-            }"
-           
-            
-            >
+            }">
             @csrf
             <input type="hidden" name="authwith" x-model="authwith">
-            <div class="border border-radius-2 rounded flex justify-around py-2 mb-4">
+            <div class="border border-radius-2 rounded flex justify-around py-2 mb-4 my-6">
 
-            <button type="button" :class="authwith == 'phone'?'bg-gray-600 text-white':'bg-gray-100 text-gray-900'" class=" w-[40%] py-2 rounded"
-                x-on:click="() => {authwith = 'phone'}">Phone
-            </button>
-            <button type="button" :class="authwith == 'email'?'bg-gray-600 text-white':'bg-gray-100 text-gray-900'" class="w-[40%] py-2 rounded"
-                x-on:click="() => {authwith = 'email'}">Email
-            </button>
+                <button type="button" :class="authwith == 'phone'?'bg-gray-50 text-primary border border-primary':'bg-gray-100 text-gray-500'" class=" w-[40%] py-2 rounded" x-on:click="() => {authwith = 'phone'}">Phone
+                </button>
+                <button type="button" :class="authwith == 'email'?'bg-gray-50 text-primary border border-primary':'bg-gray-100 text-gray-500'" class="w-[40%] py-2 rounded" x-on:click="() => {authwith = 'email'}">Email
+                </button>
             </div>
 
             <!-- Email Address -->
             <div class="relative mb-4" x-show="authwith == 'email'">
-                <x-input-label for="email" :value="__('Email')" />
+                <x-input-label for="email" :value="__('Email Address')" />
                 <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" />
                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
             </div>
@@ -32,7 +32,7 @@
             <div class="h-16" x-show="authwith == 'phone'">
                 <x-input-label for="phone" :value="__('Phone')" />
                 <div class="relative mb-8">
-                    <x-text-input id="phone" class="block mt-1 w-[71%] absolute right-0 rounded-l-none py-2" type="tel" name="phone" value="{{ old('phone')}}" />
+                    <x-text-input id="phone" class="block mt-1 w-[71%] absolute right-0  py-2" type="tel" name="phone" value="{{ old('phone')}}" />
 
                     <div class="absolute left-0 py-1 w-[30%]">
                         <div x-data="{
@@ -85,27 +85,31 @@
 
                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
             </div>
-
+            <p class="text-xs mt-10">By continuing, you agree to our <a href="#" class="text-primary-500">Terms of Service</a> and <a href="#" class="text-primary-500">Privacy Policy</a>.</p>
+            <x-primary-button class="my-3 w-full py-2 flex justify-center text-xl rounded-full">
+                {{ __('Log in') }}
+            </x-primary-button>
             <!-- Remember Me -->
-            <div class="block mt-4">
-            @if (Route::has('password.request'))
-                <a href="{{ route('get-otp', ['for' => 'reset-password']) }}" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    {{ __('Forgot your password?') }}
-                </a>
-                @endif
-            </div>
 
-            <div class="flex items-center justify-between mt-4">
-                @if (Route::has('register'))
-                <a href="{{ route('get-otp', ['for' => 'register']) }}" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    {{ __('Dont have account?') }}
-                </a>
-                @endif
-                
 
-                <x-primary-button class="ms-3">
-                    {{ __('Log in') }}
-                </x-primary-button>
+            <div class="flex flex-col gap-4 items-center justify-center mt-4">
+                <div class="block ">
+                    @if (Route::has('password.request'))
+                    <a href="{{ route('get-otp', ['for' => 'reset-password']) }}" class="underline text-sm text-black hover:text-primary rounded-md focus:outline-none ">
+                        {{ __('Forgot your password?') }}
+                    </a>
+                    @endif
+                </div>
+                <div>
+                    @if (Route::has('register'))
+                    <a href="{{ route('get-otp', ['for' => 'register']) }}" class=" text-sm text-gray-600 hover:text-primary rounded-md focus:outline-none ">
+                        {{ __('Dont have account? ') }} <span class=" underline text-black">Sign up</span>
+
+                    </a>
+                    @endif
+
+                </div>
+
             </div>
         </div>
     </form>
