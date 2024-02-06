@@ -43,7 +43,7 @@ class AuthController extends Controller
 
             return response()->json(['token' => $token, 'user' => $user]);
         }
-        return response(['status' => 'fail', 'message' => 'These credientials didn\'t match our records'], 302);
+        return response(['status' => 'fail', 'message' => 'These credientials didn\'t match our records'], 401);
     }
 
     public function getVerificationCode(GetVerificationRequest $request)
@@ -75,7 +75,7 @@ class AuthController extends Controller
 
 
         if ($verification) {
-            if ($verification->verification_code === $request->verificationCode) {
+            if ($verification->verification_code == $request->verificationCode) {
                 $verification->status = 'verified';
                 $verification->save();
 
@@ -93,7 +93,7 @@ class AuthController extends Controller
             return response([
                 'message' => 'Code wasn\'t sent correctly or expierd, please try again!',
                 'status' => 'error'
-            ], 423);
+            ], 401);
         }
     }
     public function register(RegisterRequest $request)
