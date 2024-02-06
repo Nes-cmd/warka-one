@@ -69,11 +69,7 @@ class AuthController extends Controller
 
         $country = Country::find($request->country_id);
         $candidate = $request->authwith == 'email' ? $request->email : $country->dial_code . $request->phone;
-
-
         $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
-
-
         if ($verification) {
             if ($verification->verification_code == $request->verificationCode) {
                 $verification->status = 'verified';
