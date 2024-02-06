@@ -23,7 +23,7 @@ class AuthController extends Controller
         if ($request->from != 'ker-wallet') {
             return response([
                 'status' => 'fail',
-                'message' => 'Please dont try to use this api directly from your app.',
+                'message' => 'Please dont try to use this api directly from your app. It is designed for other purpose!',
             ], 423);
         }
 
