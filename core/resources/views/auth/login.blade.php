@@ -14,11 +14,11 @@
             }">
             @csrf
             <input type="hidden" name="authwith" x-model="authwith">
-            <div class="border border-radius-2 rounded flex justify-around py-2 mb-4 my-6">
+            <div class=" flex justify-around py-2 mb-4 my-6">
 
-                <button type="button" :class="authwith == 'phone'?'bg-gray-50 text-primary border border-primary':'bg-gray-100 text-gray-500'" class=" w-[40%] py-2 rounded" x-on:click="() => {authwith = 'phone'}">Phone
+                <button type="button" :class="authwith == 'phone'?'bg-primary-50 text-primary border-b-2 border-primary':'bg-gray-100 text-gray-500'" class=" w-[40%] py-2 rounded" x-on:click="() => {authwith = 'phone'}">Phone
                 </button>
-                <button type="button" :class="authwith == 'email'?'bg-gray-50 text-primary border border-primary':'bg-gray-100 text-gray-500'" class="w-[40%] py-2 rounded" x-on:click="() => {authwith = 'email'}">Email
+                <button type="button" :class="authwith == 'email'?'bg-primary-50 text-primary border-b-2 border-primary':'bg-gray-100 text-gray-500'" class="w-[40%] py-2 rounded" x-on:click="() => {authwith = 'email'}">Email
                 </button>
             </div>
 
@@ -86,9 +86,12 @@
                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
             </div>
             <p class="text-xs mt-10">By continuing, you agree to our <a href="#" class="text-primary-500">Terms of Service</a> and <a href="#" class="text-primary-500">Privacy Policy</a>.</p>
-            <x-primary-button class="my-3 w-full py-2 flex justify-center text-xl rounded-full">
-                {{ __('Log in') }}
-            </x-primary-button>
+            <div class="w-full flex justify-center mt-2">
+                <x-primary-button class="my-3 xl:w-2/3 w-full py-2 flex justify-center items-center text-xl rounded-full">
+                    {{ __('Log in') }}
+                </x-primary-button>
+            </div>
+
             <!-- Remember Me -->
 
 

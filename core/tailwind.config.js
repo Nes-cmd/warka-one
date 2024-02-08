@@ -4,18 +4,18 @@ import forms from "@tailwindcss/forms";
 let colors = require("tailwindcss/colors");
 
 colors.mysecondary = {
-    DEFAULT: "#DEBC97",
-    50: "#FFFFFF",
-    100: "#FFFFFF",
-    200: "#FBF8F4",
-    300: "#F2E4D5",
-    400: "#E8D0B6",
-    500: "#DEBC97",
-    600: "#D0A16C",
-    700: "#C38542",
-    800: "#9B6931",
-    900: "#714C24",
-    950: "#5C3E1D",
+    DEFAULT: "#f3a433",
+    50: "#fef9ec",
+    100: "##fcebc9",
+    200: "#f9d58e",
+    300: "#f5ba54",
+    400: "#f3a433",
+    500: "#ec7f14",
+    600: "#d15c0e",
+    700: "#ad3f10",
+    800: "#8d3113",
+    900: "#742913",
+    950: "#421306",
 };
 colors.myprimary = {
     DEFAULT: "#2c2768",

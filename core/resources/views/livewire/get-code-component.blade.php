@@ -23,8 +23,8 @@
 
 
         <div class="border border-radius-2 rounded flex justify-around py-2 mb-4">
-            <button :class="authwith == 'phone'?'bg-gray-50 text-primary border border-primary':'bg-gray-100 text-gray-500'" class=" w-[40%] py-2 rounded" x-on:click="() => {authwith = 'phone'; $wire.authwith='phone'}">Phone</button>
-            <button :class="authwith == 'email'?'bg-gray-50 text-primary border border-primary':'bg-gray-100 text-gray-500'" class="w-[40%] py-2 rounded" x-on:click="() => {authwith = 'email'; $wire.authwith='email'}">Email</button>
+            <button :class="authwith == 'phone'?'bg-secondary-50 text-primary border-b-2 border-secondary':'bg-gray-100 text-gray-500'" class=" w-[40%] py-2 rounded" x-on:click="() => {authwith = 'phone'; $wire.authwith='phone'}">Phone</button>
+            <button :class="authwith == 'email'?'bg-secondary-50 text-primary border-b-2 border-secondary':'bg-gray-100 text-gray-500'" class="w-[40%] py-2 rounded" x-on:click="() => {authwith = 'email'; $wire.authwith='email'}">Email</button>
         </div>
 
         <!-- Email Address -->
@@ -90,7 +90,7 @@
         </div>
 
 
-        <div class="flex items-center justify-between mt-4">
+        <div class="w-full flex items-center justify-center mt-4">
             @if (Route::has('login'))
             <a href="{{ route('login',) }}" class=" text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none ">
                 {{ __('Already have account?') }} <span class="underline text-black">Log in</span>
