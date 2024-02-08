@@ -42,7 +42,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans text-gray-900 antialiased h-screen overflow-hidden justify-center items-center flex">
+<body class="font-sans text-gray-900  antialiased h-screen overflow-hidden justify-center items-center flex">
     <!-- <div class="min-h-screen flex flex-col justify-center items-center pt-6 sm:pt-0 bg-gray-100">
         <div>
             <a href="/">
@@ -63,9 +63,9 @@
         <div class="lg:w-1/2 w-full flex flex-col gap-6 items-center justify-center h-full">
             <div class="md:w-[75%] w-[80%] flex flex-col  gap-4 ">
                 <!-- logo  -->
-                <div class=" ">
-                    <a href="/" class="">
-                        <x-application-logo class="  fill-current text-gray-500" />
+                <div class="h-14 lg:h-12 w-full flex justify-center lg:justify-start ">
+                    <a href="/" class="h-full ">
+                        <x-application-logo class=" w-full h-full fill-current text-gray-500" />
                     </a>
                 </div>
 

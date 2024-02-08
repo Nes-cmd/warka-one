@@ -86,9 +86,12 @@
                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
             </div>
             <p class="text-xs mt-10">By continuing, you agree to our <a href="#" class="text-primary-500">Terms of Service</a> and <a href="#" class="text-primary-500">Privacy Policy</a>.</p>
-            <x-primary-button class="my-3 w-full py-2 flex justify-center text-xl rounded-full">
-                {{ __('Log in') }}
-            </x-primary-button>
+            <div class="w-full flex justify-center mt-2">
+                <x-primary-button class="my-3 xl:w-2/3 w-full py-2 flex justify-center items-center text-xl rounded-full">
+                    {{ __('Log in') }}
+                </x-primary-button>
+            </div>
+
             <!-- Remember Me -->
 
 
