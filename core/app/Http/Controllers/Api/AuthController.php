@@ -23,7 +23,7 @@ class AuthController extends Controller
         if ($request->from != 'ker-wallet') {
             return response([
                 'status' => 'fail',
-                'message' => 'Please dont try to use this api directly from your app.',
+                'message' => 'Please dont try to use this api directly from your app. It is designed for other purpose!',
             ], 423);
         }
 
@@ -43,7 +43,7 @@ class AuthController extends Controller
 
             return response()->json(['token' => $token, 'user' => $user]);
         }
-        return response(['status' => 'fail', 'message' => 'These credientials didn\'t match our records'], 302);
+        return response(['status' => 'fail', 'message' => 'These credientials didn\'t match our records'], 401);
     }
 
     public function getVerificationCode(GetVerificationRequest $request)
@@ -69,13 +69,9 @@ class AuthController extends Controller
 
         $country = Country::find($request->country_id);
         $candidate = $request->authwith == 'email' ? $request->email : $country->dial_code . $request->phone;
-
-
         $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
-
-
         if ($verification) {
-            if ($verification->verification_code === $request->verificationCode) {
+            if ($verification->verification_code == $request->verificationCode) {
                 $verification->status = 'verified';
                 $verification->save();
 
@@ -93,7 +89,7 @@ class AuthController extends Controller
             return response([
                 'message' => 'Code wasn\'t sent correctly or expierd, please try again!',
                 'status' => 'error'
-            ], 423);
+            ], 401);
         }
     }
     public function register(RegisterRequest $request)

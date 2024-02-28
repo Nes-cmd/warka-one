@@ -43,7 +43,7 @@ class SmsSend {
             'Authorization' => 'Bearer '. env('AFRO_KEY'),
             'Content-type'  => 'application/json',
         ])->post('https://api.afromessage.com/api/send', [
-            'from'     =>  env('AFRO_ID'), //
+            'from'     => env('AFRO_ID'), //
             'sender'   => env('AFRO_SENDER'), // sender short code 
             'to'       => $to, 
             'message'  => $message,
