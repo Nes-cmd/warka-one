@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Helpers\SendVerivication;
+use App\Helpers\SendVerification;
 use Livewire\Component;
 use App\Models\VerificationCode as ModelsVerificationCode;
 use App\Providers\RouteServiceProvider;
@@ -41,10 +41,10 @@ class VerifyOtpComponent extends Component
     }
     public function resendSMS(){
         $fullPhone = $this->country->dial_code . $this->phone;
-        SendVerivication::make()->via('sms')->receiver($fullPhone)->send();
+        SendVerification::make()->via('sms')->receiver($fullPhone)->send();
     }
     public function resendEmail(){
-        SendVerivication::make()->via('mail')->receiver($this->email)->send();
+        SendVerification::make()->via('mail')->receiver($this->email)->send();
     }
     public function verify() {
         

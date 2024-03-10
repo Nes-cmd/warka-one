@@ -23,9 +23,9 @@ class VerifyAuth
                 return $next($request);
             }
 
-            return redirect()->route('must-verify-otp');
+            return $request->expectsJson()?null : redirect()->route('must-verify-otp');
         }
 
-        return redirect()->route('login');
+        return $request->expectsJson()?null: redirect()->route('login');
     }
 }

@@ -7,7 +7,7 @@ use App\Models\VerificationCode as ModelsVerificationCode;
 use Exception;
 use Illuminate\Support\Facades\Mail;
 
-class SendVerivication {
+class SendVerification {
 
     protected $via;
     protected $receiver;
