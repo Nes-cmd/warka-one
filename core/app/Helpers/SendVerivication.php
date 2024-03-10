@@ -28,10 +28,15 @@ class SendVerivication {
         return $this;
     }
     public function send() {
+
+        $previos = ModelsVerificationCode::where('candidate', $this->receiver)->latest()->first();
+        
+        if($previos && $previos->expire_at->gte(now())){
+            return $previos;
+        }
+
         $verificationCode = rand(1000, 9999);
-
         if($this->via == 'mail'){
-
             $status = Mail::to($this->receiver)->send(new VerificationCode($verificationCode));
         }
         elseif($this->via == 'sms'){

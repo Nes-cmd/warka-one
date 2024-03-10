@@ -12,18 +12,27 @@ use Illuminate\Support\Facades\Route;
 Route::view('/', 'welcome');
 Route::view('mail', 'emailtemp');
 
-Route::get('/dashboard', function () {
+Route::get('dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified-auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware('auth')->get('authflow/must-verify', [VerificationController::class, 'mustVerify'])->name('must-verify-otp');
+
+
 Route::get('logout-pms', function(Request $request){
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
     
+    return redirect($request->callback);
+});
+
+Route::get('logout-wallet', function(Request $request){
     $request->session()->invalidate();
     $request->session()->regenerateToken();
     
@@ -40,8 +49,8 @@ curl -XPOST -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZGVudGlmaWVyIjoid
     'https://api.afromessage.com/api/send'
 */
 
-Route::get('sms-test', function(){
-    $op = SmsSend::sendSMS("251940678725", "Selam there, Your confirmation code is 4236");
+// Route::get('sms-test', function(){
+//     $op = SmsSend::sendSMS("251940678725", "Selam there, Your confirmation code is 4236");
 
-    dd($op);
-});
+//     dd($op);
+// });

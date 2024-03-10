@@ -32,7 +32,7 @@
                 
                 <div class="mb-8 flex">
                     
-                    <div class="py-1">
+                    <div class="py-">
                         <div x-data="{
                             open: false,
                             toggle() {
@@ -54,7 +54,7 @@
                             class="relative"
                             >
                             <!-- Button -->
-                            <button type="button" x-ref="button" :aria-expanded="open" :aria-controls="$id('dropdown-button')" type="button" class="flex items-center gap-2 bg-white px-5 py-[10px] rounded-md shadow">
+                            <button type="button" x-ref="button" :aria-expanded="open" :aria-controls="$id('dropdown-button')" type="button" class="flex items-center bg-white py-2.5 pl-2 rounded-md shadow">
                                 <img class="w-[20px]" src="{{ asset($selectedCountry->flag_url) }}" alt="">
                                 <span>({{ $selectedCountry->dial_code }})</span>
 
@@ -64,9 +64,9 @@
                             </button>
 
                             <!-- Panel -->
-                            <div x-ref="panel" x-show="open" x-transition.origin.top.left x-on:click.outside="close($refs.button)" :id="$id('dropdown-button')" style="display: none;" class="absolute left-0 mt-2 rounded-md bg-white shadow-md">
+                            <div x-ref="panel" x-show="open" x-transition.origin.top.left x-on:click.outside="close($refs.button)" :id="$id('dropdown-button')" style="display: none;" class="absolute left-0  rounded-md bg-white shadow-md">
                                 @foreach($countries as $country)
-                                <a href="#" x-on:click="open = false" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
+                                <a href="#" x-on:click="open = false" class="flex items-center w-full first-of-type:rounded-t-md last-of-type:rounded-b-md py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
                                     <img class="w-[20px]" src="{{ asset($country->flag_url) }}" alt="">
                                     <span>({{ $country->dial_code }}) {{ $country->name }}</span>
                                 </a>
@@ -75,7 +75,7 @@
                         </div>
                     </div>
 
-                    <x-text-input id="phone" class="block mt-1 w-[80%]" type="tel" name="phone" value="{{ old('phone')}}" />
+                    <x-text-input id="phone" class="block w-[100%]" type="tel" name="phone" value="{{ old('phone')}}" />
 
 
                 </div>
