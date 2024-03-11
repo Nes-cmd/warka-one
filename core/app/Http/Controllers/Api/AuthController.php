@@ -33,20 +33,29 @@ class AuthController extends Controller
             $request->validate(['email' => 'required']);
             $user = User::where('email', $request->email)->first();
         }
+        if ($user) {
+            if($user->email_verified_at == null && $user->phone_verified_at == null){
+                return response([
+                    'status' => 'fail',
+                    'message' => 'Neither the phone or the email is not verified. please try to verify one or both of them first on the sso server'
+                ], 401);
+            }
 
-        if ($user && Hash::check($request->password, $user->password)) {
 
-            $token = $user->createToken('MySecret');
+            if (Hash::check($request->password, $user->password)) {
 
-            return response()->json(['token' => $token, 'user' => $user]);
+                $token = $user->createToken('MySecret');
+
+                return response()->json(['token' => $token, 'user' => $user]);
+            }
         }
         return response(['status' => 'fail', 'message' => 'These credientials didn\'t match our records'], 401);
     }
 
-    
+
     public function register(RegisterRequest $request)
     {
-
+       
         DB::beginTransaction();
 
         try {
@@ -63,12 +72,12 @@ class AuthController extends Controller
 
             $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
 
-            if($verification && $verification->status == 'verified'){
+            if ($verification && $verification->status == 'verified') {
                 $userData['phone_verified_at'] = $request->authwith == 'phone' ? now() : null;
                 $userData['email_verified_at'] = $request->authwith == 'email' ? now() : null;
                 $verification->delete();
             }
-            
+
             // if($verification == null){
             //     throw new Exception("Please verify your {$request->authwith} first");
             // }
@@ -80,6 +89,10 @@ class AuthController extends Controller
 
             $tokens = $user->createToken('API-TOKEN');
             DB::commit();
+
+            if($request->inform){
+                informAccountCreation($user);
+            }
 
             return response([
                 'status' => 'success',
@@ -97,30 +110,31 @@ class AuthController extends Controller
         }
     }
 
-    public function resetPassword(ResetPasswordRequest $request){
-        
+    public function resetPassword(ResetPasswordRequest $request)
+    {
+
         DB::beginTransaction();
         try {
             // Here we will attempt to reset the user's password. If it is successful we
             // will update the password on an actual user model and persist it to the
             // database. Otherwise we will parse the error and return the response.
-            
-            $country = Country::find($request->country_id);
-            $candidate = $request->authwith == 'email'?$request->email: $country->dial_code . $request->phone;
 
-            
+            $country = Country::find($request->country_id);
+            $candidate = $request->authwith == 'email' ? $request->email : $country->dial_code . $request->phone;
+
+
             $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
             if ($verification->status != 'verified') {
                 throw new Exception("This {$request->authwith} was not verified");
             }
-        
-            $user = $request->authwith == 'email'?User::where('email', $candidate)->first() : User::where('phone',$request->phone)->first();
+
+            $user = $request->authwith == 'email' ? User::where('email', $candidate)->first() : User::where('phone', $request->phone)->first();
 
             $user->password = Hash::make($request->password);
             $user->save();
-            
+
             $verification->delete();
-            
+
 
             DB::commit();
 
@@ -130,7 +144,7 @@ class AuthController extends Controller
             ]);
         } catch (Exception $e) {
             DB::rollBack();
-            
+
             return response([
                 'status' => "fail",
                 "message" => "Password reseted failed. {$e->getMessage()}"
