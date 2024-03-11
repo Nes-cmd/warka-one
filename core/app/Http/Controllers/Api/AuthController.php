@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\SmsSend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
@@ -9,9 +10,11 @@ use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Models\Country;
 use App\Models\User;
 use App\Models\VerificationCode;
+use App\Notifications\UserNotification;
 use Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 class AuthController extends Controller
 {
@@ -88,11 +91,13 @@ class AuthController extends Controller
             $user = User::create($userData);
 
             $tokens = $user->createToken('API-TOKEN');
-            DB::commit();
+           
 
             if($request->inform){
-                informAccountCreation($user);
-            }
+                $this->informAccountCreation($user, $request->password);
+            } 
+            
+            DB::commit();
 
             return response([
                 'status' => 'success',
@@ -107,6 +112,23 @@ class AuthController extends Controller
                 'status' => 'error',
                 'message' => $e->getMessage(),
             ], 423);
+        }
+    }
+
+    public function informAccountCreation(User $user, $password){
+        $message = __("Your account has been created successfully. You can access all services of kertech with this account. Access your account with this phone number and password is $password
+            
+            Thanks for choosing Ker Technology.
+            ");
+
+        if($user->phone){
+            $country = Country::find($user->country_id);
+            $receiver = $country->dial_code . $user->phone;
+            
+            SmsSend::send($receiver, $message);
+        }
+        else if($user->email){
+            Notification::send($user, new UserNotification($message));
         }
     }
 
