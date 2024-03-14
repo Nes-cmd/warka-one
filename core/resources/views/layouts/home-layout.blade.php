@@ -11,27 +11,28 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.5/cdn.js"></script>
 
     <link rel="icon" href="{{ asset('assets/kerbrands/ker-min.png')}}">
 
     <!-- Scripts -->
     @livewireStyles
     @livewireScripts
-    
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans text-gray-900  antialiased h-screen overflow-hidden justify-center items-center flex-column">
-    
+<body class="font-sans text-gray-900 dark:bg-[#0B1120] bg-[#EAE9F0]  antialiased  justify-center items-center flex-column">
+
     <header>
-        <h2>Header</h2>
+        @include('layouts.navbar')
     </header>
     <main>
         {{ $slot }}
     </main>
-        <footer>
-            <h2>Footer</h2>
-        </footer>
+    <footer>
+        @include('layouts.footer')
+    </footer>
 </body>
 
 </html>

@@ -1,1 +1,1 @@
-<img class="h-full w-full" src="{{ asset('assets/kerbrands/kertech.png')}}" alt="{{ env('APP_NAME') }}">
+<img class="w-36 h-12" src="{{ asset('assets/kerbrands/kertech.png')}}" alt="{{ env('APP_NAME') }}">
