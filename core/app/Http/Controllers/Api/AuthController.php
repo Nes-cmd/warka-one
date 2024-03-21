@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Helpers\SendVerivication;
+use App\Helpers\SmsSend;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\GetVerificationRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
-use App\Http\Requests\Auth\VerifyRequest;
 use App\Models\Country;
 use App\Models\User;
 use App\Models\VerificationCode;
+use App\Notifications\UserNotification;
 use Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 class AuthController extends Controller
 {
@@ -36,94 +36,67 @@ class AuthController extends Controller
             $request->validate(['email' => 'required']);
             $user = User::where('email', $request->email)->first();
         }
+        if ($user) {
+            if($user->email_verified_at == null && $user->phone_verified_at == null){
+                return response([
+                    'status' => 'fail',
+                    'message' => 'Neither the phone or the email is not verified. please try to verify one or both of them first on the sso server'
+                ], 401);
+            }
 
-        if ($user && Hash::check($request->password, $user->password)) {
 
-            $token = $user->createToken('MySecret');
+            if (Hash::check($request->password, $user->password)) {
 
-            return response()->json(['token' => $token, 'user' => $user]);
+                $token = $user->createToken('MySecret');
+
+                return response()->json(['token' => $token, 'user' => $user]);
+            }
         }
         return response(['status' => 'fail', 'message' => 'These credientials didn\'t match our records'], 401);
     }
 
-    public function getVerificationCode(GetVerificationRequest $request)
-    {
-        if ($request->authwith == 'phone') {
-            $country = Country::find($request->country_id);
-            $receiver = $country->dial_code . $request->phone;
 
-            $via = "sms";
-        } else {
-            $receiver = $request->email;
-            $via = 'mail';
-        }
-
-        SendVerivication::make()->via($via)->receiver($receiver)->send();
-        return response([
-            'status' => 'success',
-            'message' => "Verification code sent, please use the otp sent to your {$request->authwith} to complete the rest of the process!"
-        ]);
-    }
-    public function verifyCode(VerifyRequest $request)
-    {
-
-        $country = Country::find($request->country_id);
-        $candidate = $request->authwith == 'email' ? $request->email : $country->dial_code . $request->phone;
-        $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
-        if ($verification) {
-            if ($verification->verification_code == $request->verificationCode) {
-                $verification->status = 'verified';
-                $verification->save();
-
-                return response([
-                    'status' => 'success',
-                    "message" => "{$request->authwith} verified successfully",
-                ]);
-            }
-            return response([
-                'message' => 'Incorrect code!',
-                'status' => 'error'
-            ], 401);
-
-        } else {
-            return response([
-                'message' => 'Code wasn\'t sent correctly or expierd, please try again!',
-                'status' => 'error'
-            ], 401);
-        }
-    }
     public function register(RegisterRequest $request)
     {
-
+       
         DB::beginTransaction();
 
         try {
-            $country = Country::find($request->country_id);
-            $candidate = $request->authwith == 'email' ? $request->email : $country->dial_code . $request->phone;
-
-            $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
-            if($verification == null){
-                throw new Exception("Please verify your {$request->authwith} first");
-            }
-            if ($verification->status != 'verified') {
-
-                throw new Exception("This {$request->authwith} was not verified");
-            }
-
-            $user = User::create([
+            $userData = [
                 'name' => $request->name,
                 'email' => $request->email,
                 'phone' => $request->phone,
                 'country_id' => $request->country_id,
                 'password' => Hash::make($request->password),
-                'phone_verified_at' => $request->authwith == 'phone' ? now() : null,
-                'email_verified_at' => $request->authwith == 'email' ? now() : null,
-            ]);
+            ];
+
+            $country = Country::find($request->country_id);
+            $candidate = $request->authwith == 'email' ? $request->email : $country->dial_code . $request->phone;
+
+            $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
+
+            if ($verification && $verification->status == 'verified') {
+                $userData['phone_verified_at'] = $request->authwith == 'phone' ? now() : null;
+                $userData['email_verified_at'] = $request->authwith == 'email' ? now() : null;
+                $verification->delete();
+            }
+
+            // if($verification == null){
+            //     throw new Exception("Please verify your {$request->authwith} first");
+            // }
+            // if ($verification->status != 'verified') {
+            //     throw new Exception("This {$request->authwith} was not verified");
+            // }
+
+            $user = User::create($userData);
 
             $tokens = $user->createToken('API-TOKEN');
+           
 
-            $verification->delete();
-
+            if($request->inform){
+                $this->informAccountCreation($user, $request->password);
+            } 
+            
             DB::commit();
 
             return response([
@@ -142,30 +115,48 @@ class AuthController extends Controller
         }
     }
 
-    public function resetPassword(ResetPasswordRequest $request){
-        
+    public function informAccountCreation(User $user, $password){
+        $message = __("Your account has been created successfully. You can access all services of kertech with this account. Access your account with this phone number and password is $password
+            
+            Thanks for choosing Ker Technology.
+            ");
+
+        if($user->phone){
+            $country = Country::find($user->country_id);
+            $receiver = $country->dial_code . $user->phone;
+            
+            SmsSend::send($receiver, $message);
+        }
+        else if($user->email){
+            Notification::send($user, new UserNotification($message));
+        }
+    }
+
+    public function resetPassword(ResetPasswordRequest $request)
+    {
+
         DB::beginTransaction();
         try {
             // Here we will attempt to reset the user's password. If it is successful we
             // will update the password on an actual user model and persist it to the
             // database. Otherwise we will parse the error and return the response.
-            
-            $country = Country::find($request->country_id);
-            $candidate = $request->authwith == 'email'?$request->email: $country->dial_code . $request->phone;
 
-            
+            $country = Country::find($request->country_id);
+            $candidate = $request->authwith == 'email' ? $request->email : $country->dial_code . $request->phone;
+
+
             $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
             if ($verification->status != 'verified') {
                 throw new Exception("This {$request->authwith} was not verified");
             }
-        
-            $user = $request->authwith == 'email'?User::where('email', $candidate)->first() : User::where('phone',$request->phone)->first();
+
+            $user = $request->authwith == 'email' ? User::where('email', $candidate)->first() : User::where('phone', $request->phone)->first();
 
             $user->password = Hash::make($request->password);
             $user->save();
-            
+
             $verification->delete();
-            
+
 
             DB::commit();
 
@@ -175,7 +166,7 @@ class AuthController extends Controller
             ]);
         } catch (Exception $e) {
             DB::rollBack();
-            
+
             return response([
                 'status' => "fail",
                 "message" => "Password reseted failed. {$e->getMessage()}"

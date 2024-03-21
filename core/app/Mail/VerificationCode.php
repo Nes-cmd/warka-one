@@ -31,8 +31,7 @@ class VerificationCode extends Mailable
     {
         return new Envelope(
             // from: env('APP_NAME'),
-            subject: 'Verification Code',
-           
+            subject: 'Verification Code', 
         );
     }
 

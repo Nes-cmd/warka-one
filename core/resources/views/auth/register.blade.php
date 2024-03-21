@@ -4,38 +4,40 @@
 
         <input type="hidden" name="country_id" value="{{ $authflowData['country']->id }}" id="">
         <!-- Name -->
-        <div class="mb-3">
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-        </div>
-
+        
         <!-- Phone number -->
-        <div class="mb-16" x-show="authwith == 'phone'">
+        @if( $authflowData['authwith'] == 'phone')
+        <div class="mb-6" x-show="authwith == 'phone'">
             <x-input-label for="phone" :value="__('Phone')" />
-            <div class="relative">
-                <x-text-input id="phone" disabled class="block bg-gray-100 mt-1 w-[72%] absolute right-0 rounded-l-none py-2" value="{{ $authflowData['phone'] }}" type="tel" name="phone" required />
-
-                <div class="absolute left-0 py-1 w-[30%]">
-                    <div class="relative">
+            <div class="flex">
+                    <div>
                         <!-- Button -->
-                        <button x-ref="button" type="button" class="flex items-center gap-2 bg-white px-5 py-[9px] rounded-md shadow">
+                        <button x-ref="button" type="button" class="flex items-center bg-gray-100 px-2 py-2.5 rounded-md shadow">
                             <img class="w-[20px]" src="{{ asset($authflowData['country']->flag_url) }}" alt="">
                             <span>({{ $authflowData['country']->dial_code}})</span>
                         </button>
                     </div>
-                </div>
-
+                <x-text-input id="phone" disabled class="block bg-gray-100 py-2 w-[90%]" value="{{ $authflowData['phone'] }}" type="tel" name="phone" required />
             </div>
             <x-input-error :messages="$errors->get('phone')" class="mt-2" />
         </div>
+        @endif
 
+        @if( $authflowData['authwith'] == 'email')
         <!-- Email Address -->
-        <div class="mt-4 mb-3" x-show="authwith == 'email'">
+        <div class="mt-4 mb-6" x-show="authwith == 'email'">
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" disabled class="block mt-1 w-full bg-gray-100" type="email" name="email" :value="old('email')" value="{{ $authflowData['email'] }}" required autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
+        @endif
+
+        <div class="mb-3 mt-3">
+            <x-input-label for="name" :value="__('Full Name')" />
+            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+        </div>
+
 
         <!-- Password -->
         <div class="mt-4">

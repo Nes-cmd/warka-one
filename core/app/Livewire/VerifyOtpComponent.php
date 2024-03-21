@@ -2,9 +2,10 @@
 
 namespace App\Livewire;
 
-use App\Helpers\SendVerivication;
+use App\Helpers\SendVerification;
 use Livewire\Component;
 use App\Models\VerificationCode as ModelsVerificationCode;
+use App\Providers\RouteServiceProvider;
 
 class VerifyOtpComponent extends Component
 {
@@ -17,7 +18,6 @@ class VerifyOtpComponent extends Component
     public $verificationFor;
     public function mount() {
         $authflowData = session('authflow');
-
        
         $this->authwith = $authflowData['authwith']; 
         $this->phone    = $authflowData['phone']; 
@@ -25,16 +25,29 @@ class VerifyOtpComponent extends Component
         $this->country  = $authflowData['country']; 
 
         $this->verificationFor = $authflowData['otpIsFor'];
+        
+        if($this->verificationFor === 'must-verify'){
+            $this->resend();
+        }
        
+    }
+    public function resend(){
+        if($this->authwith == 'phone'){
+            $this->resendSMS();
+        }
+        else if($this->authwith == 'email'){
+            $this->resendEmail();
+        }
     }
     public function resendSMS(){
         $fullPhone = $this->country->dial_code . $this->phone;
-        SendVerivication::make()->via('sms')->receiver($fullPhone)->send();
+        SendVerification::make()->via('sms')->receiver($fullPhone)->send();
     }
     public function resendEmail(){
-        SendVerivication::make()->via('mail')->receiver($this->email)->send();
+        SendVerification::make()->via('mail')->receiver($this->email)->send();
     }
     public function verify() {
+        
         $this->validate(['verificationCode' => 'required|numeric|digits:4']);
 
         $candidate = $this->authwith == 'email'?$this->email: $this->country->dial_code . $this->phone;
@@ -48,13 +61,22 @@ class VerifyOtpComponent extends Component
                 $verification->status = 'verified';
                 $verification->save();
 
-                if($this->verificationFor == 'reset-password'){
+                if($this->verificationFor == 'must-verify' && auth()->check()){
+                    $user = auth()->user();
+                    $verifyColumn = "{$this->authwith}_verified_at";
+                    $user->{$verifyColumn} = now();
+                    $user->save();
+                    $verification->delete();
+                    session()->forget('authflow');
+
+                    return redirect()->intended(RouteServiceProvider::HOME);
+                }
+                else if($this->verificationFor == 'reset-password'){
                     return redirect()->route('password.reset');
                 }
                 return redirect()->route('register');
             }
             session()->flash('authstatus', ['message' => 'Incorrect code!', 'type' => 'error']);
-            // dd('code incorrect', session()->all());
         }
         else{
             session()->flash('authstatus', ['message' => 'Code wasn\'t sent correctly, please try again!', 'type' => 'error']);
