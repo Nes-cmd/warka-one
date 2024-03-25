@@ -1,19 +1,23 @@
+@php
+// Determine the active state based on the current route name
+$currentRoute = \Illuminate\Support\Facades\Route::current()->getName();
+@endphp
 <nav class="flex justify-between items-center py-7 bg-transparent px-4 md:px-10 lg:px-20">
-    <a href="{{ route('dashboard') }}" class="w-36">
+    <a class="w-36">
         <x-application-logo />
     </a>
     <ul class="sm:flex items-center gap-3  hidden">
 
-        <x-nav-link>
+        <x-nav-link href="/">
             Home
         </x-nav-link>
-        <x-nav-link>
+        <x-nav-link href="/services">
             Services
         </x-nav-link>
-        <x-nav-link>
+        <x-nav-link href="/about">
             About
         </x-nav-link>
-        <x-nav-link>
+        <x-nav-link href="/contact">
             Contact us
         </x-nav-link>
         <x-nav-link>
@@ -78,16 +82,16 @@
     <a href="{{ route('dashboard') }}" class="w-36">
         <x-application-logo />
     </a>
-    <x-nav-link>
+    <x-nav-link href="/">
         Home
     </x-nav-link>
-    <x-nav-link>
+    <x-nav-link href="/services">
         Services
     </x-nav-link>
-    <x-nav-link>
+    <x-nav-link href="/about">
         About
     </x-nav-link>
-    <x-nav-link>
+    <x-nav-link href="/contact">
         Contact us
     </x-nav-link>
     <x-nav-link>
