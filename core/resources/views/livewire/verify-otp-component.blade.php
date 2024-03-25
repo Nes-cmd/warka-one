@@ -5,12 +5,12 @@
     </div>
     <div x-data="{
         authwith : $persist('{{ old('authwith')?old('authwith'):$authwith }}'),
-        resendin :  $persist(60),
-        resetResend(id) {
-            if(id == 'resendsms'){
+        resendin :  $persist(59),
+        resetResend(id, shouldSend = true) {
+            if(id == 'resendsms' && shouldSend){
                 $wire.resendSMS();
             }
-            if(id == 'resendemail'){
+            if(id == 'resendemail' && shouldSend){
                 $wire.resendEmail();
             }
 
@@ -19,7 +19,7 @@
             resendButton.disabled = true
 
             resendButton.classList.add('bg-gray-400')
-            resendButton.classList.remove('bg-gray-700')
+            resendButton.classList.remove('bg-secondary-50/100')
 
             const countdown = setInterval(() => {
                 if (this.resendin === 0) {
@@ -27,7 +27,7 @@
                     resendButton.innerText = `Resend` 
                     resendButton.disabled = false
 
-                    resendButton.classList.add('bg-gray-700')
+                    resendButton.classList.add('bg-secondary-50/100')
                     resendButton.classList.remove('bg-gray-400')
 
                     this.resendin = 60
@@ -38,29 +38,36 @@
                 }
 
             }, 1000);
+        },
+        init(){
+            if(this.resendin < 60){
+                this.resetResend(this.authwith == 'phone'?'resendsms':'resendemail', false)
+            }
         }
-        }">
+        }"
+        
+        >
 
-
+        @if($authwith == 'email')
         <div class="relative mb-4" x-show="authwith == 'email'">
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" class="block mt-1 w-full bg-gray-200" type="email" name="email" disabled wire:model="email" required />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
             <div class="absolute right-3 top-[43%] " wire:ignore>
-                <button id="resendemail" x-on:click="resetResend('resendemail')" class="border border-secondary rounded px-3 py-1 text-secondary-600 bg-secondary-50/100 ">Resend</button>
+                <button id="resendemail" x-on:click="resetResend('resendemail')"  class="border border-secondary rounded px-3 py-1 text-secondary-600 bg-secondary-50/100">Resend</button>
             </div>
         </div>
+        @endif
 
-
+        @if($authwith == 'phone')
         <div class="h-[90px]" x-show="authwith == 'phone'">
             <x-input-label for="phone" :value="__('Phone')" />
-            <div class="relative">
-                <x-text-input id="phone" disabled class="bg-gray-200 block mt-1 w-[71%]  absolute right-0 rounded-l-none py-2 pl-5 md:pl-3" type="tel" name="phone" wire:model="phone" required />
-
-                <div class="absolute left-0 py-1 w-[30%]">
-                    <div class="relative">
+            <div class="flex relative">
+                
+                <div class="">
+                    <div class="">
                         <!-- Button -->
-                        <button x-ref="button" type="button" class="flex items-center gap-2 bg-gray-200 px-5 py-[9px] rounded-md shadow">
+                        <button x-ref="button" type="button" class="flex items-center bg-gray-200 pl-2 py-2.5 rounded-md shadow">
                             <img class="w-[20px]" src="{{ asset($country->flag_url) }}" alt="">
                             <span>({{ $country->dial_code}})</span>
 
@@ -72,21 +79,26 @@
                     </div>
                 </div>
 
+                <x-text-input id="phone" disabled class="bg-gray-200 block  w-[90%] py-2.5" type="tel" name="phone" wire:model="phone" required />
+
+
                 <div class="absolute right-3 z-10 top-2" wire:ignore>
-                    <button id="resendsms" x-on:click="resetResend('resendsms')" class="bg-gray-700 border rounded px-3 py-1 text-white text-sm">Resend</button>
+                    <button id="resendsms" x-on:click="resetResend('resendsms')" class="border border-secondary rounded px-3 py-1 text-secondary-600 bg-secondary-50/100">Resend</button>
                 </div>
+                
 
             </div>
             <x-input-error :messages="$errors->get('phone')" class="mt-2" />
         </div>
+        @endif
 
+        
         <div>
             <x-input-label for="verificationCode" :value="__('Verification code')" />
             <x-text-input id="" class="block mt-1 w-full" type="text" wire:model.lazy="verificationCode" required />
             <x-input-error :messages="$errors->get('verificationCode')" class="mt-2" />
         </div>
-
-
+        
 
         <div class="flex items-center justify-between mt-4">
             <a href="/authflow/get-otp?for={{$verificationFor}}" class="border border-secondary rounded-lg px-3 py-1 text-secondary-600 bg-secondary-50/100">&lt; Go Back</a>
@@ -104,30 +116,5 @@
         </x-primary-button> -->
 
     </div>
-
-    <script>
-        // function resetResend(id) {
-        //     var seconds = 10;
-        //     var resendButton = document.getElementById(id)
-        //     resendButton.disabled = true;
-        //     resendButton.classList.remove('bg-gray-700')
-        //     resendButton.classList.add('bg-gray-400')
-        //     const countdown = setInterval(() => {
-        //         if (seconds === 0) {
-        //             clearInterval(countdown);
-        //             resendButton.innerText = `Resend`
-        //             resendButton.disabled = false
-        //             resendButton.classList.remove('bg-gray-400')
-        //             resendButton.classList.add('bg-gray-700')
-        //             console.log("Countdown finished!");
-        //         } 
-        //         else {
-        //             seconds--;
-        //             resendButton.innerText = `Resend in ${seconds} s`
-        //         }
-
-        //     }, 1000);
-        // }
-    </script>
 
 </div>

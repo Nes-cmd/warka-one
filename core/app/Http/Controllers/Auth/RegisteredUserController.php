@@ -24,6 +24,7 @@ class RegisteredUserController extends Controller
     public function create(): View
     {
         $authflowData = session('authflow');
+        
         return view('auth.register', compact('authflowData'));
     }
 
@@ -35,9 +36,10 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $authflowData = session('authflow');
+       
         $request->validate([
             'name'     => ['required', 'string', 'max:255'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', 'confirmed', 'min:6'],
         ]);
        
         DB::beginTransaction();

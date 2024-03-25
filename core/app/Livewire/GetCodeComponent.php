@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Helpers\SendVerivication;
+use App\Helpers\SendVerification;
 use App\Mail\VerificationCode;
 use App\Models\Country;
 use App\Models\User;
@@ -42,14 +42,14 @@ class GetCodeComponent extends Component
                 'phone' => ['required', 'min:9', 'max:9', $this->otpIsFor == 'register' ? 'unique:users,phone' : 'exists:users,phone']
             ]);
             $fullPhone = $this->selectedCountry->dial_code . $this->phone;
-            $status = SendVerivication::make()->via('sms')->receiver($fullPhone)->send();
+            $status = SendVerification::make()->via('sms')->receiver($fullPhone)->send();
         }
         if ($this->authwith == 'email') {
             $this->validate([
                 'email' => ['required', 'email', $this->otpIsFor == 'register' ? 'unique:users,email' : 'exists:users,email']
             ]);
            
-            $status = SendVerivication::make()->via('mail')->receiver($this->email)->send();
+            $status = SendVerification::make()->via('mail')->receiver($this->email)->send();
         }
        
         if ($status) {

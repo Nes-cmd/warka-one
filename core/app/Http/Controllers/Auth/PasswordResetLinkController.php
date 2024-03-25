@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Helpers\SendVerivication;
+use App\Helpers\SendVerification;
 use App\Http\Controllers\Controller;
 use App\Models\Country;
 use Illuminate\Http\RedirectResponse;
@@ -41,13 +41,13 @@ class PasswordResetLinkController extends Controller
 
             $fullPhone = $country->dial_code . $request->phone;
 
-            $status = SendVerivication::make()->via('sms')->receiver($fullPhone)->send();
+            $status = SendVerification::make()->via('sms')->receiver($fullPhone)->send();
         }
         if($authwith == 'email') {
             $request->validate([
                 'email' => 'required|exists:users,email'
             ]);
-            $status = SendVerivication::make()->via('mail')->receiver($request->email)->send();
+            $status = SendVerification::make()->via('mail')->receiver($request->email)->send();
         }
 
         // We will send the password reset link to this user. Once we have attempted

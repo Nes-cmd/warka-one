@@ -24,10 +24,10 @@ class RegisterRequest extends FormRequest
     {
         return [
             'name'     => ['required', 'string', 'max:255'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', 'min:6'],
             'authwith' => ['required', 'in:phone,email'],
-            'email'    => ['required_if:authwith,email', 'string', 'email'],
-            'phone'    => ['required_if:authwith,phone', 'size:9'],
+            'email'    => ['nullable','required_if:authwith,email', 'string', 'email'],
+            'phone'    => ['nullable','required_if:authwith,phone', 'size:9'],
             'country_id' => ['required_if:authwith,phone'],
             "password_confirmation" => ['required'],
         ];
