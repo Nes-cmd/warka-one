@@ -1,11 +1,11 @@
 <x-home-layout>
-    <main class="overflow-scroll overflow-y-auto h-full">
-        <section class="flex w-full flex-col items-center">
-            <div class="max-w-5xl mx-auto my-10">
-                <h1 class="dark:text-gray-50 text-gray-800 text-4xl sm:text-5xl lg:text-6xl font-extrabold text-center ">
+    <main>
+        <section class="flex w-full flex-col items-center ">
+            <div class="max-w-5xl mx-auto py-10">
+                <h1 class="text-slate-900 font-extrabold text-4xl sm:text-5xl lg:text-6xl tracking-tight text-center dark:text-white">
                     Make your life easier With KerTech’s <span class="text-secondary"> secure,</span> Reliable and Fast Technology
                 </h1>
-                <p class=" px-4 text-center dark:text-gray-300 text-gray-700 max-w-3xl mx-auto mt-10">
+                <p class=" mt-6 text-lg text-slate-600 text-center max-w-3xl mx-auto dark:text-slate-400">
                     Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vitae illum excepturi ratione molestias culpa voluptates voluptate cupiditate perferendis fugit dolore suscipit cumque, placeat porro possimus dolorum neque similique ipsam necessitatibus.
                 </p>
 
@@ -14,60 +14,107 @@
                 Our Services
             </a>
         </section>
-        <section class="max-w-6xl mx-auto my-10 px-10">
+        <section class="max-w-6xl mx-auto my-10 px-10 md:mb-40 mb-20">
             <div class="flex flex-col lg:flex-row items-center gap-4 lg:gap-0 justify-center lg:justify-end relative">
-                <div class="rounded-xl dark:bg-gray-300 bg-white flex justify-center ">
+                <div class="rounded-xl dark:bg-gray-300 bg-white/30 flex justify-center ">
                     <img src="{{ asset('assets/image/insurance.svg') }}" alt="home hero" class="w-2/3 ">
 
                 </div>
-                <div class="lg:absolute lg:top-1/2 lg:-translate-y-1/2 lg:left-0 xl:left-[5%]   bg-[#1E293B]  shadow-sm py-4 w-full md:w-2/3 lg:w-[470px] rounded-xl flex flex-col items-center gap-2">
+                <div class="lg:absolute lg:top-1/2 lg:-translate-y-1/2 lg:left-0 xl:left-[5%] bg-white  dark:bg-[#1E293B]  shadow-sm py-4 w-full md:w-2/3 lg:w-[470px] rounded-xl flex flex-col items-center gap-2">
                     <div class="w-20 h-20 rounded-full ">
                         <img src="{{ asset('assets/image/Preview.svg') }}" alt="" srcset="" class="dark:invert-0 ">
                     </div>
-                    <p class="text-center text-gray-50 px-5 text-sm">
+                    <p class="mt-6 text-lg text-slate-600 text-center max-w-3xl mx-auto dark:text-slate-400">
                         Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis nulla nemo quidem sit veniam, expedita sunt consequatur
                     </p>
                 </div>
             </div>
         </section>
-        <section class="w-full px-4 lg:px-20 md:px-10 flex flex-col items-center my-10">
-            <h1 class="text-secondary text-3xl lg:text-4xl font-extrabold text-center">
+
+        <section>
+            <!-- sso place  -->
+            <div class="max-w-5xl mx-auto py-10">
+                <h1 class="text-slate-900 font-extrabold text-3xl sm:text-4xl lg:text-5xl tracking-tight text-center dark:text-white">
+                    Your Passport to Seamless Access Across Multiple Platforms with Our <span class="text-secondary"> SSO</span> Login!
+                </h1>
+                <p class=" mt-6 text-lg text-slate-600 text-center max-w-3xl mx-auto dark:text-slate-400">
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vitae illum excepturi ratione molestias culpa voluptates voluptate cupiditate perferendis fugit dolore suscipit cumque, placeat porro possimus dolorum neque similique ipsam necessitatibus.
+                </p>
+
+            </div>
+        </section>
+        <!-- <section class="w-full px-4 lg:px-20 md:px-10 flex flex-col items-center my-10">
+            <h1 class="text-slate-900 text-4xl tracking-tight font-extrabold sm:text-5xl dark:text-white">
                 Our Services
             </h1>
-            <p class="text-center my-3 md:text-lg text-sm text-gray-800 dark:text-gray-50 w-[90%] md:w-[80%] lg:w-[70%] xl:w-[60%] 2xl:w-[50%]">
+            <p class="mt-6 text-lg text-slate-600 text-center max-w-3xl mx-auto dark:text-slate-400">
                 Lorem, ipsum dolor sit amet consectetur adipisicing elit. Architecto aspernatur aperiam ea sit hic dignissimos reprehenderit amet, quisquam maiores blanditiis! Eligendi amet illo pariatur. Nihil, sint commodi? Inventore, minima placeat.
             </p>
-            <div class="w-full grid md:grid-cols-3 grid-cols-2 gap-1 md:gap-2 lg:gap-5 mt-3">
-                <div class=" group rounded-xl col-span-1 flex flex-col items-center gap-3 bg-[#1E293B] py-4 hover:-translate-y-3 border border-transparent ease-in-out duration-300 transition-all cursor-pointer hover:border-secondary">
+            <div class="w-full grid md:grid-cols-2 grid-cols-1 gap-5 md:gap-2 lg:gap-5 mt-32">
+                <div class=" group rounded-xl col-span-1 flex flex-col items-start px-4 gap-6 bg-[#1E293B] py-4 hover:-translate-y-3 border-[0.5px] border-transparent ease-in-out duration-300 transition-all cursor-pointer hover:border-secondary">
                     <div class="lg:w-20 lg:h-20 w-16 h-16 rounded-full ">
                         <img src="{{ asset('assets/image/Preview.svg') }}" alt="" srcset="" class="dark:invert-0 ">
                     </div>
-                    <p class="text-[11px] md:text-sm lg:text-md text-gray-50 text-center px-2">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore rerum aliquid deleniti natus consequatur ea nisi cidunt consequuntur ratione ullam illo.</p>
-                    <div class="text-gray-50 lg:text-lg font-semibold group-hover:text-secondary ">
+                    <p class="text-[11px] md:text-sm lg:text-md text-slate-600 dark:text-slate-400  text-start ">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore rerum aliquid deleniti natus consequatur ea nisi cidunt consequuntur ratione ullam illo.</p>
+                    <div class="group inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 focus:outline-none focus:ring-2 bg-secondary-50 text-secondary-600 hover:bg-secondary-100 hover:text-secondary-700 focus:ring-secondary-600 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600 dark:hover:text-white dark:focus:ring-slate-500 mt-8">
                         Learn More
                     </div>
                 </div>
-                <div class=" group rounded-xl col-span-1 bg-[#1E293B] flex flex-col items-center gap-3 py-4 hover:-translate-y-3 border border-transparent ease-in-out duration-300 transition-all cursor-pointer hover:border-secondary">
+                <div class=" group rounded-xl col-span-1 flex flex-col items-start px-4 gap-6 bg-[#1E293B] py-4 hover:-translate-y-3 border-[0.5px] border-transparent ease-in-out duration-300 transition-all cursor-pointer hover:border-secondary">
                     <div class="lg:w-20 lg:h-20 w-16 h-16 rounded-full ">
                         <img src="{{ asset('assets/image/Preview.svg') }}" alt="" srcset="" class="dark:invert-0 ">
                     </div>
-                    <p class="text-[11px] md:text-sm lg:text-md text-gray-50 text-center px-2">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore rerum aliquid deleniti natus consequatur ea nisi cidunt consequuntur ratione ullam illo.</p>
-                    <div class="text-gray-50 lg:text-lg font-semibold group-hover:text-secondary ">
+                    <p class="text-[11px] md:text-sm lg:text-md text-slate-600 dark:text-slate-400  text-start ">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore rerum aliquid deleniti natus consequatur ea nisi cidunt consequuntur ratione ullam illo.</p>
+                    <div class="group inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 focus:outline-none focus:ring-2 bg-secondary-50 text-secondary-600 hover:bg-secondary-100 hover:text-secondary-700 focus:ring-secondary-600 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600 dark:hover:text-white dark:focus:ring-slate-500 mt-8">
                         Learn More
                     </div>
                 </div>
-                <div class=" group rounded-xl col-span-1 bg-[#1E293B] flex flex-col items-center gap-3 py-4 hover:-translate-y-3 border border-transparent ease-in-out duration-300 transition-all cursor-pointer hover:border-secondary">
+                <div class=" group rounded-xl col-span-1 flex flex-col items-start px-4 gap-6 bg-[#1E293B] py-4 hover:-translate-y-3 border-[0.5px] border-transparent ease-in-out duration-300 transition-all cursor-pointer hover:border-secondary">
                     <div class="lg:w-20 lg:h-20 w-16 h-16 rounded-full ">
                         <img src="{{ asset('assets/image/Preview.svg') }}" alt="" srcset="" class="dark:invert-0 ">
                     </div>
-                    <p class="text-[11px] md:text-sm lg:text-md text-gray-50 text-center px-2">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore rerum aliquid deleniti natus consequatur ea nisi cidunt consequuntur ratione ullam illo.</p>
-                    <div class="text-gray-50 lg:text-lg font-semibold group-hover:text-secondary ">
+                    <p class="text-[11px] md:text-sm lg:text-md text-slate-600 dark:text-slate-400  text-start ">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore rerum aliquid deleniti natus consequatur ea nisi cidunt consequuntur ratione ullam illo.</p>
+                    <div class="group inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 focus:outline-none focus:ring-2 bg-secondary-50 text-secondary-600 hover:bg-secondary-100 hover:text-secondary-700 focus:ring-secondary-600 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600 dark:hover:text-white dark:focus:ring-slate-500 mt-8">
                         Learn More
                     </div>
                 </div>
             </div>
+        </section> -->
+        <section class="w-full px-4 lg:px-20 md:px-10 flex flex-col items-center my-10">
+            <h1 class="text-slate-900 font-extrabold text-3xl sm:text-4xl lg:text-5xl tracking-tight  dark:text-white my-10">
+                Our Services
+            </h1>
+            <div class="grid lg:grid-cols-2 grid-cols-1 gap-10 my-5">
+                <div class="flex flex-col gap-4 ">
+                    <div class="lg:w-28 lg:h-28 w-20 h-20 rounded-full ">
+                        <img src="{{ asset('assets/image/Preview.svg') }}" alt="" srcset="" class="dark:invert-0 ">
+                    </div>
+                    <h1 class="text-slate-900 font-extrabold text-xl sm:text-2xl lg:text-2xl tracking-tight  dark:text-white">
+                        Ker Appartment Management
+                    </h1>
+                    <div class="rounded-lg dark:bg-[#1E293B] bg-white/40 w-full h-52 p-4">
+                        <p class="mt-6 text-lg text-slate-600 text-center max-w-3xl mx-auto dark:text-slate-400">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto aspernatur aperiam ea sit hic dignissimos reprehenderit amet, quisquam maiores blanditiis! Eligendi amet illo pariatur. Nihil, sint commodi? Inventore, minima placeat.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-4 ">
+                    <div class="lg:w-28 lg:h-28 w-20 h-20 rounded-full ">
+                        <img src="{{ asset('assets/image/Preview.svg') }}" alt="" srcset="" class="dark:invert-0 ">
+                    </div>
+                    <h1 class="text-slate-900 font-extrabold text-xl sm:text-2xl lg:text-2xl tracking-tight  dark:text-white">
+                        Ker Appartment Management
+                    </h1>
+                    <div class="rounded-lg dark:bg-[#1E293B] bg-white/40 w-full h-52 p-4">
+                        <p class="mt-6 text-lg text-slate-600 text-center max-w-3xl mx-auto dark:text-slate-400">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto aspernatur aperiam ea sit hic dignissimos reprehenderit amet, quisquam maiores blanditiis! Eligendi amet illo pariatur. Nihil, sint commodi? Inventore, minima placeat.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
         </section>
-        <section class="px-4 md:px-10 lg:px-20 w-full my-16 ">
+        <section class="px-4 md:px-10 lg:px-20 w-full mt-20 ">
             <div class="w-full p-4 text-center bg-transparent border-b dark:border-gray-700 border-gray-300  rounded-lg shadow sm:p-8 dark:bg-transparent ">
                 <h5 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">Work fast from anywhere</h5>
                 <p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">Stay up to date and move work forward with Flowbite on iOS & Android. Download the app today.</p>
@@ -93,38 +140,38 @@
                 </div>
             </div>
         </section>
-        <section class="w-full px-4 lg:px-20 md:px-10 flex flex-col items-center my-20">
+        <section class="w-full px-4 lg:px-20 md:px-10 flex flex-col items-center py-20">
             <img src="{{ asset('assets/image/Group.svg') }}" alt="" srcset="" class="dark:invert w-[30%] sm:w-[20%] md:w-[15%] lg:w-[10%]">
-            <h1 class="text-secondary text-3xl lg:text-4xl font-extrabold text-center -translate-y-3">
+            <h1 class="text-slate-900 text-4xl tracking-tight font-extrabold sm:text-5xl dark:text-white">
                 Our Team
             </h1>
-            <p class="text-center my-3 md:text-lg text-sm text-gray-800 dark:text-gray-50 w-[90%] md:w-[80%] lg:w-[70%] xl:w-[60%] 2xl:w-[50%]">
+            <p class="mt-6 text-lg text-slate-600 text-center max-w-3xl mx-auto dark:text-slate-400">
                 Lorem, ipsum dolor sit amet consectetur adipisicing elit. Inventore, minima placeat.
             </p>
-            <div class="w-full grid md:grid-cols-3 grid-cols-2 gap-1 md:gap-2 lg:gap-5 mt-10 ">
-                <div class=" group relative rounded-xl col-span-1 flex flex-col items-center gap-3 dark:bg-[#1E293B] bg-white py-4 hover:-translate-y-3 border border-transparent ease-in-out duration-300 transition-all cursor-pointer hover:border-secondary">
+            <div class="w-full grid md:grid-cols-3 grid-cols-2 gap-1 md:gap-2 lg:gap-5 mt-20 ">
+                <div class=" group relative rounded-xl col-span-1 flex flex-col items-center gap-3 dark:bg-[#1E293B] bg-white py-4 hover:-translate-y-3 border border-transparent ease-in-out duration-300 transition-all cursor-pointer ">
                     <div class="lg:w-20 lg:h-20 w-16 h-16 rounded-full absolute -top-10 z-10 dark:bg-[#1E293B] bg-gray-200">
                         <img src="{{ asset('assets/image/Preview.svg') }}" alt="" srcset="" class="dark:invert-0 ">
                     </div>
-                    <p class=" md:text-sm mt-6 lg:text-md dark:text-gray-50 text-gray-800 text-center px-2">Lorem ipsum dolor sit amet consectetur, adipisicing elit illo.</p>
+                    <p class=" md:text-sm mt-10 lg:text-md text-slate-600 dark:text-slate-400 text-center px-2">Lorem ipsum dolor sit amet consectetur, adipisicing elit illo.</p>
                     <div class="text-gray-400 text-sm  font-semibold group-hover:text-secondary mt-5">
                         Lorem ipsum dolor sit
                     </div>
                 </div>
-                <div class=" group relative rounded-xl col-span-1 flex flex-col items-center gap-3 dark:bg-[#1E293B] bg-white py-4 hover:-translate-y-3 border border-transparent ease-in-out duration-300 transition-all cursor-pointer hover:border-secondary">
+                <div class=" group relative rounded-xl col-span-1 flex flex-col items-center gap-3 dark:bg-[#1E293B] bg-white py-4 hover:-translate-y-3 border border-transparent ease-in-out duration-300 transition-all cursor-pointer ">
                     <div class="lg:w-20 lg:h-20 w-16 h-16 rounded-full absolute -top-10 dark:bg-[#1E293B] bg-gray-200">
                         <img src="{{ asset('assets/image/Preview.svg') }}" alt="" srcset="" class="dark:invert-0 ">
                     </div>
-                    <p class=" md:text-sm mt-6 lg:text-md dark:text-gray-50 text-gray-800 text-center px-2">Lorem ipsum dolor sit amet consectetur, adipisicing elit. </p>
+                    <p class=" md:text-sm mt-10 lg:text-md text-slate-600 dark:text-slate-400  text-center ">Lorem ipsum dolor sit amet consectetur, adipisicing elit. </p>
                     <div class="text-gray-400 text-sm  font-semibold group-hover:text-secondary mt-5">
                         Lorem ipsum dolor sit
                     </div>
                 </div>
-                <div class=" md:mt-0 mt-10 group relative rounded-xl col-span-1 flex flex-col items-center gap-3 dark:bg-[#1E293B] bg-white py-4 hover:-translate-y-3 border border-transparent ease-in-out duration-300 transition-all cursor-pointer hover:border-secondary">
+                <div class=" md:mt-0 mt-10 group relative rounded-xl col-span-1 flex flex-col items-center gap-3 dark:bg-[#1E293B] bg-white py-4 hover:-translate-y-3 border border-transparent ease-in-out duration-300 transition-all cursor-pointer ">
                     <div class="lg:w-20 lg:h-20 w-16 h-16 rounded-full absolute -top-10 dark:bg-[#1E293B] bg-gray-200">
                         <img src="{{ asset('assets/image/Preview.svg') }}" alt="" srcset="" class="dark:invert-0 ">
                     </div>
-                    <p class=" md:text-sm mt-6 lg:text-md dark:text-gray-50 text-gray-800 text-center px-2">Lorem ipsum dolor sit amet consequuntur ratione ullam illo.</p>
+                    <p class=" md:text-sm mt-10 lg:text-md text-slate-600 dark:text-slate-400 text-center px-2">Lorem ipsum dolor sit amet consequuntur ratione ullam illo.</p>
                     <div class="text-gray-400 text-sm  font-semibold group-hover:text-secondary mt-5">
                         Lorem ipsum dolor sit
                     </div>
@@ -132,6 +179,8 @@
 
             </div>
         </section>
+        <div class="absolute top-20 left-1/2 w-52 h-[800px] rotate-45 bg-gradient-to-t from-secondary-500/40 to-primary-400/40 -z-10 blur-3xl">
 
+        </div>
     </main>
 </x-home-layout>

@@ -14,7 +14,9 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.5/cdn.js"></script>
 
     <link rel="icon" href="{{ asset('assets/kerbrands/ker-min.png')}}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js">
 
+    </script>
     <!-- Scripts -->
     @livewireStyles
     @livewireScripts
@@ -22,12 +24,12 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans text-gray-900 dark:bg-[#0B1120] bg-[#EAE9F0]  antialiased  justify-center items-center flex-column">
+<body class="font-sans text-gray-900 dark:bg-[#0F172A] bg-[#EAE9F0]    justify-center items-center flex-column">
 
     <header>
         @include('layouts.navbar')
     </header>
-    <main>
+    <main class="max-w-7xl mx-auto">
         {{ $slot }}
     </main>
     <footer>

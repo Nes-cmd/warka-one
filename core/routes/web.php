@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
 Route::view('mail', 'emailtemp');
+Route::view('about', 'about');
+Route::view('services', 'services');
+Route::view('contact', 'contact');
 
 Route::get('dashboard', function () {
     return view('dashboard');
@@ -25,17 +28,17 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->get('authflow/must-verify', [VerificationController::class, 'mustVerify'])->name('must-verify-otp');
 
 
-Route::get('logout-pms', function(Request $request){
+Route::get('logout-pms', function (Request $request) {
     $request->session()->invalidate();
     $request->session()->regenerateToken();
-    
+
     return redirect($request->callback);
 });
 
-Route::get('logout-wallet', function(Request $request){
+Route::get('logout-wallet', function (Request $request) {
     $request->session()->invalidate();
     $request->session()->regenerateToken();
-    
+
     return redirect($request->callback);
 });
 
@@ -49,7 +52,7 @@ curl -XPOST -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZGVudGlmaWVyIjoid
     'https://api.afromessage.com/api/send'
 */
 
-// Route::get('sms-test', function(){
+// Route::get('sms-test', function () {
 //     $op = SmsSend::sendSMS("251940678725", "Selam there, Your confirmation code is 4236");
 
 //     dd($op);
