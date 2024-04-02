@@ -1,8 +1,8 @@
 <x-home-layout>
 
-    <main class="w-full">
+    <main class="max-w-7xl mx-auto">
         <div class="absolute  top-0  flex justify-end w-52 h-96 md:translate-x-1/2  rotate-45 dark:bg-primary/40 bg-primary-500/10 blur-3xl rounded-full"></div>
-        <div class="absolute  bottom-0   flex justify-end w-52 h-96 md:translate-x-1/2 right-0 rotate-45 dark:bg-secondary-900/30 bg-secondary-500/10 blur-3xl rounded-full"></div>
+        <!-- <div class="absolute  bottom-0   flex justify-end w-52 h-96 md:translate-x-1/2 right-0 rotate-45 dark:bg-secondary-900/30 bg-secondary-500/10 blur-3xl rounded-full"></div> -->
 
         <div class="max-w-2xl mx-auto my-10">
             <p class="text-slate-900 text-4xl text-center tracking-tight font-extrabold sm:text-5xl dark:text-white">
@@ -28,6 +28,7 @@
                         Get Started
                     </a>
                 </div>
+
 
             </div>
             <div class="flex flex-col gap-8 self-end max-w-4xl ">
