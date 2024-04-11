@@ -64,16 +64,16 @@
             <div class="hidden md:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button class="inline-flex items-center px-1 py-1  border  text-sm leading-4 font-medium rounded-full text-gray-500 bg-primary-50 hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            <div class="3xl:w-[41px]  w-[32px] aspect-square rounded-full bg-primary-100 mr-3">
-                                <!-- {{ Auth::user()->name }} -->
+                        <button class="inline-flex items-center      text-sm leading-4 font-medium rounded-full  hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                            <div id="initial" class="3xl:w-[41px]  w-[32px] aspect-square text-xl text-primary flex items-center justify-center font-bold rounded-full bg-primary-100">
+
                             </div>
 
-                            <div class="ms-1">
-                                <svg class="fill-current h-6 w-6 text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <!-- <div class="ms-1">
+                                <svg class="fill-current h-5 w-5 text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                 </svg>
-                            </div>
+                            </div> -->
                         </button>
                     </x-slot>
 
@@ -140,3 +140,14 @@
         </div>
     </div>
 </nav>
+
+<script>
+    // Get the user's name
+    var username = "{{ Auth::user()->name }}";
+
+    // Extract the first letter
+    var firstLetter = username.charAt(0).toUpperCase();
+
+    // Replace the "B" with the first letter
+    document.getElementById("initial").textContent = firstLetter;
+</script>
