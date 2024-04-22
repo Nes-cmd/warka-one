@@ -28,9 +28,9 @@ class LoginRequest extends FormRequest
     {
         return [
             'authwith' => ['required', 'in:phone,email'],
-            'email'    => ['required_if:authwith,email', 'string', 'email'],
-            'phone'    => ['required_if:authwith,phone', 'size:9'],
-            'country_id' => ['required_if:authwith,phone'],
+            'email'    => ['nullable','required_if:authwith,email', 'string', 'email'],
+            'phone'    => ['nullable','required_if:authwith,phone', 'min:9'],
+            'country_id' => ['nullable','required_if:authwith,phone'],
             'password' => ['required', 'string', 'min:6'],
         ];
     }

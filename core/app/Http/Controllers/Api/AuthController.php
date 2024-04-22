@@ -12,6 +12,8 @@ use App\Models\User;
 use App\Models\VerificationCode;
 use App\Notifications\UserNotification;
 use Exception;
+use Illuminate\Http\Request;
+// use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
@@ -28,10 +30,13 @@ class AuthController extends Controller
         }
 
         $authwith = $request->authwith;
+
+        $phone = trimPhone($request->phone);
+
         $request->validate(['password' => ['required', 'string']]);
         if ($authwith == 'phone') {
             $request->validate(['phone' => 'required']);
-            $user = User::where('phone', $request->phone)->first();
+            $user = User::where('phone', $phone)->first();
         } else {
             $request->validate(['email' => 'required']);
             $user = User::where('email', $request->email)->first();
@@ -62,16 +67,17 @@ class AuthController extends Controller
         DB::beginTransaction();
 
         try {
+            $phone = trimPhone($request->phone);
             $userData = [
                 'name' => $request->name,
                 'email' => $request->email,
-                'phone' => $request->phone,
+                'phone' => $phone,
                 'country_id' => $request->country_id,
                 'password' => Hash::make($request->password),
             ];
 
             $country = Country::find($request->country_id);
-            $candidate = $request->authwith == 'email' ? $request->email : $country->dial_code . $request->phone;
+            $candidate = $request->authwith == 'email' ? $request->email : $country->dial_code . $phone;
 
             $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
 
@@ -140,9 +146,10 @@ class AuthController extends Controller
             // Here we will attempt to reset the user's password. If it is successful we
             // will update the password on an actual user model and persist it to the
             // database. Otherwise we will parse the error and return the response.
+            $phone = trimPhone($request->phone);
 
             $country = Country::find($request->country_id);
-            $candidate = $request->authwith == 'email' ? $request->email : $country->dial_code . $request->phone;
+            $candidate = $request->authwith == 'email' ? $request->email : $country->dial_code . $phone;
 
 
             $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
@@ -150,7 +157,7 @@ class AuthController extends Controller
                 throw new Exception("This {$request->authwith} was not verified");
             }
 
-            $user = $request->authwith == 'email' ? User::where('email', $candidate)->first() : User::where('phone', $request->phone)->first();
+            $user = $request->authwith == 'email' ? User::where('email', $candidate)->first() : User::where('phone', $phone)->first();
 
             $user->password = Hash::make($request->password);
             $user->save();
@@ -173,4 +180,15 @@ class AuthController extends Controller
             ], 423);
         }
     }
+
+    // public function changePassword(Request $request){
+    //     $user = User::find($request->id);
+    //     $user->password = Hash::make($request->password);
+    //     $user->save();
+
+    //     return response([
+    //         'status' => 'success',
+    //         'massage' => 'You have successfully changed your password, and you have loged out'
+    //     ]);
+    // }
 }
