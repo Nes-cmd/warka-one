@@ -15,8 +15,13 @@ Route::post('verify-code', [VerificationController::class, 'verifyCode']);
 Route::post('create-user', [AuthController::class, 'register']);
 Route::post('reset-password', [AuthController::class, 'resetPassword']);
 
+Route::post('change-password',[AuthController::class, 'updatePdassword']);
+Route::post('update-phone', [AuthController::class, 'addPhoneNumber']);
+Route::post('update-email', [AuthController::class, 'addEmail']);
+
 Route::post('ext-login', [AuthController::class, 'login']);
 
 Route::middleware('auth:api')->get('/user/get', function (Request $request) {
     return $request->user();
 });
+

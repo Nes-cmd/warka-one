@@ -22,10 +22,12 @@ class ResetPasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'authwith' => ['required', 'in:phone,email'],
-            'email'    => ['nullable','required_if:authwith,email', 'string', 'email'],
-            'phone'    => ['nullable','required_if:authwith,phone', 'min:9'],
-            'country_id' => ['nullable','required_if:authwith,phone'],
+            // 'authwith' => ['required', 'in:phone,email'],
+            // 'email'    => ['nullable','required_if:authwith,email', 'string', 'email'],
+            // 'phone'    => ['nullable','required_if:authwith,phone', 'min:9'],
+            
+            'phoneOrEmail' => 'required',
+            'country_id' => ['nullable'],
             'password' => ['required', 'confirmed', 'min:6'],
             'password_confirmation' => ['required'],
         ];

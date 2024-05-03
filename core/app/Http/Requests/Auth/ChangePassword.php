@@ -4,7 +4,7 @@ namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class VerifyRequest extends FormRequest
+class ChangePassword extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,11 @@ class VerifyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'verificationCode' => ['required','numeric', 'digits:4'],
-            // 'authwith' => ['required', 'in:phone,email'],
-            // 'email'    => ['nullable','required_if:authwith,email', 'string', 'email'],
-            // 'phone'    => ['nullable','required_if:authwith,phone', 'min:9'],
-            'phoneOrEmail' => 'required',
-            'country_id' => ['nullable'],
+            'user_id' => 'required|exists:users,id',
+            'client_id' => 'required',
+            'old_password' => 'required',
+            'new_password' => 'required|min:6',
+            'password_confirmation' => 'required|min:6'
         ];
     }
 }

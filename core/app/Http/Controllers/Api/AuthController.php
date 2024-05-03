@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\SmsSend;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\ChangePassword;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
+use App\Http\Requests\Auth\EmailRequest;
+use App\Http\Requests\Auth\PhoneRequest;
 use App\Models\Country;
 use App\Models\User;
 use App\Models\VerificationCode;
@@ -42,7 +45,7 @@ class AuthController extends Controller
             $user = User::where('email', $request->email)->first();
         }
         if ($user) {
-            if($user->email_verified_at == null && $user->phone_verified_at == null){
+            if ($user->email_verified_at == null && $user->phone_verified_at == null) {
                 return response([
                     'status' => 'fail',
                     'message' => 'Neither the phone or the email is not verified. please try to verify one or both of them first on the sso server'
@@ -63,7 +66,7 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
-       
+
         DB::beginTransaction();
 
         try {
@@ -97,12 +100,12 @@ class AuthController extends Controller
             $user = User::create($userData);
 
             $tokens = $user->createToken('API-TOKEN');
-           
 
-            if($request->inform){
+
+            if ($request->inform) {
                 $this->informAccountCreation($user, $request->password);
-            } 
-            
+            }
+
             DB::commit();
 
             return response([
@@ -121,43 +124,51 @@ class AuthController extends Controller
         }
     }
 
-    public function informAccountCreation(User $user, $password){
+    public function informAccountCreation(User $user, $password)
+    {
         $message = __("Your account has been created successfully. You can access all services of kertech with this account. Access your account with this phone number and password is $password
             
             Thanks for choosing Ker Technology.
             ");
 
-        if($user->phone){
+        if ($user->phone) {
             $country = Country::find($user->country_id);
             $receiver = $country->dial_code . $user->phone;
-            
+
             SmsSend::send($receiver, $message);
-        }
-        else if($user->email){
+        } else if ($user->email) {
             Notification::send($user, new UserNotification($message));
         }
     }
 
     public function resetPassword(ResetPasswordRequest $request)
     {
+        $authwith = isPhoneOrEmail($request->phoneOrEmail);
+
+        if ($authwith == 'invalid') {
+            return response([
+                'status' => 'fail',
+                'message' => 'The input neither recognized as phhone nor as email'
+            ], 423);
+        }
 
         DB::beginTransaction();
+
         try {
             // Here we will attempt to reset the user's password. If it is successful we
             // will update the password on an actual user model and persist it to the
             // database. Otherwise we will parse the error and return the response.
-            $phone = trimPhone($request->phone);
+            $phone = trimPhone($request->phoneOrEmail);
 
-            $country = Country::find($request->country_id);
-            $candidate = $request->authwith == 'email' ? $request->email : $country->dial_code . $phone;
-
+            $country = Country::find($request->country_id ? $request->country_id : 1);
+            $candidate = $authwith == 'email' ? $request->phoneOrEmail : $country->dial_code . $phone;
 
             $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
             if ($verification->status != 'verified') {
-                throw new Exception("This {$request->authwith} was not verified");
+                throw new Exception("This {$authwith} was not verified");
             }
 
-            $user = $request->authwith == 'email' ? User::where('email', $candidate)->first() : User::where('phone', $phone)->first();
+            $user = $authwith == 'email' ? User::where('email', $candidate)->first() : User::where('phone', $phone)->first();
 
             $user->password = Hash::make($request->password);
             $user->save();
@@ -191,4 +202,116 @@ class AuthController extends Controller
     //         'massage' => 'You have successfully changed your password, and you have loged out'
     //     ]);
     // }
+    public function updatePdassword(ChangePassword $request)
+    {
+        if($request->new_password !== $request->password_confirmation) {
+            return response([
+                "message" => "The password confirmation field confirmation does not match.",
+                "errors" => [
+                    "password_confirmation" => [
+                        "The password confirmation field confirmation does not match."
+                    ]
+                ]
+            ], 422);
+        }
+
+        $user = User::find($request->user_id);
+
+        if ($user == null) {
+            return response([
+                'status' => 'fail',
+                'message' => 'we didn\'t found the user on our sso server. please contact a support'
+            ], 423);
+        }
+        if (Hash::check($request->old_password, $user->password)) {
+            $user->password = Hash::make($request->new_password);
+            $user->save();
+            
+            return response([
+                'status' => 'success',
+                'massage' => 'You have successfully changed your password, and you have loged out'
+            ]);
+          
+        } else {
+            return response([
+                'status' => 'fail',
+                'message' => 'Your old paddword is incorrect'
+            ], 423);
+        }
+    }
+
+    public function addPhoneNumber(PhoneRequest $request)
+    {
+        $user = User::find($request->user_id);
+
+        if ($user && isPhoneOrEmail($request->phone == 'phone')) {
+
+            $country = Country::find($request->country_id);
+            $candidate = $country->dial_code . trimPhone($request->phone);                 
+            $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
+
+            if ($this->isVerified($verification, $request->verification_code)) {
+                $user->phone = trimPhone($request->phone);
+                $user->phone_verified_at = now();
+                $user->save();
+
+                $verification->delete();
+
+                return response([
+                    'status' => 'success',
+                    'message' => 'phone updated to current user'
+                ]);
+            }
+            return response([
+                'status' => 'fail',
+                'message' => 'Please verify first or send verification code along with phone number'
+            ], 423);
+        }
+        return response([
+            'status' => 'fail',
+            'message' => 'Invalid input'
+        ], 423);
+    }
+
+    public function addEmail(EmailRequest $request)
+    {
+        $user = User::find($request->user_id);
+
+        if ($user && isPhoneOrEmail($request->email == 'email')) {
+            $candidate = $request->email;
+            $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
+
+            if ($this->isVerified($verification, $request->verification_code)) {
+                $user->email = $request->email;
+                $user->email_verified_at = now();
+                $user->save();
+
+                $verification->delete();
+
+                return response([
+                    'status' => 'success',
+                    'message' => 'email updated to current user'
+                ]);
+            }
+            return response([
+                'status' => 'fail',
+                'message' => 'Please verify first or send verification code along with the email'
+            ], 423);
+        }
+        return response([
+            'status' => 'fail',
+            'message' => 'Invalid input'
+        ], 423);
+    }
+
+    public function isVerified($verification, $code = null)
+    {
+        if ($verification?->status == 'verified') {
+            return true;
+        }
+        if ($code != null && $verification?->verification_code == $code) {
+            return true;
+        }
+        return false;
+    }
 }

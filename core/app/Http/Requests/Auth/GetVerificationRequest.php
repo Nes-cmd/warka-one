@@ -22,11 +22,13 @@ class GetVerificationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'authwith' => 'required|in:phone,email',
-            'phone' => ['nullable','required_if:authwith,phone', 'min:9', request()->get('otpIsFor') == 'registration' ? 'unique:users,phone' : 'exists:users,phone'],
-            'email' => ['nullable','required_if:authwith,email', 'email', request()->get('otpIsFor') == 'registration' ? 'unique:users,email' : 'exists:users,email'],
-            'otpIsFor' => 'required|in:registration,reset-password',
-            'country_id' => ['nullable','required_if:authwith,phone'],
+            // 'authwith' => 'required|in:phone,email',
+            // 'phone' => ['nullable','required_if:authwith,phone', 'min:9', request()->get('otpIsFor') == 'registration' ? 'unique:users,phone' : 'exists:users,phone'],
+            // 'email' => ['nullable','required_if:authwith,email', 'email', request()->get('otpIsFor') == 'registration' ? 'unique:users,email' : 'exists:users,email'],
+            
+            'phoneOrEmail' => 'required',
+            'otpIsFor' => 'required|in:registration,reset-password,add-auth',
+            'country_id' => ['nullable'],
         ];
     }
 }
