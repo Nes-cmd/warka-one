@@ -1,12 +1,11 @@
 @php
-// Determine the active state based on the current route name
-$currentRoute = \Illuminate\Support\Facades\Route::current()->getName();
+$currentRoute = Route::current()->getName();
 @endphp
-<nav class="flex justify-between items-center py-7 bg-transparent px-4 md:px-10 lg:px-20">
-    <a class="w-36">
+<nav class="container m-auto flex justify-between items-center py-4 bg-transparent px-3">
+    <a class="w-36" href="/">
         <x-application-logo />
     </a>
-    <ul class="sm:flex items-center gap-3  hidden">
+    <ul class="sm:flex items-center gap-3 hidden">
 
         <x-nav-link href="/">
             Home
@@ -20,12 +19,9 @@ $currentRoute = \Illuminate\Support\Facades\Route::current()->getName();
         <x-nav-link href="/contact">
             Contact us
         </x-nav-link>
-        <x-nav-link>
+        <!-- <x-nav-link>
             Help
-        </x-nav-link>
-
-
-
+        </x-nav-link> -->
     </ul>
     <button onclick="toggleNavbar(true)" class="sm:hidden">
         <svg width="24" height="25" class="dark:stroke-gray-50 stroke-gray-800" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -64,14 +60,21 @@ $currentRoute = \Illuminate\Support\Facades\Route::current()->getName();
         @guest
         <x-nav-link :href="route('login')">
             <div class="border border-secondary px-6 w-full py-2 flex-shrink-0 rounded-full flex justify-center items-center hover:dark:bg-gray-600 ">
-                Login
+                My Account
             </div>
         </x-nav-link>
 
         @endguest
 
     </ul>
+
 </nav>
+
+<div class="flex items-center container m-auto">
+    <div class="flex-grow bg-gray-500 h-px"></div>
+    <!-- <div class="text-gray-500 mx-4">Page Divider</div> -->
+    <div class="flex-grow bg-gray-600 h-px"></div>
+</div>
 
 <section id="navbar" class="hidden shadow-sm w-2/3 rounded-lg dark:bg-[#1E293B] bg-white py-10 px-4  absolute top-0 left-0 flex flex-col items-center gap-7 ease-in-out duration-300 delay-200 transition-all translate-animate">
     <div onclick="toggleNavbar(false)" class="absolute top-4 left-4">

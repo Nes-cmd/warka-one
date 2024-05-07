@@ -6,11 +6,11 @@
                     Make your life easier With KerTech’s <span class="text-secondary"> secure,</span> Reliable and Fast Technology
                 </h1>
                 <p class=" mt-6 text-lg text-slate-600 text-center max-w-3xl mx-auto dark:text-slate-400">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vitae illum excepturi ratione molestias culpa voluptates voluptate cupiditate perferendis fugit dolore suscipit cumque, placeat porro possimus dolorum neque similique ipsam necessitatibus.
+                    Welcome to Ker Technology, where we revolutionize the way you manage your digital world. Imagine having one account to rule them all—a centralized hub that simplifies your online experience and brings together a multitude of solutions. With our Single Sign-On (SSO) technology, we provide a seamless and efficient way to access and manage all your digital resources from a single personality.
                 </p>
 
             </div>
-            <a class="h-12   flex items-center bg-primary hover:bg-primary-500 dark:bg-primary-500 hover:dark:bg-primary-600 cursor-pointer font-semibold text-gray-50 rounded-lg justify-center px-6 w-72">
+            <a href="#services" class="h-12 flex items-center bg-primary hover:bg-primary-500 dark:bg-primary-500 hover:dark:bg-primary-600 cursor-pointer font-semibold text-gray-50 rounded-lg justify-center px-6 w-72">
                 Our Services
             </a>
         </section>
@@ -25,7 +25,7 @@
                         <img src="{{ asset('assets/image/Preview.svg') }}" alt="" srcset="" class="dark:invert-0 ">
                     </div>
                     <p class="mt-6 text-lg text-slate-600 text-center max-w-3xl mx-auto dark:text-slate-400">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis nulla nemo quidem sit veniam, expedita sunt consequatur
+                        Gone are the days of juggling multiple usernames and passwords for various platforms and services. With Ker Technology, you can create one account and unlock a world of possibilities.
                     </p>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                     Your Passport to Seamless Access Across Multiple Platforms with Our <span class="text-secondary"> SSO</span> Login!
                 </h1>
                 <p class=" mt-6 text-lg text-slate-600 text-center max-w-3xl mx-auto dark:text-slate-400">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vitae illum excepturi ratione molestias culpa voluptates voluptate cupiditate perferendis fugit dolore suscipit cumque, placeat porro possimus dolorum neque similique ipsam necessitatibus.
+                    The convenience of having everything in one place cannot be overstated. Imagine effortlessly switching between different services without the need to remember countless login credentials
                 </p>
 
             </div>
@@ -80,35 +80,41 @@
                 </div>
             </div>
         </section> -->
-        <section class="w-full px-4 lg:px-20 md:px-10 flex flex-col items-center my-10">
+        <section id="services" class="w-full px-4 lg:px-20 md:px-10 flex flex-col items-center my-10">
             <h1 class="text-slate-900 font-extrabold text-3xl sm:text-4xl lg:text-5xl tracking-tight  dark:text-white my-10">
                 Our Services
             </h1>
             <div class="grid lg:grid-cols-2 grid-cols-1 gap-10 my-5">
-                <div class="flex flex-col gap-4 ">
-                    <div class="lg:w-28 lg:h-28 w-20 h-20 rounded-full ">
-                        <img src="{{ asset('assets/image/Preview.svg') }}" alt="" srcset="" class="dark:invert-0 ">
+                <div class="flex items-center flex-col gap-4 ">
+                    <div class="rounded-full text-secondary-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+                        </svg>
                     </div>
-                    <h1 class="text-slate-900 font-extrabold text-xl sm:text-2xl lg:text-2xl tracking-tight  dark:text-white">
-                        Ker Appartment Management
+                    <h1 class="text-slate-900 font-extrabold text-xl sm:text-2xl lg:text-2xl tracking-tight  dark:text-secondary-400">
+                        <a href="https://wallet.kertech.co">Ker Wallet</a>
                     </h1>
-                    <div class="rounded-lg dark:bg-[#1E293B] bg-white/40 w-full h-52 p-4">
-                        <p class="mt-6 text-lg text-slate-600 text-center max-w-3xl mx-auto dark:text-slate-400">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto aspernatur aperiam ea sit hic dignissimos reprehenderit amet, quisquam maiores blanditiis! Eligendi amet illo pariatur. Nihil, sint commodi? Inventore, minima placeat.
-                        </p>
+                    <div class="rounded-lg dark:bg-[#1E293B] bg-white/40 w-full  p-4">
+                        <a href="https://wallet.kertech.co" class="mt-6 text-lg text-slate-600 hover:text-secondary-300 text-center max-w-3xl mx-auto dark:text-slate-400">
+                            With Ker Wallet, managing your online money has never been easier. Say goodbye to the hassle of carrying physical cash or fumbling with multiple payment methods. Our secure and user-friendly platform allows you to effortlessly make online transactions, send and receive funds, and keep track of your financial activities—all from the convenience of one centralized ker-one account.
+                        </a>
                     </div>
                 </div>
-                <div class="flex flex-col gap-4 ">
-                    <div class="lg:w-28 lg:h-28 w-20 h-20 rounded-full ">
-                        <img src="{{ asset('assets/image/Preview.svg') }}" alt="" srcset="" class="dark:invert-0 ">
+
+                <div class="flex items-center flex-col gap-4 ">
+                    <div class="rounded-full text-secondary-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205 3 1m1.5.5-1.5-.5M6.75 7.364V3h-3v18m3-13.636 10.5-3.819" />
+                        </svg>
+
                     </div>
-                    <h1 class="text-slate-900 font-extrabold text-xl sm:text-2xl lg:text-2xl tracking-tight  dark:text-white">
-                        Ker Appartment Management
+                    <h1 class="text-slate-900 font-extrabold text-xl sm:text-2xl lg:text-2xl tracking-tight  dark:text-secondary-400">
+                        <a href="https://pms.kertech.co"> Ker Appartment Management</a>
                     </h1>
-                    <div class="rounded-lg dark:bg-[#1E293B] bg-white/40 w-full h-52 p-4">
-                        <p class="mt-6 text-lg text-slate-600 text-center max-w-3xl mx-auto dark:text-slate-400">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto aspernatur aperiam ea sit hic dignissimos reprehenderit amet, quisquam maiores blanditiis! Eligendi amet illo pariatur. Nihil, sint commodi? Inventore, minima placeat.
-                        </p>
+                    <div class="rounded-lg dark:bg-[#1E293B] bg-white/40 w-full p-4">
+                        <a href="https://pms.kertech.co" class="mt-6 text-lg hover:text-secondary-300 text-slate-600 text-center max-w-3xl mx-auto dark:text-slate-400">
+                            Introducing Ker Apartment Management System, With Ker PMS, say goodbye to manual paperwork and time-consuming processes. Our user-friendly platform simplifies tasks such as rent collection, maintenance requests, communication with residents, and tracking of financials. From online rent payments to streamlined communication, Ker AMS is your digital hub for efficient apartment management.
+                        </a>
                     </div>
                 </div>
             </div>
@@ -116,8 +122,8 @@
         </section>
         <section class="px-4 md:px-10 lg:px-20 w-full mt-20 ">
             <div class="w-full p-4 text-center bg-transparent border-b dark:border-gray-700 border-gray-300  rounded-lg shadow sm:p-8 dark:bg-transparent ">
-                <h5 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">Work fast from anywhere</h5>
-                <p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">Stay up to date and move work forward with Flowbite on iOS & Android. Download the app today.</p>
+                <h5 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">Get paid fast from anywhere</h5>
+                <p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">Stay up to date and move work forward with <span class="text-secondary-400">Ker Wallet</span> on iOS & Android. Download the app today.</p>
                 <div class="items-center justify-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4 rtl:space-x-reverse">
                     <a href="#" class="w-full sm:w-auto bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700">
                         <svg class="me-3 w-7 h-7" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="apple" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
@@ -140,7 +146,9 @@
                 </div>
             </div>
         </section>
-        <section class="w-full px-4 lg:px-20 md:px-10 flex flex-col items-center py-20">
+
+
+        <!-- <section class="w-full px-4 lg:px-20 md:px-10 flex flex-col items-center py-20">
             <img src="{{ asset('assets/image/Group.svg') }}" alt="" srcset="" class="dark:invert w-[30%] sm:w-[20%] md:w-[15%] lg:w-[10%]">
             <h1 class="text-slate-900 text-4xl tracking-tight font-extrabold sm:text-5xl dark:text-white">
                 Our Team
@@ -179,6 +187,7 @@
 
             </div>
         </section>
+         -->
         <div class="absolute top-20 left-1/2 w-52 h-[800px] rotate-45 bg-gradient-to-t from-secondary-500/40 to-primary-400/40 -z-10 blur-3xl">
 
         </div>

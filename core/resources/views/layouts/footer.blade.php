@@ -1,5 +1,5 @@
-<footer class="bg-white dark:bg-gray-900">
-    <div class="mx-auto w-full md:px-10 lg:px-20 p-4 py-6 lg:py-8">
+<footer class="container m-auto bg-white dark:bg-gray-900 px-3">
+    <div class="mx-auto w-fullp-4 py-6 lg:py-8">
         <div class="md:flex md:justify-between">
             <div class="mb-6 md:mb-0">
                 <x-application-logo />
@@ -10,10 +10,10 @@
                     <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Services</h2>
                     <ul class="text-gray-500 dark:text-gray-400 font-medium">
                         <li class="mb-4">
-                            <a class="hover:underline">Ker Wallet</a>
+                            <a href="https://wallet.kertech.co" class="hover:underline">Ker Wallet</a>
                         </li>
                         <li>
-                            <a class="hover:underline">Ker Apt Mng</a>
+                            <a href="https://pms.kertech.co" class="hover:underline">Ker Apt Mng</a>
                         </li>
                     </ul>
                 </div>
@@ -33,7 +33,7 @@
         </div>
         <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
         <div class="flex items-center justify-between">
-            <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a href="https://flowbite.com/" class="hover:underline">Flowbite™</a>. All Rights Reserved.
+            <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© {{ now()->year }} <a href="#" class="hover:underline">Ker Technology™</a>. All Rights Reserved.
             </span>
             <div class="flex mt-4 sm:justify-center sm:mt-0">
                 <a href="#" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
