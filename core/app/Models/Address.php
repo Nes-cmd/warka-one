@@ -14,7 +14,11 @@ class Address extends Model
         $subcity = $this->subcity?$this->subcity->name:'';
         $city = $this->city?$this->city->name:'';
         $location = ucfirst($this->specific_location);
-        return "$location in $subcity $city,{$this->country->name}";
+
+        $effective = "$subcity $city, {$this->country->name}";
+        $effective = $location? "$location in {$effective}":$effective;
+
+        return $effective;
     }
 
     public function country(){
