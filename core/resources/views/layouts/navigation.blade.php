@@ -1,6 +1,6 @@
 <nav x-data="{ open: false }" class="bg-white border-b border-primary-200">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-[1715px] mx-auto px-4 sm:px-6 lg:px-20">
+    <div class="container mx-auto px-10">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
@@ -13,7 +13,7 @@
 
             </div>
             <!-- Navigation Links -->
-            <div class=" hidden md:flex gap-2">
+            <!-- <div class=" hidden md:flex gap-2">
                 <div class="hidden    md:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         <div class="flex gap-2 items-center">
@@ -59,7 +59,7 @@
                         </div>
                     </x-nav-link>
                 </div>
-            </div>
+            </div> -->
             <!-- Settings Dropdown -->
             <div class="hidden md:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">

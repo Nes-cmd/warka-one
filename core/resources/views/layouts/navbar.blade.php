@@ -19,9 +19,6 @@ $currentRoute = Route::current()->getName();
         <x-nav-link href="/contact">
             Contact us
         </x-nav-link>
-        <!-- <x-nav-link>
-            Help
-        </x-nav-link> -->
     </ul>
     <button onclick="toggleNavbar(true)" class="sm:hidden">
         <svg width="24" height="25" class="dark:stroke-gray-50 stroke-gray-800" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -30,10 +27,20 @@ $currentRoute = Route::current()->getName();
             <path d="M17 22.5H19C21 22.5 22 21.5 22 19.5V17.5C22 15.5 21 14.5 19 14.5H17C15 14.5 14 15.5 14 17.5V19.5C14 21.5 15 22.5 17 22.5Z" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
             <path d="M5 22.5H7C9 22.5 10 21.5 10 19.5V17.5C10 15.5 9 14.5 7 14.5H5C3 14.5 2 15.5 2 17.5V19.5C2 21.5 3 22.5 5 22.5Z" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
-
     </button>
-    <ul class="sm:flex items-center gap-3 hidden">
 
+    
+    <ul class="sm:flex items-center gap-3 hidden">
+    <div class="">
+        <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400  focus:outline-none   text-sm p-2 mr-3">
+            <svg id="theme-toggle-dark-icon" class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+        </button>
+    </div>
         @auth
         <!-- notification  -->
         <x-nav-link>
