@@ -5,7 +5,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                 <div class="max-w-xl">
-                    @include('profile.partials.update-profile-information-form')
+                   
                 </div>
             </div>
 
@@ -132,10 +132,12 @@
                     </p>
                 </div>
                 <div class=" w-20 lg:w-36 aspect-square rounded-full border "> </div>
-                <p class=" font-poppins font-bold mt-3 px-2 text-lg">
-                    Betty kassaw
+                <p class=" font-poppins font-bold mt-3 px-2 text-lg capitalize">
+                    {{ Auth::user()->name }}
                 </p>
                 <p class=" font-poppins font-light mt-2 px-2">bettykassaw@gmail.com</p>
+                <p class=" font-poppins font-light mt-2 px-2">baldaras,yeka subcity, coet delevour st</p>
+
                 <p class=" font-poppins font-light mt-1 px-2">+251904189653</p>
                 <button class="bg-primary w-32 self-end font-poppins rounded-lg text-white font-bold py-2">
                     Verify
@@ -185,7 +187,7 @@
                 </div>
             </section>
         </section>
-        <section class=" md:w-[60%] w-full mt-10 md:bg-gray-100 bg-transparent rounded-2xl flex flex-col py-4 md:px-4">
+        <section class=" md:w-[59%] w-full mt-10 md:bg-gray-100 bg-transparent rounded-2xl flex flex-col py-4 md:px-4">
             <p class="font-poppins font-bold text-lg">
                 Account Management
             </p>
@@ -194,7 +196,7 @@
             </p>
             <hr>
             <div class="flex flex-col mt-10 gap-5">
-                <button class=" flex flex-row gap-3 border-b pb-3">
+                <!-- <button class=" flex flex-row gap-3 border-b pb-3">
 
                     <div>
                         <img src="{{ asset('assets/icons/vuesax/linear/key.svg') }}" alt="" srcset="">
@@ -205,8 +207,10 @@
                     </p>
 
 
-                </button>
-                <button class=" flex flex-row gap-3 border-b pb-3">
+                </button> -->
+                @include('profile.partials.update-password-form')
+
+                <!-- <button class=" flex flex-row gap-3 border-b pb-3">
 
                     <div>
                         <img src="{{ asset('assets/icons/vuesax/linear/user.svg') }}" alt="" srcset="">
@@ -217,8 +221,10 @@
                     </p>
 
 
-                </button>
-                <button class=" flex flex-row justify-between items-center border-b pb-3">
+                </button> -->
+                @include('profile.partials.update-profile-information-form')
+
+                <!-- <button class=" flex flex-row justify-between items-center border-b pb-3">
                     <div class="flex flex-row gap-3">
                         <div>
                             <img src="{{ asset('assets/icons/vuesax/linear/folder-open.svg') }}" alt="" srcset="">
@@ -228,13 +234,15 @@
                             Verify Document
                         </p>
                     </div>
-                    <div class="w-24 rounded bg-primary text-white font-semibold py-1">
+                    <div class="w-24 rounded bg-transparent border border-primary text-primary font-semibold py-1">
                         Verify
                     </div>
-                </button>
+                </button> -->
+                @include('profile.partials.verify-user-document')
 
-                <div class="mt-10 border-t">
-                    <button class=" flex flex-row gap-3  pb-3 mt-3">
+
+                <div class="mt-10 border-t pt-5">
+                    <!-- <button class=" flex flex-row gap-3  pb-3 mt-3">
 
                         <div>
                             <img src="{{ asset('assets/icons/vuesax/linear/security.svg') }}" alt="" srcset="">
@@ -251,7 +259,9 @@
                         </div>
 
 
-                    </button>
+                    </button> -->
+                    @include('profile.partials.delete-user-form')
+
                 </div>
             </div>
         </section>
