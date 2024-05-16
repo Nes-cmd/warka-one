@@ -45,9 +45,8 @@
 <body class="font-sans text-gray-900  antialiased h-screen overflow-hidden justify-center items-center flex">
 
     <div class="flex lg:flex-row flex-col items-center justify-center   w-[100%] md:w-[90%] h-[85%]">
-        <div class="w-1/2 h-full border bg-primary-50 flex hidden lg:block items-center  px-10">
-
-            <img src="{{ asset('assets/kerbrands/loginAvatar.svg')}}" class=" h-full" alt="loginAvatar" />
+        <div class="w-1/2 h-full border bg-primary-50 flex lg:block items-center  px-10">
+            <img src="{{ asset('assets/kerbrands/loginAvatar.svg')}}" class=" h-full" alt="Ker Logo" />
         </div>
         <div class="lg:w-1/2 w-full flex flex-col gap-6 items-center justify-center h-full">
             <div class="md:w-[75%] w-[90%] flex flex-col  gap-4 ">
@@ -59,9 +58,7 @@
                 </div>
 
                 <div>
-
                     {{ $slot }}
-
                 </div>
             </div>
         </div>

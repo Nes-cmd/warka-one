@@ -1,12 +1,9 @@
 @php
 $currentRoute = Route::current()->getName();
 @endphp
-<nav class="container m-auto flex justify-between items-center py-4 bg-transparent px-3">
-    <a class="w-36" href="/">
-        <x-application-logo />
-    </a>
+<nav class="flex justify-between items-center py-4 bg-transparent">
+    <a class="w-36" href="/"><x-application-logo /></a>
     <ul class="sm:flex items-center gap-3 hidden">
-
         <x-nav-link href="/">
             Home
         </x-nav-link>
@@ -31,16 +28,16 @@ $currentRoute = Route::current()->getName();
 
     
     <ul class="sm:flex items-center gap-3 hidden">
-    <div class="">
-        <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400  focus:outline-none   text-sm p-2 mr-3">
-            <svg id="theme-toggle-dark-icon" class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-            </svg>
-            <svg id="theme-toggle-light-icon" class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
-            </svg>
-        </button>
-    </div>
+        <div class="">
+            <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400  focus:outline-none   text-sm p-2 mr-3">
+                <svg id="theme-toggle-dark-icon" class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                </svg>
+                <svg id="theme-toggle-light-icon" class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
         @auth
         <!-- notification  -->
         <x-nav-link>
@@ -70,11 +67,8 @@ $currentRoute = Route::current()->getName();
                 My Account
             </div>
         </x-nav-link>
-
         @endguest
-
     </ul>
-
 </nav>
 
 <div class="flex items-center container m-auto">
@@ -83,12 +77,14 @@ $currentRoute = Route::current()->getName();
     <div class="flex-grow bg-gray-600 h-px"></div>
 </div>
 
-<section id="navbar" class="hidden shadow-sm w-2/3 rounded-lg dark:bg-[#1E293B] bg-white py-10 px-4  absolute top-0 left-0 flex flex-col items-center gap-7 ease-in-out duration-300 delay-200 transition-all translate-animate">
-    <div onclick="toggleNavbar(false)" class="absolute top-4 left-4">
+<section id="navbar" class="shadow-sm w-2/3 rounded-lg dark:bg-[#1E293B] bg-white py-2 pb-4 px-4  absolute top-0 left-0 flex flex-col items-left gap-7 ease-in-out duration-300 delay-200 transition-all translate-animate">
+    <div onclick="toggleNavbar(false)" class="absolute top-4  right-4" style="cursor:pointer">
         <svg width="24" height="24" class="dark:fill-gray-300 fill-gray-800" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M5.46967 5.46967C5.76256 5.17678 6.23744 5.17678 6.53033 5.46967L12 10.9393L17.4697 5.46967C17.7626 5.17678 18.2374 5.17678 18.5303 5.46967C18.8232 5.76256 18.8232 6.23744 18.5303 6.53033L13.0607 12L18.5303 17.4697C18.8232 17.7626 18.8232 18.2374 18.5303 18.5303C18.2374 18.8232 17.7626 18.8232 17.4697 18.5303L12 13.0607L6.53033 18.5303C6.23744 18.8232 5.76256 18.8232 5.46967 18.5303C5.17678 18.2374 5.17678 17.7626 5.46967 17.4697L10.9393 12L5.46967 6.53033C5.17678 6.23744 5.17678 5.76256 5.46967 5.46967Z" />
         </svg>
     </div>
+   
+
     <a href="{{ url('/') }}" class="w-36">
         <x-application-logo />
     </a>
@@ -108,6 +104,7 @@ $currentRoute = Route::current()->getName();
         Help
     </x-nav-link>
     @auth
+
     <!-- notification  -->
     <x-nav-link>
         <svg width="24" height="25" class="dark:stroke-gray-50 stroke-gray-800" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -131,7 +128,6 @@ $currentRoute = Route::current()->getName();
     @endauth
 
     @guest
-
     <x-nav-link :href="route('login')" class="w-full">
         <div class="border border-gray-600 w-full py-3 flex-shrink-0 rounded-full flex justify-center items-center hover:dark:bg-gray-600 ">
             Login
@@ -139,9 +135,8 @@ $currentRoute = Route::current()->getName();
     </x-nav-link>
 
     @endguest
-
-
 </section>
+
 <script>
     function toggleNavbar(open) {
         var navbar = document.getElementById("navbar");

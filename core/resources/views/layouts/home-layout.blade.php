@@ -34,13 +34,13 @@
 
 <body class="font-sans text-gray-900 dark:bg-[#0F172A] bg-[#EAE9F0]    justify-center items-center flex-column">
 
-    <header>
+    <header class="lg:px-24 md:px-12 px-4">
         @include('layouts.navbar')
     </header>
-    <main class="max-w-7xl mx-auto">
+    <main class="lg:px-24 md:px-12 px-4">
         {{ $slot }}
     </main>
-    <footer>
+    <footer class="lg:px-24 md:px-12 px-4">
         @include('layouts.footer')
     </footer>
 
