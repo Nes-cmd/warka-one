@@ -77,7 +77,7 @@ $currentRoute = Route::current()->getName();
     <div class="flex-grow bg-gray-600 h-px"></div>
 </div>
 
-<section id="navbar" class="shadow-sm w-2/3 rounded-lg dark:bg-[#1E293B] bg-white py-2 pb-4 px-4  absolute top-0 left-0 flex flex-col items-left gap-7 ease-in-out duration-300 delay-200 transition-all translate-animate">
+<section id="navbar" class="hidden shadow-sm w-2/3 rounded-lg dark:bg-[#1E293B] bg-white py-2 pb-4 px-4  absolute top-0 left-0 flex flex-col items-left gap-7 ease-in-out duration-300 delay-200 transition-all translate-animate">
     <div onclick="toggleNavbar(false)" class="absolute top-4  right-4" style="cursor:pointer">
         <svg width="24" height="24" class="dark:fill-gray-300 fill-gray-800" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M5.46967 5.46967C5.76256 5.17678 6.23744 5.17678 6.53033 5.46967L12 10.9393L17.4697 5.46967C17.7626 5.17678 18.2374 5.17678 18.5303 5.46967C18.8232 5.76256 18.8232 6.23744 18.5303 6.53033L13.0607 12L18.5303 17.4697C18.8232 17.7626 18.8232 18.2374 18.5303 18.5303C18.2374 18.8232 17.7626 18.8232 17.4697 18.5303L12 13.0607L6.53033 18.5303C6.23744 18.8232 5.76256 18.8232 5.46967 18.5303C5.17678 18.2374 5.17678 17.7626 5.46967 17.4697L10.9393 12L5.46967 6.53033C5.17678 6.23744 5.17678 5.76256 5.46967 5.46967Z" />
