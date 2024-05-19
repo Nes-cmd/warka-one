@@ -43,6 +43,9 @@
             <div id="tab4" class="tabcontent p-4 hidden  rounded-b-lg  transition-all ease-in-out duration-300">
                 @include('profile.partials.verify-user-document')
             </div>
+            <div id="tab5" class="tabcontent p-4 hidden  rounded-b-lg  transition-all ease-in-out duration-300">
+                @include('profile.partials.delete-user-form')
+            </div>
             </sectiion>
             <script>
                 // When the DOM is loaded

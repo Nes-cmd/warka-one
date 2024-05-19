@@ -39,5 +39,12 @@
                 <input class=" border-b border-0" placeholder="Enter your Street" />
             </div>
         </div>
+        <div class="flex items-center gap-4 mt-10">
+            <x-primary-button class="w-40 py-2 rounded-full flex justify-center">{{ __('Save') }}</x-primary-button>
+
+            @if (session('status') === 'profile-updated')
+            <p x-transition class="text-sm text-gray-600">{{ __('Saved.') }}</p>
+            @endif
+        </div>
     </section>
 </main>
