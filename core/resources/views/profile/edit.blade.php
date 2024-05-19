@@ -8,7 +8,9 @@
                         Unverified User
                     </p>
                 </div>
-                <div class=" w-20 lg:w-36 aspect-square rounded-full border "> </div>
+                <div class=" w-20 lg:w-36 aspect-square rounded-full border ">
+                    <img class="w-full h-full" src="{{ asset('assets/image/user.png') }}" alt="" srcset="">
+                </div>
                 <p class=" font-poppins font-bold mt-3 px-2 text-lg capitalize">
                     {{ Auth::user()->name }}
                 </p>
@@ -121,6 +123,10 @@
                         <tr class="border-b">
                             <td class="font-poppins font-medium py-3">Birth Date:</td>
                             <td class="font-poppins font-light "> 19 Mar 1999</td>
+                        </tr>
+                        <tr class="border-b">
+                            <td class="font-poppins font-medium py-3">Account Created Date:</td>
+                            <td class="font-poppins font-light "> 20 May 2021</td>
                         </tr>
                     </tbody>
                 </table>
