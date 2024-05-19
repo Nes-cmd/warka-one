@@ -5,7 +5,10 @@
 @tailwind utilities;
 
 
+hr{
 
+    border-top: 0.5px solid #dbd9d9; 
+}
 * Vertical Scrollbar */
 ::-webkit-scrollbar {
     width: 2px;

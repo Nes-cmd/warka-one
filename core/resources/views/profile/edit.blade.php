@@ -70,7 +70,7 @@
             </section>
         </section>
         <section class="flex flex-col md:flex-row gap-5 mt-10">
-            <section class=" md:w-[50%] w-full  md:bg-gray-100 dark:bg-slate-800 bg-transparent rounded-2xl flex flex-col py-4 md:px-4">
+            <section class=" md:w-[50%] w-full  md:bg-gray-100 md:dark:bg-slate-800 bg-transparent rounded-2xl flex flex-col py-4 md:px-4">
                 <p class="font-poppins font-bold text-lg mb-3">
                     Address
                 </p>
@@ -104,7 +104,7 @@
 
 
             </section>
-            <section class="md:w-[50%] w-full   md:bg-gray-100 dark:bg-slate-800 bg-transparent rounded-2xl flex flex-col py-4 md:px-4">
+            <section class="md:w-[50%] w-full   md:bg-gray-100 md:dark:bg-slate-800 bg-transparent rounded-2xl flex flex-col py-4 md:px-4">
                 <p class="font-poppins font-bold text-lg mb-3">
                     Other Informations
                 </p>
@@ -133,7 +133,7 @@
 
             </section>
         </section>
-        <section class="md:w-[49%] w-full  md:bg-gray-100 dark:bg-slate-800 bg-transparent rounded-2xl flex flex-col py-4 md:px-4 mt-10">
+        <section class="md:w-[49%] w-full  md:bg-gray-100 md:dark:bg-slate-800 bg-transparent rounded-2xl flex flex-col py-4 md:px-4 mt-10">
             <p class="font-poppins font-bold text-lg ">
                 Documents
             </p>
