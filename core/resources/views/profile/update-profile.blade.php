@@ -1,5 +1,5 @@
 <x-app-layout>
-    <main class="max-w-7xl  mx-auto mt-16 px-6">
+    <main class="max-w-7xl  mx-auto mt-16 px-6 dark:text-gray-200">
         <div>
             <p class="text-lg font-poppins font-bold">
                 Account Setting
@@ -7,25 +7,25 @@
             <p class="text-sm font-poppins font-light mt-1">Here you manage your Account </p>
         </div>
         <section class="mt-10">
-            <div class="flex flex-row justify-evenly overflow-x-auto border-b">
+            <div class="flex flex-row justify-evenly overflow-x-auto border-b dark:border-slate-700">
                 <div onclick="openTab(event, 'tab1')" class="tablink  cursor-default flex flex-col gap-1 items-center border-b flex-shrink-0 p-4">
-                    <img class="w-5 h-5" src="{{ asset('assets/icons/vuesax/linear/user.svg') }}" alt="" srcset="">
+                    <img class="w-5 h-5 dark:invert" src="{{ asset('assets/icons/vuesax/linear/user.svg') }}" alt="" srcset="">
                     <p>User Profile</p>
                 </div>
                 <div onclick="openTab(event, 'tab2')" class="tablink cursor-default flex flex-col gap-1 items-center border-b flex-shrink-0 p-4">
-                    <img class="w-5 h-5" src="{{ asset('assets/icons/vuesax/linear/location.svg') }}" alt="" srcset="">
+                    <img class="w-5 h-5 dark:invert" src="{{ asset('assets/icons/vuesax/linear/location.svg') }}" alt="" srcset="">
                     <p>Update Address</p>
                 </div>
                 <div onclick="openTab(event, 'tab3')" class="tablink cursor-default flex flex-col gap-1 items-center border-b flex-shrink-0 p-4">
-                    <img class="w-5 h-5" src="{{ asset('assets/icons/vuesax/linear/key.svg') }}" alt="" srcset="">
+                    <img class="w-5 h-5 dark:invert" src="{{ asset('assets/icons/vuesax/linear/key.svg') }}" alt="" srcset="">
                     <p>Password Manager</p>
                 </div>
                 <div onclick="openTab(event, 'tab4')" class="tablink cursor-default flex flex-col gap-1 items-center border-b flex-shrink-0 p-4">
-                    <img class="w-5 h-5" src="{{ asset('assets/icons/vuesax/linear/scan.svg') }}" alt="" srcset="">
+                    <img class="w-5 h-5 dark:invert" src="{{ asset('assets/icons/vuesax/linear/scan.svg') }}" alt="" srcset="">
                     <p>Verification Center</p>
                 </div>
                 <div onclick="openTab(event, 'tab5')" class="tablink cursor-default  flex flex-col gap-1 items-center border-b flex-shrink-0 p-4">
-                    <img class="w-5 h-5" src="{{ asset('assets/icons/vuesax/linear/toggle-on-circle.svg') }}" alt="" srcset="">
+                    <img class="w-5 h-5 dark:invert" src="{{ asset('assets/icons/vuesax/linear/toggle-on-circle.svg') }}" alt="" srcset="">
                     <p>Account Setting</p>
                 </div>
             </div>
@@ -64,6 +64,7 @@
                     tablinks = document.getElementsByClassName("tablink");
                     for (i = 0; i < tablinks.length; i++) {
                         tablinks[i].classList.remove("text-secondary");
+                        tablinks[i].classList.remove("border-b");
                         tablinks[i].classList.remove("border-secondary");
 
                     }
@@ -71,6 +72,7 @@
                     // Show the selected tab content and set the button as active
                     document.getElementById(tabName).classList.remove("hidden");
                     evt.currentTarget.classList.add("text-secondary");
+                    evt.currentTarget.classList.add("border-b");
                     evt.currentTarget.classList.add("border-secondary");
                 }
                 window.onload = function() {

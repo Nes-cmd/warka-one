@@ -12,31 +12,31 @@
                 <label for="country">
                     Country
                 </label>
-                <input class=" border-b border-0" placeholder="Enter your Country" />
+                <input class=" border-b border-0 bg-transparent" placeholder="Enter your Country" />
             </div>
             <div class="flex flex-col gap-1">
                 <label for="City">
                     City
                 </label>
-                <input class=" border-b border-0" placeholder="Enter your City" />
+                <input class=" border-b border-0 bg-transparent" placeholder="Enter your City" />
             </div>
             <div class="flex flex-col gap-1">
                 <label for="SubCity">
                     SubCity
                 </label>
-                <input class=" border-b border-0" placeholder="Enter your SubCity" />
+                <input class=" border-b border-0 bg-transparent" placeholder="Enter your SubCity" />
             </div>
             <div class="flex flex-col gap-1">
                 <label for="Woreda">
                     Woreda
                 </label>
-                <input class=" border-b border-0" placeholder="Enter your Woreda" />
+                <input class=" border-b border-0 bg-transparent" placeholder="Enter your Woreda" />
             </div>
             <div class="flex flex-col gap-1">
                 <label for="Street">
                     Street
                 </label>
-                <input class=" border-b border-0" placeholder="Enter your Street" />
+                <input class=" border-b border-0 bg-transparent" placeholder="Enter your Street" />
             </div>
         </div>
         <div class="flex items-center gap-4 mt-10">

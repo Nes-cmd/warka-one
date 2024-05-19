@@ -5,7 +5,7 @@
         </p>
         <p class="text-sm font-poppins font-light mt-1">You can close this account </p>
     </div>
-    <div class="flex flex-col gap-3 border-b py-5 ">
+    <div class="flex flex-col gap-3 border-b dark:border-slate-700 py-5 ">
         <div class="flex flex-row justify-between">
             <p class="font-medium">
                 Account Created Date:
@@ -24,7 +24,7 @@
 
         </div>
 
-        <p class="mt-1 text-sm text-gray-600">
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
             {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
         </p>
     </header>

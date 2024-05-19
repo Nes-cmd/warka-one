@@ -14,10 +14,19 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <script>
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
 </head>
 
-<body class="font-sans antialiased">
-    <div class="min-h-screen bg-white">
+<body class="font-sans antialiased bg-white dark:bg-[#0F172A]">
+    <div class="min-h-screen bg-white dark:bg-[#0F172A]">
         @include('layouts.navigation')
 
         <!-- Page Heading -->

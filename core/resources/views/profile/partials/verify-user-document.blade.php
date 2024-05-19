@@ -38,7 +38,7 @@
                     <label for="country">
                         Fayda ID Number
                     </label>
-                    <input class=" border-b border-0" placeholder="Enter your FCN" />
+                    <input class=" border-b border-0 bg-transparent" placeholder="Enter your FCN" />
                 </div>
                 <div class="flex items-center justify-center w-full">
                     <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
@@ -110,6 +110,7 @@
             links = document.getElementsByClassName("link");
             for (i = 0; i < links.length; i++) {
                 links[i].classList.remove("text-secondary");
+                links[i].classList.remove("border-b");
                 links[i].classList.remove("border-secondary");
 
             }
@@ -117,6 +118,7 @@
             // Show the selected tab content and set the button as active
             document.getElementById(tabName).classList.remove("hidden");
             evt.currentTarget.classList.add("text-secondary");
+            evt.currentTarget.classList.add("border-b");
             evt.currentTarget.classList.add("border-secondary");
         }
         window.onload = function() {
