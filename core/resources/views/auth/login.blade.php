@@ -15,9 +15,8 @@
             @csrf
             <input type="hidden" name="authwith" x-model="authwith">
             <div class="border border-radius-2 rounded flex justify-around py-2 mb-4">
-
-                <button type="button" :class="authwith == 'phone'?'bg-secondary-50 text-primary border-b-2 border-secondary':'bg-gray-100 text-gray-500'" class=" w-[40%] py-2 rounded" x-on:click="() => {authwith = 'phone'}">Phone</button>
                 <button type="button" :class="authwith == 'email'?'bg-secondary-50 text-primary border-b-2 border-secondary':'bg-gray-100 text-gray-500'" class="w-[40%] py-2 rounded" x-on:click="() => {authwith = 'email'}">Email</button>
+                <button type="button" :class="authwith == 'phone'?'bg-secondary-50 text-primary border-b-2 border-secondary':'bg-gray-100 text-gray-500'" class=" w-[40%] py-2 rounded" x-on:click="() => {authwith = 'phone'}">Phone</button>
             </div>
 
             <!-- Email Address -->

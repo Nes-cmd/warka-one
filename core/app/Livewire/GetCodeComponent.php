@@ -3,15 +3,12 @@
 namespace App\Livewire;
 
 use App\Helpers\SendVerification;
-use App\Mail\VerificationCode;
 use App\Models\Country;
-use App\Models\User;
-use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 
 class GetCodeComponent extends Component
 {
-    public $authwith = 'phone';
+    public $authwith = 'email';
 
     public $phone;
 

@@ -29,17 +29,17 @@
     <div class="min-h-screen bg-white dark:bg-[#0F172A]">
         @include('layouts.navigation')
 
-        <!-- Page Heading -->
+        <!-- Page Heading -->   
         @if (isset($header))
         <header class="">
-            <div class="max-w-7xl mx-auto  px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto">
                 {{ $header }}
             </div>
         </header>
         @endif
 
         <!-- Page Content -->
-        <main class="container mx-auto">
+        <main class="container mx-auto lg:px-24 md:px-12 px-4">
             {{ $slot }}
         </main>
     </div>

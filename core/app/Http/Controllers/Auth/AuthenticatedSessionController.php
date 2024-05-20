@@ -22,7 +22,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(Request $request): View
     {
-        $authwith = 'phone';
+        $authwith = 'email';
         $countries = Country::all();
         $selectedCountry = Country::first();
         return view('auth.login', compact('authwith', 'countries', 'selectedCountry'));

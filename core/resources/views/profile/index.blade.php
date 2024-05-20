@@ -18,7 +18,7 @@
                 <p class=" font-poppins font-light mt-2 px-2">bettykassaw@gmail.com</p>
 
                 <p class=" font-poppins font-light mt-1 px-2">+251904189653</p>
-                <a href="/profileSettings" class=" w-40 dark:text-gray-200 self-end flex gap-3 font-poppins rounded-lg text-primary font-semibold ">
+                <a href="/profile-setting" class=" w-40 dark:text-gray-200 self-end flex gap-3 font-poppins rounded-lg text-primary font-semibold ">
                     <img class="dark:invert" src="{{ asset('assets/icons/vuesax/linear/magicpen.svg') }}" alt="" srcset="">
                     <span>
                         Edit Profile

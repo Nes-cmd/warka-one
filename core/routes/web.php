@@ -1,10 +1,8 @@
 <?php
 
-use App\Helpers\SmsSend;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 
@@ -14,16 +12,10 @@ Route::view('mail', 'emailtemp');
 Route::view('about', 'about');
 Route::view('services', 'services');
 Route::view('contact', 'contact');
-// Route::view('profileSettings', 'profile.update-profile');
-
-Route::redirect('dashboard', 'account')->name('dashboard');
-Route::redirect('profile', 'account')->name('profile.edit');
-Route::redirect('profile', 'profileSettings')->name('profile.update-profile');
-
 
 Route::middleware('auth')->group(function () {
-    Route::get('account', [ProfileController::class, 'index'])->name('profile.edit');
-    Route::get('profileSettings', [ProfileController::class, 'edit'])->name('profile.update-profile');
+    Route::get('account', [ProfileController::class, 'index'])->name('account');
+    Route::get('profile-setting', [ProfileController::class, 'edit'])->name('profile.update-profile');
     Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });

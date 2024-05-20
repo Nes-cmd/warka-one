@@ -1,65 +1,16 @@
-<nav x-data="{ open: false }" class="bg-white dark:bg-[#0F172A]  border-b border-primary-200 dark:border-slate-700">
+<nav x-data="{ open: false }" class="bg-white lg:px-24 md:px-12 px-4 dark:bg-[#0F172A]  border-b border-primary-200 dark:border-slate-700">
     <!-- Primary Navigation Menu -->
     <div class="container mx-auto px-10">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ route('account') }}">
                         <x-application-logo class="block  w-auto fill-current text-gray-800" />
                     </a>
                 </div>
-
-
             </div>
-            <!-- Navigation Links -->
-            <!-- <div class=" hidden md:flex gap-2">
-                <div class="hidden    md:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        <div class="flex gap-2 items-center">
-
-
-                            <p class="text-lg">{{ __('Dashboard') }}</p>
-                        </div>
-                    </x-nav-link>
-                </div>
-                <div class="hidden   md:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        <div class="flex gap-2 items-center">
-
-
-                            <p class="text-lg">{{ __('Transactions') }}</p>
-                        </div>
-                    </x-nav-link>
-                </div>
-                <div class="hidden   md:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        <div class="flex gap-2 items-center">
-
-
-                            <p class="text-lg">{{ __('Wallet') }}</p>
-                        </div>
-                    </x-nav-link>
-                </div>
-                <div class="hidden   md:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        <div class="flex gap-2 items-center">
-
-
-                            <p class="text-lg">{{ __('Transfer') }}</p>
-                        </div>
-                    </x-nav-link>
-                </div>
-                <div class="hidden   md:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        <div class="flex gap-2 items-center">
-
-
-                            <p class="text-lg">{{ __('Help') }}</p>
-                        </div>
-                    </x-nav-link>
-                </div>
-            </div> -->
+           
             <!-- Settings Dropdown -->
             <div class="hidden md:flex sm:items-center sm:ms-6 gap-3">
                 <div>
@@ -90,7 +41,7 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
+                        <x-dropdown-link :href="route('account')">
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
@@ -122,8 +73,8 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden md:hidden absolute top-20 inset-10 z-20 bg-white">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+            <x-responsive-nav-link :href="route('account')" :active="request()->routeIs('account')">
+                {{ __('Account') }}
             </x-responsive-nav-link>
         </div>
 
@@ -135,7 +86,7 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
+                <x-responsive-nav-link :href="route('account')">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
 
