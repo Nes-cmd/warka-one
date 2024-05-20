@@ -26,7 +26,7 @@ $currentRoute = Route::current()->getName();
         </svg>
     </button>
 
-    
+
     <ul class="sm:flex items-center gap-3 hidden">
         <div class="">
             <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400  focus:outline-none   text-sm p-2 mr-3">
@@ -63,7 +63,7 @@ $currentRoute = Route::current()->getName();
 
         @guest
         <x-nav-link :href="route('login')">
-            <div class="border border-secondary px-6 w-full py-2 flex-shrink-0 rounded-full flex justify-center items-center hover:dark:bg-gray-600 ">
+            <div class="border border-secondary px-6 w-full py-2 flex-shrink-0 rounded-full flex justify-center items-center dark:hover:bg-gray-600 ">
                 My Account
             </div>
         </x-nav-link>

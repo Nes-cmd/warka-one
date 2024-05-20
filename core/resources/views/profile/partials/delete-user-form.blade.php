@@ -1,4 +1,20 @@
-<section class="space-y-6 font-poppins">
+<section class="space-y-6 font-poppins max-w-2xl ">
+    <div class="mt-10">
+        <p class="text-base font-poppins font-bold">
+            Account Setting
+        </p>
+        <p class="text-sm font-poppins font-light mt-1">You can close this account </p>
+    </div>
+    <div class="flex flex-col gap-3 border-b dark:border-slate-700 py-5 ">
+        <div class="flex flex-row justify-between">
+            <p class="font-medium">
+                Account Created Date:
+            </p>
+            <p class="font-light">
+                20 May 2021
+            </p>
+        </div>
+    </div>
     <header>
         <div class="flex flex-row gap-2">
             <img src="{{ asset('assets/icons/vuesax/linear/security.svg') }}" alt="" srcset="">
@@ -8,7 +24,7 @@
 
         </div>
 
-        <p class="mt-1 text-xs text-gray-600">
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
             {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
         </p>
     </header>

@@ -3,3 +3,85 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+hr{
+
+    border-top: 0.5px solid #dbd9d9; 
+}
+* Vertical Scrollbar */
+::-webkit-scrollbar {
+    width: 2px;
+
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #dbd9d9;
+    border-radius: 2px;
+    
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  
+  /* Horizontal Scrollbar */
+  ::-webkit-scrollbar-horizontal {
+    height: 0px;
+    
+    
+  }
+  
+  ::-webkit-scrollbar-track-horizontal {
+    background: #f1f1f1;
+  }
+  
+  ::-webkit-scrollbar-thumb-horizontal {
+    background: #dbd9d9;
+    border-radius: 5px;
+  }
+  
+  ::-webkit-scrollbar-thumb-horizontal:hover {
+    background: #555;
+  }/* Vertical Scrollbar */
+  ::-webkit-scrollbar {
+    width: 2px;
+    height: 1px;
+    
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #555;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 2px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  
+  /* Horizontal Scrollbar */
+  ::-webkit-scrollbar-horizontal {
+    height: 0px;
+  }
+  
+  ::-webkit-scrollbar-track-horizontal {
+    background: #f1f1f1;
+  }
+  
+  ::-webkit-scrollbar-thumb-horizontal {
+    background: #dbd9d9;
+    border-radius: 1px;
+    height: 1px;
+  }
+  
+  ::-webkit-scrollbar-thumb-horizontal:hover {
+    background: #555;
+  }
