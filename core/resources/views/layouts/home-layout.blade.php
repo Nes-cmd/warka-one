@@ -32,7 +32,7 @@
 
 </head>
 
-<body class="font-sans text-gray-900 dark:bg-[#0F172A] bg-[#EAE9F0]    justify-center items-center flex-column">
+<body class="font-sans text-gray-900 dark:bg-[#0F172A] bg-[#EAE9F0] justify-center items-center flex-column">
 
     <header class="lg:px-24 md:px-12 px-4">
         @include('layouts.navbar')

@@ -32,9 +32,30 @@
             @method('patch')
 
             <div>
-                <x-input-label for="name" :value="__('Name')" />
+                <x-input-label for="name" :value="__('Full Name')" />
                 <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
                 <x-input-error class="mt-2" :messages="$errors->get('name')" />
+            </div>
+
+            <div>
+                <x-input-label for="name" :value="__('Gender')" />
+                <select name="gender" class="w-full border-gray-300 dark:border-slate-700 bg-transparent focus:border-indigo-500 dark:focus:border-slate-500 focus:ring-indigo-500 dark:focus:ring-slate-500 rounded-md shadow-sm">
+                    <option class="rounded bg-primary-300" value="male">Male</option>
+                    <option class="rounded bg-primary-300" value="female">Female</option>
+                </select>
+                <x-input-error class="mt-2" :messages="$errors->get('gender')" />
+            </div>
+
+            <div>
+                <x-input-label for="name" :value="__('Birth date')" />
+                <x-text-input class="w-full" type="date" />
+                <x-input-error class="mt-2" :messages="$errors->get('gender')" />
+            </div>
+
+            <div>
+                <x-input-label for="name" :value="__('Phone')" />
+                <x-text-input name="phone" type="tel" class="mt-1 block w-full" :value="old('phone', $user->phone)" required />
+                <x-input-error class="mt-2" :messages="$errors->get('gender')" />
             </div>
 
             <div>
@@ -44,10 +65,10 @@
 
                 @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
                 <div>
-                    <p class="text-sm mt-2 text-gray-800">
+                    <p class="text-sm mt-2 text-gray-800 dark:text-gray-500">
                         {{ __('Your email address is unverified.') }}
 
-                        <button form="send-verification" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <button form="send-verification" class="underline text-sm text-gray-600 dark:text-gray-500 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             {{ __('Click here to re-send the verification email.') }}
                         </button>
                     </p>
@@ -56,7 +77,7 @@
                     <p class="mt-2 font-medium text-sm text-green-600">
                         {{ __('A new verification link has been sent to your email address.') }}
                     </p>
-                    @endif
+                    @endif  
                 </div>
                 @endif
             </div>

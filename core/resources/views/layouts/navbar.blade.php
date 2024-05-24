@@ -1,6 +1,3 @@
-@php
-$currentRoute = Route::current()->getName();
-@endphp
 <nav class="flex justify-between items-center py-4 bg-transparent">
     <a class="w-36" href="/"><x-application-logo /></a>
     <ul class="sm:flex items-center gap-3 hidden">
@@ -71,6 +68,7 @@ $currentRoute = Route::current()->getName();
     </ul>
 </nav>
 
+<!-- divider line -->
 <div class="flex items-center container m-auto">
     <div class="flex-grow bg-gray-500 h-px"></div>
     <!-- <div class="text-gray-500 mx-4">Page Divider</div> -->
@@ -100,9 +98,7 @@ $currentRoute = Route::current()->getName();
     <x-nav-link href="/contact">
         Contact us
     </x-nav-link>
-    <x-nav-link>
-        Help
-    </x-nav-link>
+    
     @auth
 
     <!-- notification  -->

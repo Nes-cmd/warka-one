@@ -10,7 +10,7 @@
             <div class="flex flex-row justify-evenly overflow-x-auto border-b dark:border-slate-700">
                 <div onclick="openTab(event, 'tab1')" class="tablink  cursor-default flex flex-col gap-1 items-center border-b flex-shrink-0 p-4">
                     <img class="w-5 h-5 dark:invert" src="{{ asset('assets/icons/vuesax/linear/user.svg') }}" alt="" srcset="">
-                    <p>User Profile</p>
+                    <p>Personal Info</p>
                 </div>
                 <div onclick="openTab(event, 'tab2')" class="tablink cursor-default flex flex-col gap-1 items-center border-b flex-shrink-0 p-4">
                     <img class="w-5 h-5 dark:invert" src="{{ asset('assets/icons/vuesax/linear/location.svg') }}" alt="" srcset="">

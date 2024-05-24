@@ -1,5 +1,5 @@
-<footer class="container m-auto bg-white dark:bg-gray-900 px-3">
-    <div class="mx-auto w-fullp-4 py-6 lg:py-8">
+<footer class="container m-auto bg-transparent dark:bg-gray-900 px-3">
+    <div class="mx-auto w-full py-6 lg:py-8">
         <div class="md:flex md:justify-between">
             <div class="mb-6 md:mb-0">
                 <x-application-logo />

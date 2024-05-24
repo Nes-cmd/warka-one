@@ -28,9 +28,9 @@
 
             <div class="h-16" x-show="authwith == 'phone'">
                 <x-input-label for="phone" :value="__('Phone')" />
-                
+
                 <div class="mb-8 flex">
-                    
+
                     <div class="rounded">
                         <div x-data="{
                             open: false,
@@ -46,12 +46,7 @@
                                 this.open = false
                                 focusAfter && focusAfter.focus()
                             }
-                            }" 
-                            x-on:keydown.escape.prevent.stop="close($refs.button)" 
-                            x-on:focusin.window="!$refs.panel.contains($event.target) && close()" 
-                            x-id="['dropdown-button']" 
-                            class="relative"
-                            >
+                            }" x-on:keydown.escape.prevent.stop="close($refs.button)" x-on:focusin.window="!$refs.panel.contains($event.target) && close()" x-id="['dropdown-button']" class="relative">
                             <!-- Button -->
                             <button type="button" x-ref="button" :aria-expanded="open" :aria-controls="$id('dropdown-button')" type="button" class="flex items-center bg-white py-2.5 pl-2 rounded-l-none rounded-r-md shadow">
                                 <img class="w-[20px]" src="{{ asset($selectedCountry->flag_url) }}" alt="">
@@ -83,10 +78,17 @@
 
 
             <!-- Password -->
-            <div class="mt-4">
+            <div class="mt-4 relative">
                 <x-input-label for="password" :value="__('Password')" />
+                <x-text-input id="passwordInput" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
 
-                <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
+                <button type="button" class="absolute inset-y-0 right-0 px-4 top-1/3 flex items-center  hover:text-primary-500 focus:outline-none" onclick="togglePasswordVisibility()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="togglePasswordIcon">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 12s3-8 10-8 10 8 10 8-3 8-10 8-10-8-10-8z" />
+                        <path id="showIcon" style="display:none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
 
                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
             </div>
