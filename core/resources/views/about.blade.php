@@ -5,7 +5,7 @@
                 <h1 class="text-center dark:text-white text-slate-900 md:text-5xl md:font-semibold text-3xl  capitalize">
                     we want to help you make your business and your life easier
                 </h1>
-                <div class="absolute top-0  md:left-1/2  w-52 h-96 rotate-90   bg-primary-500/30 blur-3xl"></div>
+                <div class="absolute top-0  md:left-1/2  w-52 h-48 md:h-96 rotate-90   bg-primary-500/30 blur-3xl"></div>
                 <p class="dark:text-gray-500 text-slate-900  lg:text-xl my-7 text-center px-10">
                 Welcome to Ker Technology, where we revolutionize the way you manage your digital world. Imagine having one account to rule them all—a centralized hub that simplifies your online experience and brings together a multitude of solutions. With our Single Sign-On (SSO) technology, we provide a seamless and efficient way to access and manage all your digital resources from a single personality.
                 </p>
@@ -30,7 +30,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="absolute top-0  md:left-1/2  w-52 h-full rotate-90 bg-gradient-to-tr from-primary-600/40 via-secondary-900/40 to-primary-800/40 blur-3xl"></div>
+                <div class="absolute top-0  md:left-1/2 left-0   w-16 md:w-48 h-full rotate-90 bg-gradient-to-tr from-primary-600/40 via-secondary-900/40 to-primary-800/40 blur-3xl"></div>
 
             </div>
         </section>
@@ -72,7 +72,7 @@
                 </div>
 
             </div>
-            <div class="absolute top-0  md:left-1/2  w-52 h-full rotate-90 bg-gradient-to-tr from-primary-400/40 via-secondary-900/40 to-primary-800/40 blur-3xl"></div>
+            <div class="absolute top-0 left-0  md:left-1/2  w-16 md:w-48 h-full rotate-90 bg-gradient-to-tr from-primary-400/40 via-secondary-900/40 to-primary-800/40 blur-3xl"></div>
 
         </section>
     </main>
