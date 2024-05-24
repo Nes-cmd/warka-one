@@ -14,7 +14,7 @@
                 Our Services
             </a>
         </section>
-        <section class="max-w-6xl mx-auto my-10 px-10 md:mb-40 mb-20">
+        <section class="max-w-6xl mx-auto my-10 md:px-10 md:mb-40 mb-20">
             <div class="flex flex-col lg:flex-row items-center gap-4 lg:gap-0 justify-center lg:justify-end relative">
                 <div class="rounded-xl dark:bg-gray-300 bg-white/30 flex justify-center ">
                     <img src="{{ asset('assets/image/insurance.svg') }}" alt="home hero" class="w-2/3 ">
@@ -44,7 +44,7 @@
             </div>
         </section>
         
-        <section id="services" class="w-full px-4 lg:px-20 md:px-10 flex flex-col items-center my-10">
+        <section id="services" class="w-full lg:px-20 md:px-10 flex flex-col items-center my-10">
             <h1 class="text-slate-900 font-extrabold text-3xl sm:text-4xl lg:text-5xl tracking-tight  dark:text-white my-10">
                 Our Services
             </h1>
@@ -84,7 +84,7 @@
             </div>
 
         </section>
-        <section class="px-4 md:px-10 lg:px-20 w-full my-10 ">
+        <section class="md:px-10 lg:px-20 w-full my-10 ">
             <div class="w-full p-4 text-center bg-transparent border-b dark:border-gray-700 border-gray-300  rounded-lg shadow sm:p-8 dark:bg-transparent ">
                 <h5 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">Get paid fast from anywhere</h5>
                 <p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">Stay up to date and move work forward with <span class="text-secondary-400">Ker Wallet</span> on iOS & Android. Download the app today.</p>
@@ -151,8 +151,8 @@
 
             </div>
         </section>-->
-        <div class="absolute top-20 left-1/3 w-52 h-[400px] lg:h[900px] rotate-45 bg-gradient-to-t from-secondary-500/40 to-primary-400/40 -z-10 blur-3xl"></div>
-        <div class="absolute top-[1200px] left-1/4 w-52 h-[400px] lg:h[900px] rotate-45 bg-gradient-to-t from-primary-500/40 to-primary-100/40 z-10 blur-3xl"></div>
+        <div class="absolute top-20 left-1/3 w-52 h-[300px] md:h-[500px] lg:h[900px] rotate-45 bg-gradient-to-t from-secondary-500/40 to-primary-400/40 -z-10 blur-3xl"></div>
+        <div class="absolute top-[1200px] left-1/4 w-52 h-[350px] md:h[600px] lg:h[900px] rotate-45 bg-gradient-to-t from-primary-500/40 to-primary-100/40 z-10 blur-3xl"></div>
         <!-- <div class="absolute top-1/2 left-1/3 w-52 h-[350px] lg:h[900px] rotate-45 bg-gradient-to-t from-secondary-500/40 to-primary-400/40 -z-10 blur-3xl"></div> -->
     </main>
 </x-home-layout>
