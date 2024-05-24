@@ -1,6 +1,6 @@
 <div>
     <x-auth-session-status class="mb-4" :status="session('authstatus')" />
-    <div class="mb-4 text-sm text-gray-600">
+    <div class="mb-4 text-sm text-gray-600 dark:text-white">
         {{ "We have sent a 4-digit code to your $authwith , Use that code to verify "}}
     </div>
     <div x-data="{
@@ -51,7 +51,7 @@
         @if($authwith == 'email')
         <div class="relative mb-4" x-show="authwith == 'email'">
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full bg-gray-200" type="email" name="email" disabled wire:model="email" required />
+            <x-text-input id="email" class="block mt-1 w-full bg-gray-200 dark:text-gray-400" type="email" name="email" disabled wire:model="email" required />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
             <div class="absolute right-3 top-[43%] " wire:ignore>
                 <button id="resendemail" x-on:click="resetResend('resendemail')"  class="border border-secondary rounded px-3 py-1 text-secondary-600 bg-secondary-50/100">Resend</button>
@@ -67,7 +67,7 @@
                 <div class="">
                     <div class="">
                         <!-- Button -->
-                        <button x-ref="button" type="button" class="flex items-center bg-gray-200 pl-2 py-2.5 rounded-md shadow">
+                        <button x-ref="button" type="button" class="flex items-center bg-gray-200 dark:text-white dark:bg-gray-700 pl-2 py-2.5 rounded-md shadow">
                             <img class="w-[20px]" src="{{ asset($country->flag_url) }}" alt="">
                             <span>({{ $country->dial_code}})</span>
 
@@ -79,7 +79,7 @@
                     </div>
                 </div>
 
-                <x-text-input id="phone" disabled class="bg-gray-200 block  w-[90%] py-2.5" type="tel" name="phone" wire:model="phone" required />
+                <x-text-input id="phone" disabled class="bg-gray-200 dark:text-gray-400 block  w-[90%] py-2.5" type="tel" name="phone" wire:model="phone" required />
 
 
                 <div class="absolute right-3 z-10 top-2" wire:ignore>
@@ -95,7 +95,7 @@
         
         <div>
             <x-input-label for="verificationCode" :value="__('Verification code')" />
-            <x-text-input id="" class="block mt-1 w-full" type="text" wire:model.lazy="verificationCode" required />
+            <x-text-input id="" class="block mt-1 w-full dark:text-white" type="text" wire:model.lazy="verificationCode" required />
             <x-input-error :messages="$errors->get('verificationCode')" class="mt-2" />
         </div>
         

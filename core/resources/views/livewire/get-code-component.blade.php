@@ -1,12 +1,12 @@
 <div>
     @if($otpIsFor == 'reset-password')
-    <div class="mb-4 text-sm text-gray-600">
+    <div class="mb-4 text-sm text-gray-600 dark:text-white">
         {{ __('Don\'t worry if you forgot your password. Simply provide us with your phone/email, and we\'ll send a verification code. Once verified, you can easily reset your password.') }}
     </div>
     @else
 
-    <div class="mb-4 text-sm text-gray-600">
-        <p class="mb-4 text-3xl text-black font-semibold">
+    <div class="mb-4 text-sm text-gray-600 dark:text-white">
+        <p class="mb-4 text-3xl font-semibold">
             Welcome !
         </p>
         {{ __('Pleae enter your phone number. You will receive a text message to verify your account. Message & data rates may apply. ') }}
@@ -22,7 +22,7 @@
         ">
 
 
-        <div class="border border-radius-2 rounded flex justify-around py-2 mb-4">
+        <div class="border border-radius-2 rounded dark:border-gray-600 flex justify-around py-2 mb-4">
             <button :class="authwith == 'email'?'bg-secondary-50 text-primary border-b-2 border-secondary':'bg-gray-100 text-gray-500'" class="w-[40%] py-2 rounded" x-on:click="() => {authwith = 'email'; $wire.authwith='email'}">Email</button>
             <button :class="authwith == 'phone'?'bg-secondary-50 text-primary border-b-2 border-secondary':'bg-gray-100 text-gray-500'" class=" w-[40%] py-2 rounded" x-on:click="() => {authwith = 'phone'; $wire.authwith='phone'}">Phone</button>
         </div>
@@ -30,11 +30,11 @@
         <!-- Email Address -->
         <div class="relative mb-4" x-show="authwith == 'email'">
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model.lazy="email" id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
+            <x-text-input wire:model.lazy="email" id="email" class="block mt-1 w-full dark:bg-gray-700 dark:text-white" type="email" name="email" :value="old('email')" required />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
             <!-- <div class="absolute right-3 top-[43%] ">
                 <button class="border rounded px-3 py-1 text-white bg-blue-500">Get code</button>
-            </div> -->
+            </div> --> 
         </div>
 
         <div class="h-12" x-show="authwith == 'phone'">
@@ -57,7 +57,7 @@
                         }
                         }" x-on:keydown.escape.prevent.stop="close($refs.button)" x-on:focusin.window="! $refs.panel.contains($event.target) && close()" x-id="['dropdown-button']" class="relative">
                         <!-- Button -->
-                        <button type="button" x-ref="button" :aria-expanded="open" :aria-controls="$id('dropdown-button')" type="button" class="flex items-center bg-white py-2.5 pl-2 rounded-md shadow">
+                        <button type="button" x-ref="button" :aria-expanded="open" :aria-controls="$id('dropdown-button')" type="button" class="flex items-center bg-white  dark:bg-gray-700 dark:text-white py-2.5 pl-2 rounded-md shadow">
                                 <img class="w-[20px]" src="{{ asset($selectedCountry->flag_url) }}" alt="">
                                 <span>({{ $selectedCountry->dial_code }})</span>
 
@@ -78,7 +78,7 @@
                     </div>
                 </div>
 
-                <x-text-input wire:model.lazy="phone" id="phone" type="tel" class="block w-[100%]"  name="phone" :value="old('phone')" required />
+                <x-text-input wire:model.lazy="phone" id="phone" type="tel" class="block w-[100%]  dark:bg-gray-700 dark:text-white"  name="phone" :value="old('phone')" required />
 
 
             </div>
@@ -93,10 +93,10 @@
         </div>
 
 
-        <div class="w-full flex items-center justify-center mt-4">
+        <div class="w-full flex items-center justify-center mt-4 hover:text-primary-300">
             @if (Route::has('login'))
-            <a href="{{ route('login',) }}" class=" text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none ">
-                {{ __('Already have account?') }} <span class="underline text-black">Log in</span>
+            <a href="{{ route('login',) }}" class=" text-sm text-gray-600 dark:text-gray-300  rounded-md focus:outline-none ">
+                {{ __('Already have account?') }} <span class="underline dark:text-gray-200 hover:text-primary-300">Log in</span>
             </a>
             @endif
 
