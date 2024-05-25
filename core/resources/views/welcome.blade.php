@@ -151,8 +151,8 @@
 
             </div>
         </section>-->
-        <div class="absolute top-20 left-1/3 w-52 h-[300px] md:h-[500px] lg:h[900px] rotate-45 bg-gradient-to-t from-secondary-500/40 to-primary-400/40 -z-10 blur-3xl"></div>
-        <div class="absolute top-[1200px] left-1/4 w-52 h-[350px] md:h[600px] lg:h[900px] rotate-45 bg-gradient-to-t from-primary-500/40 to-primary-100/40 z-10 blur-3xl"></div>
+        <div class="absolute top-20 left-1/3 w-32 md:w-52 h-[350px] md:h-[500px] lg:h[900px] rotate-45 bg-gradient-to-t from-secondary-500/40 to-primary-400/40 -z-10 blur-3xl"></div>
+        <div class="absolute top-[1200px] left-1/4 w-32 md:w-52 h-[300px] md:h[600px] lg:h[900px] rotate-45 bg-gradient-to-t from-primary-500/40 to-primary-100/40 z-10 blur-3xl"></div>
         <!-- <div class="absolute top-1/2 left-1/3 w-52 h-[350px] lg:h[900px] rotate-45 bg-gradient-to-t from-secondary-500/40 to-primary-400/40 -z-10 blur-3xl"></div> -->
     </main>
 </x-home-layout>

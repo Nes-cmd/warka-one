@@ -1,11 +1,11 @@
 <x-home-layout>
     <main>
         <section class="max-w-5xl mx-auto  flex flex-col  justify-between relative   ">
-            <div class="lg:pt-32 pt-24 relative px-4">
+            <div class="lg:pt-32 pt-24 relative md:px-4">
                 <h1 class="text-center dark:text-white text-slate-900 md:text-5xl md:font-semibold text-3xl  capitalize">
                     we want to help you make your business and your life easier
                 </h1>
-                <div class="absolute top-0  md:left-1/2  w-52 h-48 md:h-96 rotate-90   bg-primary-500/30 blur-3xl"></div>
+                <div class="absolute top-0 left-10  md:left-1/2 w-32 md:w-52 h-48 md:h-96 rotate-90   bg-primary-500/30 blur-3xl"></div>
                 <p class="dark:text-gray-500 text-slate-900  lg:text-xl my-7 text-center px-10">
                 Welcome to Ker Technology, where we revolutionize the way you manage your digital world. Imagine having one account to rule them all—a centralized hub that simplifies your online experience and brings together a multitude of solutions. With our Single Sign-On (SSO) technology, we provide a seamless and efficient way to access and manage all your digital resources from a single personality.
                 </p>

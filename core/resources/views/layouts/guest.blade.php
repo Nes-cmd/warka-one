@@ -58,7 +58,7 @@
             <img src="{{ asset('assets/kerbrands/loginAvatar.svg')}}" class=" h-full" alt="Ker Logo" />
             <div class="absolute top-20 left-1/3 w-52 h-[400px] lg:h[900px] rotate-45 bg-gradient-to-t from-primary-500/40 to-primary-100/40 z-10 blur-3xl"></div>
         </div>
-        <div class="lg:w-1/2 w-full flex flex-col gap-6 bg-primary-50 dark:bg-[#2e3648] items-center justify-center h-full">
+        <div class="lg:w-1/2 w-full flex flex-col gap-6 bg-primary-50 dark:bg-[#1f2533] items-center justify-center h-full">
             <div class="md:w-[75%] w-[90%] flex flex-col  gap-4 ">
                 <!-- logo  -->
                 <div class="h-14 lg:h-12 w-full flex justify-center lg:justify-start ">
