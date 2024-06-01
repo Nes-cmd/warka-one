@@ -7,7 +7,7 @@
                 </h1>
                 <div class="absolute top-0 left-10  md:left-1/2 w-32 md:w-52 h-48 md:h-96 rotate-90   bg-primary-500/30 blur-3xl"></div>
                 <p class="dark:text-gray-500 text-slate-900  lg:text-xl my-7 text-center px-10">
-                Welcome to Ker Technology, where we revolutionize the way you manage your digital world. Imagine having one account to rule them all—a centralized hub that simplifies your online experience and brings together a multitude of solutions. With our Single Sign-On (SSO) technology, we provide a seamless and efficient way to access and manage all your digital resources from a single personality.
+                Welcome to Ker Labs, where we revolutionize the way you manage your digital world. Imagine having one account to rule them all—a centralized hub that simplifies your online experience and brings together a multitude of solutions. With our Single Sign-On (SSO) technology, we provide a seamless and efficient way to access and manage all your digital resources from a single personality.
                 </p>
             </div>
 
@@ -22,7 +22,7 @@
                         What We do?
                     </h1>
                     <p class="dark:text-gray-500 text-slate-900 md:text-start text-center my-4">
-                    Our digital hub is designed to streamline your online activities, saving you valuable time and energy. No more wasting precious moments searching for passwords or navigating through countless login screens. With Ker Technology, you can focus on what truly matters—your work, your connections, and your passions.
+                    Our digital hub is designed to streamline your online activities, saving you valuable time and energy. No more wasting precious moments searching for passwords or navigating through countless login screens. With Ker Labs, you can focus on what truly matters—your work, your connections, and your passions.
                     </p>
                     <div class="">
                         <a class="dark:text-white/70 text-slate-900 px-4 py-2 my-7 rounded-full border border-slate-900 dark:border-white/40 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-default">

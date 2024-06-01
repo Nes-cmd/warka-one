@@ -128,7 +128,7 @@ class AuthController extends Controller
     {
         $message = __("Your account has been created successfully. You can access all services of kertech with this account. Access your account with this phone number and password is $password
             
-            Thanks for choosing Ker Technology.
+            Thanks for choosing Ker Labs.
             ");
 
         if ($user->phone) {

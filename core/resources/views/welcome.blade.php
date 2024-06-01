@@ -6,7 +6,7 @@
                     Make your life easier With KerTech’s <span class="text-secondary"> secure,</span> Reliable and Fast Technology
                 </h1>
                 <p class=" mt-6 text-lg text-slate-600 text-center max-w-3xl mx-auto dark:text-slate-400">
-                    Welcome to Ker Technology, where we revolutionize the way you manage your digital world. Imagine having one account to rule them all—a centralized hub that simplifies your online experience and brings together a multitude of solutions. With our Single Sign-On (SSO) technology, we provide a seamless and efficient way to access and manage all your digital resources from a single personality.
+                    Welcome to Ker Labs, where we revolutionize the way you manage your digital world. Imagine having one account to rule them all—a centralized hub that simplifies your online experience and brings together a multitude of solutions. With our Single Sign-On (SSO) technology, we provide a seamless and efficient way to access and manage all your digital resources from a single personality.
                 </p>
 
             </div>
@@ -25,7 +25,7 @@
                         <img src="{{ asset('assets/image/Preview.svg') }}" alt="" srcset="" class="dark:invert-0 ">
                     </div>
                     <p class="mt-6 text-lg text-slate-600 text-center max-w-3xl mx-auto dark:text-slate-400">
-                        Gone are the days of juggling multiple usernames and passwords for various platforms and services. With Ker Technology, you can create one account and unlock a world of possibilities.
+                        Gone are the days of juggling multiple usernames and passwords for various platforms and services. With Ker Labs, you can create one account and unlock a world of possibilities.
                     </p>
                 </div>
             </div>
