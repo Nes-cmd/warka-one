@@ -23,19 +23,13 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->get('authflow/must-verify', [VerificationController::class, 'mustVerify'])->name('must-verify-otp');
 
 
-Route::get('logout-pms', function (Request $request) {
+Route::get('logout-sso-client', function (Request $request) {
     $request->session()->invalidate();
     $request->session()->regenerateToken();
 
     return redirect($request->callback);
 });
 
-Route::get('logout-wallet', function (Request $request) {
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
-
-    return redirect($request->callback);
-});
 
 require __DIR__ . '/auth.php';
 
