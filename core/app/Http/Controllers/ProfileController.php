@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enum\GenderEnum;
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Country;
 use App\Models\User;
 use App\Models\UserDetail;
 use Illuminate\Http\RedirectResponse;
@@ -17,16 +18,18 @@ class ProfileController extends Controller
     /**
      * Display the user's profile form.
      */
-    public function index(Request $request): View
+    public function index(): View
     {
+        $user = User::with('userDetail.address')->where('id', auth()->id())->first();
+        // dd( $user);
         return view('profile.index', [
-            'user' => $request->user(),
+            'user' => $user,
         ]);
     }
-    public function edit(Request $request): View
+    public function edit(): View
     {
         $user = User::with('userDetail')->where('id', auth()->id())->first();
-
+        
         $genders = GenderEnum::cases();
 
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enum\GenderEnum;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class UserDetail extends Model
@@ -15,7 +16,7 @@ class UserDetail extends Model
         'birth_date' => 'datetime'
     ];
 
-    public function address() : HasOne {
-        return $this->hasOne(Address::class);
+    public function address() : BelongsTo {
+        return $this->belongsTo(Address::class);
     }
 }

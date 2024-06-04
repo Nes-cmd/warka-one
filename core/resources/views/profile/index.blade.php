@@ -3,21 +3,22 @@
         <section class="flex flex-col md:flex-row gap-5">
             <section class="md:w-1/2 w-full rounded-2xl bg-gray-100 dark:bg-slate-800 p-5 flex flex-col ">
                 <div class="flex gap-1 self-end items-center">
-                    <div class="w-2 h-2 rounded-full bg-red-600"></div>
-                    <p class=" font-poppins font-light">
-                        Unverified User
+
+                    <div class="w-2 h-2 rounded-full {{ $user->userDetail->id_verification_status?'bg-success-500':'bg-danger-500'}}"></div>
+                    <p class=" font-poppins font-light {{ $user->userDetail->id_verification_status?'text-success-500':'text-danger-500'}}">
+                        {{ $user->userDetail->id_verification_status?'Verified':'Un verified'}}
                     </p>
                 </div>
                 <div class=" w-20 lg:w-36 aspect-square rounded-full  ">
                     <img class="w-full h-full" src="{{ asset('assets/image/user.png') }}" alt="" srcset="">
                 </div>
                 <p class=" font-poppins font-bold mt-3 px-2 text-lg capitalize">
-                    {{ Auth::user()->name }}
+                    {{ $user->name }}
                 </p>
-                <p class=" font-poppins font-light mt-2 px-2">Female</p>
-                <p class=" font-poppins font-light mt-2 px-2">bettykassaw@gmail.com</p>
+                <p class=" font-poppins font-light mt-2 px-2">{{ $user->userDetail->gender }}</p>
+                <p class=" font-poppins font-light mt-2 px-2">{{ $user->email }}</p>
 
-                <p class=" font-poppins font-light mt-1 px-2">+251904189653</p>
+                <p class=" font-poppins font-light mt-1 px-2">{{ $user->phone }}</p>
                 <a href="/profile-setting" class=" w-40 dark:text-gray-200 self-end flex gap-3 font-poppins rounded-lg text-primary font-semibold ">
                     <img class="dark:invert" src="{{ asset('assets/icons/vuesax/linear/magicpen.svg') }}" alt="" srcset="">
                     <span>
@@ -27,7 +28,7 @@
             </section>
             <section class="md:w-1/2 w-full flex flex-col ">
                 <p class="text-lg font-poppins font-bold">
-                    Subscribed services
+                    Connected services
                 </p>
                 <p class="text-sm font-poppins font-light mt-1">here you see your subscribed services </p>
                 <div class="grid lg:grid-cols-2 md:grid-cols-1 gap-5 mt-5 grid-cols-4">
@@ -39,9 +40,9 @@
                             <div class="">
                                 <img src="{{ asset('assets/icons/vuesax/linear/card-pos.svg') }}" alt="" srcset="">
                             </div>
-                            <p class="text-secondary dark:text-gray-200 font-poppins font-bold md:text-base text-sm mt-1">
+                            <a href="https://wallet.kertech.co" target="__blank" class="text-secondary dark:text-gray-200 font-poppins font-bold md:text-base text-sm mt-1">
                                 Ker Wallet
-                            </p>
+                            </a>
                             <p class="text-sm font-light font-poppins text-gray-600 dark:text-gray-400 md:block hidden">
                                 Transfer, Receive & Enjoy
                             </p>
@@ -55,11 +56,11 @@
                             <div class="">
                                 <img class="dark:invert" src="{{ asset('assets/icons/vuesax/linear/buildings.svg') }}" alt="" srcset="">
                             </div>
-                            <p class="text-primary dark:text-gray-200 font-poppins font-bold md:text-base text-sm mt-1 md:block hidden">
+                            <a href="https://pms.kertech.co" target="__blank" class="text-primary dark:text-gray-200 font-poppins font-bold md:text-base text-sm mt-1 md:block hidden">
                                 Apartment managment
-                            </p>
+                            </a>
                             <p class="text-primary dark:text-gray-200 font-poppins font-bold md:text-base text-sm mt-1 md:hidden block">
-                                KAMS
+                                Ker PMS
                             </p>
                             <p class="text-sm font-light font-poppins text-gray-600 dark:text-gray-400 md:block hidden">
                                 You build we manage
@@ -81,23 +82,20 @@
 
                         <tr class="border-b dark:border-slate-700">
                             <td class="font-poppins font-medium py-3">Country</td>
-                            <td class="font-poppins font-light "> Ethiopia</td>
+                            <td class="font-poppins font-light "> {{ $user->userDetail->address?->country->name }}</td>
                         </tr>
                         <tr class="border-b dark:border-slate-700">
                             <td class="font-poppins font-medium py-3">City</td>
-                            <td class="font-poppins font-light "> Addis Ababa</td>
+                            <td class="font-poppins font-light "> {{ $user->userDetail->address?->city->name  }}</td>
                         </tr>
                         <tr class="border-b dark:border-slate-700">
                             <td class="font-poppins font-medium py-3">SubCity</td>
-                            <td class="font-poppins font-light "> Bole</td>
+                            <td class="font-poppins font-light "> {{ $user->userDetail->address?->subcity->name  }}</td>
                         </tr>
+                       
                         <tr class="border-b dark:border-slate-700">
-                            <td class="font-poppins font-medium py-3">Woreda</td>
-                            <td class="font-poppins font-light "> 06</td>
-                        </tr>
-                        <tr class="border-b dark:border-slate-700">
-                            <td class="font-poppins font-medium py-3">Street</td>
-                            <td class="font-poppins font-light "> mozambique st</td>
+                            <td class="font-poppins font-medium py-3">Specific Location</td>
+                            <td class="font-poppins font-light ">{{ $user->userDetail->address?->specific_location }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -133,7 +131,7 @@
 
             </section>
         </section>
-        <section class="md:w-[49%] w-full  md:bg-gray-100 md:dark:bg-slate-800 bg-transparent rounded-2xl flex flex-col py-4 md:px-4 mt-10">
+        <!-- <section class="md:w-[49%] w-full  md:bg-gray-100 md:dark:bg-slate-800 bg-transparent rounded-2xl flex flex-col py-4 md:px-4 mt-10">
             <p class="font-poppins font-bold text-lg ">
                 Documents
             </p>
@@ -161,6 +159,6 @@
 
             </div>
             <hr />
-        </section>
+        </section> -->
     </main>
 </x-app-layout>

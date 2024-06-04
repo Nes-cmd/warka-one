@@ -22,7 +22,6 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(Request $request): View
     {
-        dd($request->all());
         $authwith = 'email';
         $countries = Country::all();
         $selectedCountry = Country::first();
