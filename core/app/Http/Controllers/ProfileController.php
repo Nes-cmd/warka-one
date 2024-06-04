@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enum\GenderEnum;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\User;
+use App\Models\UserDetail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,8 +25,14 @@ class ProfileController extends Controller
     }
     public function edit(Request $request): View
     {
+        $user = User::with('userDetail')->where('id', auth()->id())->first();
+
+        $genders = GenderEnum::cases();
+
+
         return view('profile.update-profile', [
-            'user' => $request->user(),
+            'user' => $user,
+            'genders' => $genders,
         ]);
     }
     /**
@@ -33,18 +41,26 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $user = $request->user();
+        $userDetail = UserDetail::where('user_id', $user->id)->first();
+
+       
         $user->fill($request->validated());
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
-        if($request->phone){
+
+        if ($user->isDirty('phone')) {
             $user->pone = trimPhone($request->phone);
             $user->phone_verified_at = null;
         }
 
         $user->save();
 
+        $userDetail->gender = $request->gender;
+        $userDetail->birth_date = $request->birth_date;
+        $userDetail->save();
+     
         return back()->with('status', 'profile-updated');
     }
 

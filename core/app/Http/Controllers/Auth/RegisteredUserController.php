@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserDetail;
 use App\Models\VerificationCode;
 use App\Providers\RouteServiceProvider;
 use Exception;
@@ -62,6 +63,10 @@ class RegisteredUserController extends Controller
                 'password'          => Hash::make($request->password),
                 'phone_verified_at' => $authflowData['authwith'] == 'phone'?now():null,
                 'email_verified_at' => $authflowData['authwith'] == 'email'?now():null,
+            ]);
+
+            UserDetail::create([
+                'user_id' => $user->id,
             ]);
 
             $verification->delete();

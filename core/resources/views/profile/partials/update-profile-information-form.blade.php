@@ -1,4 +1,14 @@
 <section class="font-poppins mt-10">
+<style>
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(0) grayscale(0) brightness(1);
+      transition: filter 0.3s ease;
+    }
+
+    .dark input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(1) grayscale(100%) brightness(200%);
+    }
+  </style>
     <!-- <button x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-user-edit-profile')" class="bg-transparent  font-poppins w-full">
 
         <div class=" flex flex-row gap-3 border-b pb-3">
@@ -30,7 +40,6 @@
         <form method="post" action="{{ route('profile.update') }}" class="mt-10 space-y-6">
             @csrf
             @method('patch')
-
             <div>
                 <x-input-label for="name" :value="__('Full Name')" />
                 <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
@@ -39,28 +48,30 @@
 
             <div>
                 <x-input-label for="name" :value="__('Gender')" />
-                <select name="gender" class="w-full border-gray-300 dark:border-slate-700 bg-transparent focus:border-indigo-500 dark:focus:border-slate-500 focus:ring-indigo-500 dark:focus:ring-slate-500 rounded-md shadow-sm">
-                    <option class="rounded bg-primary-300" value="male">Male</option>
-                    <option class="rounded bg-primary-300" value="female">Female</option>
-                </select>
+                <select required name="gender" class="w-full border-gray-300 dark:border-slate-700 bg-transparent focus:border-indigo-500 dark:focus:border-slate-500 focus:ring-indigo-500 dark:focus:ring-slate-500 rounded-md shadow-sm">
+                    <option value="">Choose</option>
+                    @foreach($genders as $gender)
+                        <option class="rounded bg-primary-300" value="{{ $gender->value }}" {{$user->userDetail->gender == $gender?'selected':''}}>{{ $gender->name }}</option>
+                    @endforeach
+                </select> 
+                <x-input-error class="mt-2" :messages="$errors->get('gender')" />
+            </div> 
+
+            <div>
+                <x-input-label for="name" :value="__('Birth date')" /> 
+                <x-text-input name="birth_date" class="w-full" :value="old('birth_date', $user->userDetail->birth_date->format('Y-m-d') )" type="date" />
                 <x-input-error class="mt-2" :messages="$errors->get('gender')" />
             </div>
 
-            <div>
-                <x-input-label for="name" :value="__('Birth date')" />
-                <x-text-input class="w-full" type="date" />
-                <x-input-error class="mt-2" :messages="$errors->get('gender')" />
-            </div>
-
-            <div>
+            <div> 
                 <x-input-label for="name" :value="__('Phone')" />
-                <x-text-input name="phone" type="tel" class="mt-1 block w-full" :value="old('phone', $user->phone)" required />
+                <x-text-input style="{{$user->phone?'background-color:#94a3b8':''}}" disabled="{{$user->phone?1:0}}" name="phone" type="tel" class="mt-1 block w-full" :value="old('phone', $user->phone)" required />
                 <x-input-error class="mt-2" :messages="$errors->get('gender')" />
             </div>
 
             <div>
                 <x-input-label for="email" :value="__('Email')" />
-                <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
+                <x-text-input style="{{$user->email?'background-color:#94a3b8':''}}" disabled="{{$user->email?1:0}}" id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
                 <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
                 @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
