@@ -59,7 +59,7 @@
 
             <div>
                 <x-input-label for="name" :value="__('Birth date')" /> 
-                <x-text-input name="birth_date" class="w-full" :value="old('birth_date', $user->userDetail->birth_date->format('Y-m-d') )" type="date" />
+                <x-text-input name="birth_date" class="w-full" :value="old('birth_date', $user->userDetail->birth_date?->format('Y-m-d') )" type="date" />
                 <x-input-error class="mt-2" :messages="$errors->get('gender')" />
             </div>
 

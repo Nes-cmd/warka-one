@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(AssumptionController::class)->group(function(){
-    // Route::get('detail', 'all_user_has_detail');
+    Route::get('detail', 'fix_all_user_has_detail');
 });
 
 Route::view('/', 'welcome');
