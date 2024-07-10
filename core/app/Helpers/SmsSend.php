@@ -18,7 +18,7 @@ class SmsSend {
         $postdata =  json_encode([
             "accessKey" => env('SMS_ACCESS'),
             "secretKey" => env('SMS_SECRET'),
-            "from" => "Ker Tech",
+            "from" => "Ker Labs",
             "to" => $toPhone,
             "message" => $message,
             "callbackUrl" =>"https://example.com"
