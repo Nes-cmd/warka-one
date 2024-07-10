@@ -27,7 +27,12 @@ class Address extends Model
     public function city(){
         return $this->belongsTo(City::class, 'city_id');
     }
+
     public function subcity(){
         return $this->belongsTo(SubCity::class, 'sub_city_id');
+    }
+
+    public function woreda(){
+        return $this->belongsTo(Woreda::class, 'woreda_id');
     }
 }
