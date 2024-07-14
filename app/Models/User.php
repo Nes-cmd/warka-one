@@ -6,6 +6,7 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -69,8 +70,8 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
             $model->id = Str::uuid();
         });
     }
-    public function country()  {
-        return $this->hasOne(Country::class);
+    public function country() : BelongsTo {
+        return $this->belongsTo(Country::class, 'country_id');
     }
 
     public function userDetail() : HasOne {

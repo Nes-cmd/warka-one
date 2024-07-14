@@ -15,7 +15,7 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     public static function form(Form $form): Form
     {
@@ -27,6 +27,7 @@ class UserResource extends Resource
                         ->maxLength(255),
                     Forms\Components\TextInput::make('email')
                         ->email()
+                        ->requiredWithout('phone')
                         ->maxLength(255)
                         ->default(null),
                     Forms\Components\Select::make('country_id')
@@ -34,13 +35,14 @@ class UserResource extends Resource
                         ->options(Country::pluck('name', 'id'))
                         ->default(1),
                     Forms\Components\TextInput::make('phone')
+                        ->requiredWithout('email')
                         ->tel()
-                        ->maxLength(9)
-                        ->default(null),
+                        ->maxLength(9),
                     // Forms\Components\DateTimePicker::make('email_verified_at'),
                     // Forms\Components\DateTimePicker::make('phone_verified_at'),
                     Forms\Components\TextInput::make('password')
                         ->password()
+                        ->required($form->getOperation() === "create")
                         ->maxLength(255),
 
                 ])->columns(2)
@@ -55,7 +57,7 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('name')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('email')->copyable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('phone')->copyable()
+                Tables\Columns\TextColumn::make('phone')->copyable()->color('info')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email_verified_at')
                     ->dateTime('M y')
@@ -63,8 +65,7 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('phone_verified_at')
                     ->dateTime('M y')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('country_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('country.name')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime('M-Y')
