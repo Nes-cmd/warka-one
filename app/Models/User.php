@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -11,7 +13,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Support\Str;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
@@ -54,6 +56,11 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $primaryKey = 'id';
 
     public $incrementing = false;
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->email == 'nesrusadik0@gmail.com';
+    }
 
     protected static function boot()
     {
