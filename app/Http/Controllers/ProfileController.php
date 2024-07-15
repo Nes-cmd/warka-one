@@ -54,7 +54,7 @@ class ProfileController extends Controller
         }
 
         if ($user->isDirty('phone')) {
-            $user->pone = trimPhone($request->phone);
+            $user->phone = trimPhone($request->phone);
             $user->phone_verified_at = null;
         }
 
