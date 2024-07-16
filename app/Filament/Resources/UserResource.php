@@ -32,6 +32,7 @@ class UserResource extends Resource
                         ->default(null),
                     Forms\Components\Select::make('country_id')
                         ->label(__('Country'))
+                        ->requiredWith('phone')
                         ->options(Country::pluck('name', 'id'))
                         ->default(1),
                     Forms\Components\TextInput::make('phone')
