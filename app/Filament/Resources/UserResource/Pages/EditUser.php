@@ -25,8 +25,13 @@ class EditUser extends EditRecord
             $record->email = $data['phone'];
             $record->email_verified_at = null;
         }
+
         $record->name = $data['name'];
         $record->country_id = $data['country_id'];
+
+        $record->email_verified_at = $data['email_verified_at'];
+        $record->phone_verified_at = $data['phone_verified_at'];
+        
         $record->save();
 
         return $record;

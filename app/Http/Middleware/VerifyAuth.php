@@ -16,8 +16,6 @@ class VerifyAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return $next($request);
-        
         if(auth()->check()){
             $user = auth()->user();
             if($user->email_verified_at != null || $user->phone_verified_at != null){
