@@ -5,7 +5,7 @@ namespace App\Helpers;
 use Illuminate\Support\Facades\Http;
 
 class SmsSend {
-    public static function send(string $to, string $message, string $via = 'faris'){
+    public static function send(string $to, string $message, string $via = 'afro'){
         if($via == 'afro'){
             return self::sendThroughAfro($to, $message);
         }
