@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\GetVerificationRequest;
 use App\Http\Requests\Auth\VerifyRequest;
 use App\Models\Country;
+use App\Models\User;
 use App\Models\VerificationCode;
 
 class VerificationController extends Controller
@@ -18,20 +19,41 @@ class VerificationController extends Controller
         if ($authwith == 'invalid') {
             return response(['status' => 'fail', 'message' => 'The input neither recognized as phhone nor as email'], 423);
         }
-        if($authwith == 'phone'){
+        if ($authwith == 'phone') {
             $request->merge([
                 'phoneOrEmail' => trimPhone($request->phoneOrEmail)
             ]);
         }
         
+        $user = User::where($authwith, $request->phoneOrEmail)->get();
         if ($request->otpIsFor == 'reset-password') {
-            $request->validate([
-                'phoneOrEmail' => 'exists:users,' . $authwith,
-            ]);
-        } elseif($request->otpIsFor == 'registration' || $request->otpIsFor == 'add-auth') {
-            $request->validate([
-                'phoneOrEmail' => 'unique:users,' . $authwith
-            ]);
+            if (count($user) !== 1) {
+                return response([
+                    "message" => "The selected phone or email is invalid.",
+                    "errors" => [
+                        "phoneOrEmail" => [
+                            "The selected phone or email is invalid."
+                        ]
+                    ]
+                ], 422);
+            }
+            // $request->validate([
+            //     'phoneOrEmail' => 'exists:users,' . $authwith,
+            // ]);
+        } elseif ($request->otpIsFor == 'registration' || $request->otpIsFor == 'add-auth') {
+            if(count($user) >= 1){
+                return response([
+                    "message" => "The phone or email has already been taken.",
+                    "errors" => [
+                        "phoneOrEmail" => [
+                            "The phone or email has already been taken."
+                        ]
+                    ]
+                ], 422);
+            }
+            // $request->validate([
+            //     'phoneOrEmail' => 'unique:users,' . $authwith
+            // ]);
         }
 
         if ($authwith == 'phone') {
@@ -44,7 +66,6 @@ class VerificationController extends Controller
             $receiver = $request->phoneOrEmail;
             $via = 'mail';
         }
-
 
         SendVerification::make()->via($via)->receiver($receiver)->send();
         return response([
@@ -59,15 +80,15 @@ class VerificationController extends Controller
 
         if ($authwith == 'invalid') {
             return response([
-                'status' => 'fail', 
+                'status' => 'fail',
                 'message' => 'The input neither recognized as phhone nor as email'
             ], 423);
         }
 
-        $country = Country::find($request->country_id?$request->country_id:1);
+        $country = Country::find($request->country_id ? $request->country_id : 1);
         $candidate = $authwith == 'email' ? $request->phoneOrEmail : $country->dial_code . trimPhone($request->phoneOrEmail);
         $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
-        if($verification) {
+        if ($verification) {
             if ($verification->verification_code == $request->verificationCode) {
                 $verification->status = 'verified';
                 $verification->save();
