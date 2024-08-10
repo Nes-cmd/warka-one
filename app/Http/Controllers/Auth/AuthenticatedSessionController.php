@@ -17,6 +17,8 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
+    protected $maxAttempts = 5; // Number of failed attempts allowed
+    protected $decayMinutes = 30; // Time until they can try again
     /**
      * Display the login view.
      */
@@ -33,6 +35,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+
         $authwith = $request->authwith;
         $request->validate(['password' => ['required', 'string']]);
         if($authwith == 'phone'){
