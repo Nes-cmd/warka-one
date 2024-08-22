@@ -40,7 +40,8 @@ class AuthenticatedSessionController extends Controller
         $request->validate(['password' => ['required', 'string']]);
         if($authwith == 'phone'){
             $request->validate(['phone' => 'required']);
-            $user = User::where('phone', $request->phone)->first();
+            $phone  = trimPhone($request->phone);
+            $user = User::where('phone', $phone)->first();
         }
         else{
             $request->validate(['email' => 'required']);

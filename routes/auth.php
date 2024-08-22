@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('guest')->group(function () {
 
     Route::get('authflow/get-otp', [VerificationController::class, 'index'])->name('get-otp');
-    
+
     Route::get('authflow/verify', [VerificationController::class, 'verifyView'])->name('verify-otp');
 
     // Route::get('reset-password', );
@@ -24,9 +24,12 @@ Route::middleware('guest')->group(function () {
 
     Route::post('register', [RegisteredUserController::class, 'store']);
 
-    Route::middleware('throttle:5,30')->get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
+    // Route::middleware('throttle:5,30')->group(function () {
+        Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
+        Route::post('login', [AuthenticatedSessionController::class, 'store']);
+    // });
 
-    Route::middleware('throttle:5,30')->post('login', [AuthenticatedSessionController::class, 'store']);
+
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
 
