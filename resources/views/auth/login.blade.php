@@ -92,7 +92,7 @@
 
                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
             </div>
-            <p class="text-xs mt-10 dark:text-gray-300">By continuing, you agree to our <a href="#" class="text-primary-500">Terms of Service</a> and <a href="#" class="text-primary-500">Privacy Policy</a>.</p>
+            <p class="text-xs mt-10 dark:text-gray-300">By continuing, you agree to our <a href="https://pms.kertech.co/legal/policies" class="text-primary-500">Terms of Service</a> and <a href="https://pms.kertech.co/legal/policies#" class="text-primary-500">Privacy Policy</a>.</p>
             <div class="w-full flex justify-center mt-2">
                 <x-primary-button class="my-3 xl:w-2/3 w-full py-2 flex justify-center items-center text-xl rounded-full">
                     {{ __('Log in') }}

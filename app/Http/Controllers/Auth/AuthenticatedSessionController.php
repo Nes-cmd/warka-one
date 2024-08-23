@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
 use App\Models\Country;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
@@ -11,7 +10,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -37,14 +35,14 @@ class AuthenticatedSessionController extends Controller
     {
 
         $authwith = $request->authwith;
-        $request->validate(['password' => ['required', 'string']]);
+        $request->validate(['password' => ['required', 'string', 'max:255']]);
         if($authwith == 'phone'){
-            $request->validate(['phone' => 'required']);
+            $request->validate(['phone' => 'required', 'max:25']);
             $phone  = trimPhone($request->phone);
             $user = User::where('phone', $phone)->first();
         }
         else{
-            $request->validate(['email' => 'required']);
+            $request->validate(['email' => 'required', 'max:60']);
             $user = User::where('email', $request->email)->first();
         }
         
