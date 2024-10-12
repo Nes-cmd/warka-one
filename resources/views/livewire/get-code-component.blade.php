@@ -9,7 +9,7 @@
         <p class="mb-4 text-3xl font-semibold">
             Welcome !
         </p>
-        {{ __('Pleae enter your phone number. You will receive a text message to verify your account. Message & data rates may apply. ') }}
+        {{ __('Please enter your phone number. You will receive a text message to verify your account.') }}
     </div>
     @endif
 

@@ -24,10 +24,10 @@ Route::middleware('guest')->group(function () {
 
     Route::post('register', [RegisteredUserController::class, 'store']);
 
-    // Route::middleware('throttle:5,30')->group(function () {
+    Route::middleware('throttle:30,30')->group(function () {
         Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
         Route::post('login', [AuthenticatedSessionController::class, 'store']);
-    // });
+    });
 
 
 
