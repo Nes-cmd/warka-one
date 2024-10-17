@@ -35,7 +35,7 @@ class SendVerification {
             return $previos;
         }
 
-        $verificationCode = rand(1000, 9999);
+        $verificationCode = rand(100000, 999999);
         if($this->via == 'mail'){
             $status = Mail::to($this->receiver)->send(new VerificationCode($verificationCode));
         }
