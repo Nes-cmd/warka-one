@@ -71,6 +71,8 @@ class AuthController extends Controller
 
         try {
             $phone = trimPhone($request->phone);
+            $user = User::where('phone', $phone)->first();
+            if($user) throw new Exception('User already has account');
             $userData = [
                 'name' => $request->name,
                 'email' => $request->email,
