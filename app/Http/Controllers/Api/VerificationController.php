@@ -9,6 +9,7 @@ use App\Http\Requests\Auth\VerifyRequest;
 use App\Models\Country;
 use App\Models\User;
 use App\Models\VerificationCode;
+use Exception;
 
 class VerificationController extends Controller
 {
@@ -24,7 +25,7 @@ class VerificationController extends Controller
                 'phoneOrEmail' => trimPhone($request->phoneOrEmail)
             ]);
         }
-        
+
         $user = User::where($authwith, $request->phoneOrEmail)->get();
         if ($request->otpIsFor == 'reset-password') {
             if (count($user) !== 1) {
@@ -41,7 +42,7 @@ class VerificationController extends Controller
             //     'phoneOrEmail' => 'exists:users,' . $authwith,
             // ]);
         } elseif ($request->otpIsFor == 'registration' || $request->otpIsFor == 'add-auth') {
-            if(count($user) >= 1){
+            if (count($user) >= 1) {
                 return response([
                     "message" => "The phone or email has already been taken.",
                     "errors" => [
@@ -66,12 +67,18 @@ class VerificationController extends Controller
             $receiver = $request->phoneOrEmail;
             $via = 'mail';
         }
-
-        SendVerification::make()->via($via)->receiver($receiver)->send();
-        return response([
-            'status' => 'success',
-            'message' => "Verification code sent, please use the otp sent to your {$authwith} to complete the rest of the process!"
-        ]);
+        try {
+            SendVerification::make()->via($via)->receiver($receiver)->send();
+            return response([
+                'status' => 'success',
+                'message' => "Verification code sent, please use the otp sent to your {$authwith} to complete the rest of the process!"
+            ]);
+        } catch (Exception $e) {
+            return response([
+                'status' => 'fail',
+                'message' => 'Un-able to send the verification code. Please try after a while',
+            ], 423);
+        }
     }
 
     public function verifyCode(VerifyRequest $request)
