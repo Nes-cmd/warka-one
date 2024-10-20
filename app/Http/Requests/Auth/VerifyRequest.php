@@ -22,7 +22,7 @@ class VerifyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'verificationCode' => ['required','numeric', 'digits:4'],
+            'verificationCode' => ['required','numeric', 'digits:6'],
             // 'authwith' => ['required', 'in:phone,email'],
             // 'email'    => ['nullable','required_if:authwith,email', 'string', 'email'],
             // 'phone'    => ['nullable','required_if:authwith,phone', 'min:9'],
