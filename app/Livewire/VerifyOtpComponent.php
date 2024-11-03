@@ -48,7 +48,7 @@ class VerifyOtpComponent extends Component
     }
     public function verify() {
         
-        $this->validate(['verificationCode' => 'required|numeric|digits:4']);
+        $this->validate(['verificationCode' => 'required|numeric|digits:6']);
 
         $candidate = $this->authwith == 'email'?$this->email: $this->country->dial_code . $this->phone;
 
