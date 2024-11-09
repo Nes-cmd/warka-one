@@ -53,14 +53,14 @@
 
 <body class="font-sans text-gray-900 dark:bg-[#0F172A] bg-[#EAE9F0]  antialiased h-screen overflow-hidden justify-center items-center flex">
 
-    <div class="flex lg:flex-row flex-col rounded-lg items-center justify-center px-4 w-[100%] md:w-[90%] h-[85%]">
+    <div class="flex lg:flex-row flex-col items-center justify-center px-2 w-[100%] md:w-[90%] h-[85%]">
         <div class="w-1/2 h-full hidden relative  bg-primary-100 dark:bg-[#232b3c] lg:flex  items-center  px-10">
             
             <img src="{{ asset('assets/kerbrands/loginAvatar.svg')}}" class=" h-full" alt="Ker Logo" />
 
             <div class="absolute top-20 left-1/3 w-52 h-[400px] lg:h[900px] rotate-45 bg-gradient-to-t from-primary-500/40 to-primary-100/40 z-10 blur-3xl"></div>
         </div>
-        <div class="lg:w-1/2 w-full flex flex-col gap-6 bg-primary-50 dark:bg-[#1f2533] items-center justify-center h-full">
+        <div class="lg:w-1/2 w-full flex flex-col gap-6 bg-primary-50 dark:bg-[#1f2533] rounded-lg md:rounded-none items-center justify-center h-full">
             <div class="md:w-[75%] w-[90%] flex flex-col p gap-4 ">
                 <!-- logo  -->
                 <div class="h-14 lg:h-12 w-full pt-4 flex justify-center mb-4">
@@ -69,7 +69,7 @@
                     </a>
                 </div>
 
-                <div class="pb-4 relative">
+                <div class="pb-4 relative ">
                     {{ $slot }}
                      <div class="absolute md:hidden -top-20 left-1/3 w-52 h-[100px] rotate-30 bg-gradient-to-t from-primary-300/40 to-primary-100/40  blur-3xl"></div>
                 </div>

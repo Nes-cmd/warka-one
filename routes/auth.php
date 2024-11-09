@@ -22,7 +22,7 @@ Route::middleware('guest')->group(function () {
     
     Route::post('register', [RegisteredUserController::class, 'store']);
     
-    Route::middleware('throttle:20,30')->group(function () {
+    // Route::middleware('throttle:20,30')->group(function () {
         Route::get('authflow/get-otp', [VerificationController::class, 'index'])->name('get-otp');
         Route::get('authflow/verify', [VerificationController::class, 'verifyView'])->name('verify-otp');
         Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
@@ -30,7 +30,7 @@ Route::middleware('guest')->group(function () {
         Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
         Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
         Route::get('reset-password/', [NewPasswordController::class, 'create'])->name('password.reset');
-    });
+    // });
 
 
     Route::post('reset-password', [NewPasswordController::class, 'store'])->name('password.store');
