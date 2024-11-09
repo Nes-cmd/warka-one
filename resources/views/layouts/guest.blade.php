@@ -53,7 +53,7 @@
 
 <body class="font-sans text-gray-900 dark:bg-[#0F172A] bg-[#EAE9F0]  antialiased h-screen overflow-hidden justify-center items-center flex">
 
-    <div class="flex lg:flex-row flex-col items-center justify-center px-4 w-[100%] md:w-[90%] h-[85%]">
+    <div class="flex lg:flex-row flex-col rounded-lg items-center justify-center px-4 w-[100%] md:w-[90%] h-[85%]">
         <div class="w-1/2 h-full hidden relative  bg-primary-100 dark:bg-[#232b3c] lg:flex  items-center  px-10">
             
             <img src="{{ asset('assets/kerbrands/loginAvatar.svg')}}" class=" h-full" alt="Ker Logo" />
