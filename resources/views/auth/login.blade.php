@@ -22,7 +22,7 @@
             <!-- Email Address -->
             <div class="relative mb-4" x-show="authwith == 'email'">
                 <x-input-label for="email" :value="__('Email Address')" />
-                <x-text-input id="email" class="block mt-1 w-full dark:bg-gray-700 dark:text-white" type="email" name="email" :value="old('email')" />
+                <x-text-input id="email" class="block mt-1 w-full dark:text-white" type="email" name="email" :value="old('email')" />
                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
             </div>
 
