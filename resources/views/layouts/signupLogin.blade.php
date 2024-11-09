@@ -64,12 +64,12 @@
             <div class="w-[75%] flex flex-col gap-8">
                 <!-- logo  -->
                 <div class=" ">
-                    <a href="/" class="">
+                    <a href="{{ url()->previos() }}" class="">
                         <x-application-logo class="  fill-current text-gray-500" />
                     </a>
                 </div>
 
-                <div class="  ">
+                <div >
                     {{ $slot }}
                 </div>
             </div>

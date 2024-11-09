@@ -6,7 +6,7 @@ let colors = require("tailwindcss/colors");
 colors.mysecondary = {
     DEFAULT: "#f3a433",
     50: "#fef9ec",
-    100: "##fcebc9",
+    100: "#fcebc9",
     200: "#f9d58e",
     300: "#f5ba54",
     400: "#f3a433",

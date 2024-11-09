@@ -57,7 +57,7 @@
                         }
                         }" x-on:keydown.escape.prevent.stop="close($refs.button)" x-on:focusin.window="! $refs.panel.contains($event.target) && close()" x-id="['dropdown-button']" class="relative">
                         <!-- Button -->
-                        <button type="button" x-ref="button" :aria-expanded="open" :aria-controls="$id('dropdown-button')" type="button" class="flex items-center bg-white  dark:bg-gray-700 dark:text-white py-2.5 pl-2 rounded-md shadow">
+                        <button type="button" x-ref="button" :aria-expanded="open" :aria-controls="$id('dropdown-button')" type="button" class="flex items-center bg-white  dark:bg-gray-700 dark:text-white py-2.5 pl-2 rounded-l-md shadow">
                                 <img class="w-[20px]" src="{{ asset($selectedCountry->flag_url) }}" alt="">
                                 <span>({{ $selectedCountry->dial_code }})</span>
 
@@ -78,7 +78,7 @@
                     </div>
                 </div>
 
-                <x-text-input wire:model.lazy="phone" id="phone" type="tel" class="block w-[100%]  dark:bg-gray-700 dark:text-white"  name="phone" :value="old('phone')" required />
+                <x-text-input wire:model.lazy="phone" id="phone" type="tel" class="block w-[100%]  dark:text-white rounded-l-none"  name="phone" :value="old('phone')" required />
 
 
             </div>

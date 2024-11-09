@@ -67,7 +67,7 @@
                 <div class="">
                     <div class="">
                         <!-- Button -->
-                        <button x-ref="button" type="button" class="flex items-center bg-gray-200 dark:text-white dark:bg-gray-700 pl-2 py-2.5 rounded-md shadow">
+                        <button x-ref="button" type="button" class="flex items-center bg-gray-200 dark:text-white dark:bg-gray-700 pl-2 py-2.5 rounded-l-md shadow">
                             <img class="w-[20px]" src="{{ asset($country->flag_url) }}" alt="">
                             <span>({{ $country->dial_code}})</span>
 
@@ -79,7 +79,7 @@
                     </div>
                 </div>
 
-                <x-text-input id="phone" disabled class="bg-gray-200 dark:text-gray-400 block  w-[90%] py-2.5" type="tel" name="phone" wire:model="phone" required />
+                <x-text-input id="phone" disabled class="bg-gray-200 dark:text-gray-400 block  w-[90%] py-2.5 rounded-l-none" type="tel" name="phone" wire:model="phone" required />
 
 
                 <div class="absolute right-3 z-10 top-2" wire:ignore>

@@ -48,7 +48,7 @@
                             }
                             }" x-on:keydown.escape.prevent.stop="close($refs.button)" x-on:focusin.window="!$refs.panel.contains($event.target) && close()" x-id="['dropdown-button']" class="relative">
                             <!-- Button -->
-                            <button type="button" x-ref="button" :aria-expanded="open" :aria-controls="$id('dropdown-button')" type="button" class="flex items-center bg-white dark:bg-gray-700 dark:text-white py-2.5 pl-2 rounded-l-none rounded-r-md shadow">
+                            <button type="button" x-ref="button" :aria-expanded="open" :aria-controls="$id('dropdown-button')" type="button" class="flex items-center bg-white dark:bg-gray-700 dark:text-white py-2.5 pl-2 rounded-l-md rounded-r-none shadow">
                                 <img class="w-[20px]" src="{{ asset($selectedCountry->flag_url) }}" alt="">
                                 <span>{{ $selectedCountry->dial_code }}</span>
 
@@ -58,7 +58,7 @@
                             </button>
 
                             <!-- Panel -->
-                            <div x-ref="panel" x-show="open" x-transition.origin.top.left x-on:click.outside="close($refs.button)" :id="$id('dropdown-button')" style="display: none;" class="absolute left-0  rounded-md bg-white shadow-md">
+                            <div x-ref="panel" x-show="open" x-transition.origin.top.left x-on:click.outside="close($refs.button)" :id="$id('dropdown-button')" style="display: none;" class="absolute left-0   bg-white shadow-md">
                                 @foreach($countries as $country)
                                 <a href="#" x-on:click="open = false" class="flex items-center w-full first-of-type:rounded-t-md last-of-type:rounded-b-md py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
                                     <img class="w-[20px]" src="{{ asset($country->flag_url) }}" alt="">
@@ -70,8 +70,6 @@
                     </div>
 
                     <x-text-input id="phone" class="block w-[100%] rounded-l-none dark:text-white" type="tel" name="phone" value="{{ old('phone')}}" />
-
-
                 </div>
             </div>
             <x-input-error x-show="authwith == 'phone'" :messages="$errors->get('phone')" class="mt-2" />
@@ -80,7 +78,7 @@
             <!-- Password -->
             <div class="mt-4 relative">
                 <x-input-label for="password" :value="__('Password')" />
-                <x-text-input id="passwordInput" class="dark:bg-gray-700 dark:text-white block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
+                <x-text-input id="passwordInput" class="dark:text-white block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
 
                 <button type="button" class="absolute inset-y-0 right-0 px-4 top-1/3 flex items-center dark:text-gray-400  hover:text-primary-500 focus:outline-none" onclick="togglePasswordVisibility()">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="togglePasswordIcon">
@@ -92,7 +90,7 @@
 
                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
             </div>
-            <p class="text-xs mt-10 dark:text-gray-300">By continuing, you agree to our <a href="https://pms.kertech.co/legal/policies" class="text-primary-500">Terms of Service</a> and <a href="https://pms.kertech.co/legal/policies#" class="text-primary-500">Privacy Policy</a>.</p>
+            <p class="text-xs mt-10 dark:text-gray-300 text-center">By continuing, you agree to our <a href="https://pms.kertech.co/legal/policies" class="text-primary-500">Terms of Service</a> and <a href="https://pms.kertech.co/legal/policies#" class="text-primary-500">Privacy Policy</a>.</p>
             <div class="w-full flex justify-center mt-2">
                 <x-primary-button class="my-3 xl:w-2/3 w-full py-2 flex justify-center items-center text-xl rounded-full">
                     {{ __('Log in') }}

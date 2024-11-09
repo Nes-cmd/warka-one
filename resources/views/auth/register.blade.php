@@ -12,12 +12,12 @@
             <div class="flex">
                     <div>
                         <!-- Button -->
-                        <button x-ref="button" type="button" class="flex items-center dark:bg-gray-700 dark:text-gray-200 bg-gray-200 px-2 py-2.5 rounded-md shadow">
+                        <button x-ref="button" type="button" class="flex items-center dark:bg-gray-700 dark:text-gray-200 bg-gray-200 px-2 py-2.5 rounded-l-md shadow">
                             <img class="w-[20px]" src="{{ asset($authflowData['country']->flag_url) }}" alt="">
                             <span>({{ $authflowData['country']->dial_code}})</span>
                         </button>
                     </div>
-                <x-text-input id="phone" disabled class="block bg-gray-100 dark:bg-gray-700 dark:text-gray-400 py-2 w-[90%]" value="{{ $authflowData['phone'] }}" type="tel" name="phone" required />
+                <x-text-input id="phone" disabled class="block bg-gray-100 dark:bg-gray-700 rounded-l-none dark:text-gray-400 py-2 w-[90%]" value="{{ $authflowData['phone'] }}" type="tel" name="phone" required />
             </div>
             <x-input-error :messages="$errors->get('phone')" class="mt-2" />
         </div>
