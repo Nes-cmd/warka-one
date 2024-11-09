@@ -30,7 +30,7 @@
         <!-- Email Address -->
         <div class="relative mb-4" x-show="authwith == 'email'">
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model.lazy="email" id="email" class="block mt-1 w-full dark:bg-gray-700 dark:text-white" type="email" name="email" :value="old('email')" required />
+            <x-text-input wire:model.lazy="email" id="email" class="block mt-1 w-full dark:text-white" type="email" name="email" :value="old('email')" required />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
             <!-- <div class="absolute right-3 top-[43%] ">
                 <button class="border rounded px-3 py-1 text-white bg-blue-500">Get code</button>

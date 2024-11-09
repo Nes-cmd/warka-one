@@ -63,7 +63,7 @@
         <div class="lg:w-1/2 w-full flex flex-col gap-6 bg-primary-50 dark:bg-[#1f2533] rounded-lg md:rounded-none items-center justify-center h-full">
             <div class="md:w-[75%] w-[90%] flex flex-col p gap-4 ">
                 <!-- logo  -->
-                <div class="h-14 lg:h-12 w-full pt-4 flex justify-center mb-4">
+                <div class="h-14 lg:h-12 w-full pt-4 flex justify-center mb-4 z-10">
                     <a href="{{ url()->previous() }}" class="h-full">
                         <x-application-logo class=" w-full h-full fill-current text-gray-500" />
                     </a>
