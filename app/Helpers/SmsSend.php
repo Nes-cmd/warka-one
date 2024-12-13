@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Http;
 
 class SmsSend {
     public static function send(string $to, string $message, string $via = 'afro'){
-        if($via == 'afro'){
+        if(env('SMS_VIA') == 'afro'){
             return self::sendThroughAfro($to, $message);
         }
         
