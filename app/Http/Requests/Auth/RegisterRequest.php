@@ -29,7 +29,7 @@ class RegisterRequest extends FormRequest
             'email'    => ['nullable','required_if:authwith,email', 'string', 'email'],
             'phone'    => ['nullable','required_if:authwith,phone', 'min:9'],
             'country_id' => ['nullable','required_if:authwith,phone'],
-            "password_confirmation" => ['required'],
+            'password_confirmation' => ['required'],
         ];
     }
 }
