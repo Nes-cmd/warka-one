@@ -55,7 +55,7 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->label('ID')->searchable()->copyable(),
+                Tables\Columns\TextColumn::make('id')->label('ID')->searchable()->copyable()->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('name')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('email')->copyable()
                     ->searchable(),
