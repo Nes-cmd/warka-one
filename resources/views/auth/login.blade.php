@@ -99,7 +99,7 @@
                     type="submit"
                    
                     class="my-3 xl:w-2/3 w-full py-2 flex justify-center items-center text-xl rounded-full"
-                    x-bind:class="isLoading?'bg-primary-500':'bg-secondary'"
+                    x-bind:class="isLoading?'bg-primary-500':'bg-primary'"
                     x-bind:disabled="isLoading"
                 >
                     <span x-show="!isLoading">{{ __('Log in') }}</span>

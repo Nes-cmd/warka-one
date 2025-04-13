@@ -1,22 +1,22 @@
 <x-home-layout>
-    <main class="relative">
-        <div class="max-w-5xl mx-auto py-10 px-4 sm:px-6">
+    <main class="">
+        <div class="max-w-5xl mx-auto py-10 px-4 sm:px-2">
             <h1 class="text-slate-900 font-extrabold text-4xl sm:text-5xl lg:text-6xl tracking-tight text-center dark:text-white mb-10">
                 Privacy Policy & Terms of Service
             </h1>
             
             <div class="mt-10 bg-white dark:bg-[#1E293B] rounded-xl shadow-sm p-8">
                 <p class="text-lg text-slate-600 dark:text-slate-400 mb-6">
-                    Last Updated: {{ date('F d, Y') }}
+                    Last Updated: April 03, 2025
                 </p>
                 
                 <div class="mb-12">
                     <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">Introduction</h2>
                     <p class="text-lg text-slate-600 dark:text-slate-400 mb-4">
-                        Welcome to KerTech, your trusted Single Sign-On (SSO) service provider. This document outlines our privacy practices and terms of service that govern your use of our platform and services.
+                        Welcome to Kerone SSO, your trusted Single Sign-On (SSO) service provider. This document outlines our privacy practices and terms of service that govern your use of our platform and services.
                     </p>
                     <p class="text-lg text-slate-600 dark:text-slate-400">
-                        By accessing or using KerTech's services, you agree to the collection and use of information in accordance with this policy. We take your privacy seriously and are committed to protecting your personal information.
+                        By accessing or usin Kerlabs services, you agree to the collection and use of information in accordance with this policy. We take your privacy seriously and are committed to protecting your personal information.
                     </p>
                 </div>
                 
