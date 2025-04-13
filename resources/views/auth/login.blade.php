@@ -93,7 +93,7 @@
 
                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
             </div>
-            <p class="text-xs mt-10 dark:text-gray-300 text-center">By continuing, you agree to our <a href="https://pms.kertech.co/legal/policies" class="text-primary-500">Terms of Service</a> and <a href="https://pms.kertech.co/legal/policies#" class="text-primary-500">Privacy Policy</a>.</p>
+            <p class="text-xs mt-10 dark:text-gray-300 text-center">By continuing, you agree to our <a href="{{ route('privacy-policy') }}" class="text-primary-500">Terms of Service</a> and <a href="{{ route('privacy-policy') }}" class="text-primary-500">Privacy Policy</a>.</p>
             <div class="w-full flex justify-center mt-2">
                 <x-primary-button 
                     type="submit"
@@ -125,7 +125,7 @@
                     @endif
                 </div>
                 <div>
-                    @if (Route::has('register'))
+                    @if (Route::has('register') && $registrationEnabled)
                     <a href="{{ route('get-otp', ['for' => 'register']) }}" class="dark:text-gray-300 text-sm text-gray-600 hover:text-primary-300 rounded-md focus:outline-none ">
                         {{ __('Dont have account? ') }} <span class=" underline">Sign up</span>
 

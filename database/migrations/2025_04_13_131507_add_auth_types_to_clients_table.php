@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('oauth_clients', function (Blueprint $table) {
-            $table->json('use_auth_types')->default('["email", "phone"]');
+            $table->json('use_auth_types')->default('["email", "phone"]')->after('revoked');
+            $table->boolean('registration_enabled')->default(false)->after('use_auth_types');
         });
     }
 
@@ -23,6 +24,7 @@ return new class extends Migration
     {
         Schema::table('oauth_clients', function (Blueprint $table) {
             $table->dropColumn('use_auth_types');
+            $table->dropColumn('registration_enabled');
         });
     }
 };

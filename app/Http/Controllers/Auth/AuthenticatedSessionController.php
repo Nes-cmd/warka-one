@@ -38,11 +38,13 @@ class AuthenticatedSessionController extends Controller
         }
 
         $authwith = count($options) == 1?$options[0]:'email';
+
+        $registrationEnabled = $client->registration_enabled;
         
 
         $countries = Country::all();
         $selectedCountry = Country::first();
-        return view('auth.login', compact('authwith', 'countries', 'selectedCountry', 'options'));
+        return view('auth.login', compact('authwith', 'countries', 'selectedCountry', 'options', 'registrationEnabled'));
     }
 
     /**

@@ -12,8 +12,10 @@ use Illuminate\Support\Facades\Route;
 Route::controller(AssumptionController::class)->group(function(){
     Route::get('detail', 'fix_all_user_has_detail');
 });
+
 Route::redirect('et', '/');
 Route::view('/', 'welcome');
+Route::view('privacy-policy', 'privacy-policy')->name('privacy-policy');
 Route::view('mail', 'emailtemp');
 Route::view('about', 'about');
 Route::view('services', 'services');
