@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Country;
+use App\Models\Passport\Client;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use Laravel\Passport\Passport;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -22,10 +24,25 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(Request $request): View
     {
-        $authwith = 'email';
+        $intended = session()->get('url.intended');
+        $clientId = null;
+        if ($intended && strpos($intended, 'oauth/authorize') !== false) {
+            $queryParams = [];
+            parse_str(parse_url($intended, PHP_URL_QUERY), $queryParams);
+            $clientId = $queryParams['client_id'] ?? null;
+        }
+        $client = null;
+        $options = ['email', 'phone'];
+        if($clientId && $client = Client::find($clientId)){
+            $options = $client->use_auth_types;
+        }
+
+        $authwith = count($options) == 1?$options[0]:'email';
+        
+
         $countries = Country::all();
         $selectedCountry = Country::first();
-        return view('auth.login', compact('authwith', 'countries', 'selectedCountry'));
+        return view('auth.login', compact('authwith', 'countries', 'selectedCountry', 'options'));
     }
 
     /**
@@ -35,6 +52,7 @@ class AuthenticatedSessionController extends Controller
     {
 
         $authwith = $request->authwith;
+        
         $request->validate(['password' => ['required', 'string', 'max:255']]);
         if($authwith == 'phone'){
             $request->validate(['phone' => 'required', 'max:25']);

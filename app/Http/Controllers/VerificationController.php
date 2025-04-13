@@ -12,6 +12,7 @@ class VerificationController extends Controller
             'for' => 'required|in:register,reset-password'
         ]);
         $otpIsFor = $request->for;
+
         return view('auth.get-otp', compact('otpIsFor'));
     }
 

@@ -11,7 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        Schema::table('oauth_clients', function (Blueprint $table) {
+            $table->json('use_auth_types')->default('["email", "phone"]');
+        });
     }
 
     /**
@@ -19,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::table('oauth_clients', function (Blueprint $table) {
+            $table->dropColumn('use_auth_types');
+        });
     }
 };

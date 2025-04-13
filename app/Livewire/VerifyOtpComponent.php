@@ -16,6 +16,7 @@ class VerifyOtpComponent extends Component
 
     public $verificationCode;
     public $verificationFor;
+    public $options;
     public function mount() {
         $authflowData = session('authflow');
        
@@ -25,6 +26,22 @@ class VerifyOtpComponent extends Component
         $this->country  = $authflowData['country']; 
 
         $this->verificationFor = $authflowData['otpIsFor'];
+       
+
+        $intended = session()->get('url.intended');
+        $clientId = null;
+        if ($intended && strpos($intended, 'oauth/authorize') !== false) {
+            $queryParams = [];
+            parse_str(parse_url($intended, PHP_URL_QUERY), $queryParams);
+            $clientId = $queryParams['client_id'] ?? null;
+        }
+        $client = null;
+        $options = ['email', 'phone'];
+        if($clientId && $client = \App\Models\Passport\Client::find($clientId)){
+            $options = $client->use_auth_types;
+        }
+        $this->options = $options;
+
         
         if($this->verificationFor === 'must-verify'){
             $this->resend();

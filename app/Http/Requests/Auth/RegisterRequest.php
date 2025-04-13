@@ -30,6 +30,7 @@ class RegisterRequest extends FormRequest
             'phone'    => ['nullable','required_if:authwith,phone', 'min:9'],
             'country_id' => ['nullable','required_if:authwith,phone'],
             'password_confirmation' => ['required'],
+            'inform'  => ['sometimes', 'nullable'],
         ];
     }
 }

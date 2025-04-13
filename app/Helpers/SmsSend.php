@@ -21,7 +21,7 @@ class SmsSend {
             "from" => "Ker Labs",
             "to" => $toPhone,
             "message" => $message,
-            "callbackUrl" =>"https://example.com"
+            "callbackUrl" =>"https://kertech.co"
          ]);
 
         $opts = array('http' => [

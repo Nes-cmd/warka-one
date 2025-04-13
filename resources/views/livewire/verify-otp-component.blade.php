@@ -110,6 +110,7 @@
                 {{ __('Verify') }}
             </x-primary-button>
         </div>
+        
         <!-- <x-primary-button wire:click="verify" class="ms-3 py-2">
             <span wire:loading class="loader mx-1"></span>
             {{ __('Verify') }}

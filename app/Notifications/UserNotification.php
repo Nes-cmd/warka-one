@@ -36,9 +36,9 @@ class UserNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->subject('Ker Account Created')
+                    ->subject('Kerone Account Created')
                     ->line($this->message)
-                    ->action('Login Now', url('/login'))
+                    // ->action('Login Now', url('/login'))
                     ->line('Thank you for using our application!');
     }
 

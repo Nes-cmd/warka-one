@@ -4,8 +4,10 @@ use App\Helpers\SmsSend;
 use App\Http\Controllers\AssumptionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VerificationController;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 Route::controller(AssumptionController::class)->group(function(){
     Route::get('detail', 'fix_all_user_has_detail');

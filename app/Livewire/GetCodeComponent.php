@@ -18,12 +18,27 @@ class GetCodeComponent extends Component
     public $countries;
 
     public $otpIsFor;
+    public $options;
 
     public function mount($otpIsFor)
     {
         $this->selectedCountry = Country::first();
         $this->countries = Country::all();
         $this->otpIsFor = $otpIsFor;
+
+        $intended = session()->get('url.intended');
+        $clientId = null;
+        if ($intended && strpos($intended, 'oauth/authorize') !== false) {
+            $queryParams = [];
+            parse_str(parse_url($intended, PHP_URL_QUERY), $queryParams);
+            $clientId = $queryParams['client_id'] ?? null;
+        }
+        $client = null;
+        $options = ['email', 'phone'];
+        if($clientId && $client = \App\Models\Passport\Client::find($clientId)){
+            $options = $client->use_auth_types;
+        }
+        $this->options = $options;
     }
     public function changeCountry($id)
     {

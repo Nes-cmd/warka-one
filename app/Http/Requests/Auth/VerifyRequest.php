@@ -27,7 +27,7 @@ class VerifyRequest extends FormRequest
             // 'email'    => ['nullable','required_if:authwith,email', 'string', 'email'],
             // 'phone'    => ['nullable','required_if:authwith,phone', 'min:9'],
             'phoneOrEmail' => 'required',
-            'country_id' => ['nullable'],
+            'country_id' => 'nullable',
         ];
     }
 }

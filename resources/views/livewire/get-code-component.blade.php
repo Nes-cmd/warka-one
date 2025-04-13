@@ -21,12 +21,12 @@
         console.log(authwith)
         ">
 
-
+        @if(count($options) > 1 && in_array('email', $options) && in_array('phone', $options))
         <div class="border border-radius-2 rounded dark:border-gray-600 flex justify-around py-2 mb-4">
             <button :class="authwith == 'email'?'bg-secondary-50 text-primary border-b-2 border-secondary':'bg-gray-100 text-gray-500'" class="w-[40%] py-2 rounded" x-on:click="() => {authwith = 'email'; $wire.authwith='email'}">Email</button>
             <button :class="authwith == 'phone'?'bg-secondary-50 text-primary border-b-2 border-secondary':'bg-gray-100 text-gray-500'" class=" w-[40%] py-2 rounded" x-on:click="() => {authwith = 'phone'; $wire.authwith='phone'}">Phone</button>
         </div>
-
+        @endif
         <!-- Email Address -->
         <div class="relative mb-4" x-show="authwith == 'email'">
             <x-input-label for="email" :value="__('Email')" />

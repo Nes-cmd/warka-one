@@ -27,13 +27,14 @@ class VerificationController extends Controller
         }
 
         $user = User::where($authwith, $request->phoneOrEmail)->get();
+
         if ($request->otpIsFor == 'reset-password') {
             if (count($user) !== 1) {
                 return response([
-                    "message" => "The selected phone or email is invalid.",
+                    "message" => "The selected $authwith is invalid.",
                     "errors" => [
                         "phoneOrEmail" => [
-                            "The selected phone or email is invalid."
+                            "The selected $authwith is invalid."
                         ]
                     ]
                 ], 422);
@@ -92,6 +93,8 @@ class VerificationController extends Controller
             ], 423);
         }
 
+        return $request->all();
+
         $country = Country::find($request->country_id ? $request->country_id : 1);
         $candidate = $authwith == 'email' ? $request->phoneOrEmail : $country->dial_code . trimPhone($request->phoneOrEmail);
         $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
@@ -109,11 +112,11 @@ class VerificationController extends Controller
                 'message' => 'Incorrect code!',
                 'status' => 'error'
             ], 401);
-        } else {
-            return response([
-                'message' => 'Code wasn\'t sent correctly or expierd, please try again!',
-                'status' => 'error'
-            ], 401);
         }
+
+        return response([
+            'message' => 'Code wasn\'t sent correctly or expierd, please try again!',
+            'status' => 'error'
+        ], 401);
     }
 }

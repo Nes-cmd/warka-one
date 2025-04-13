@@ -71,13 +71,17 @@ class AuthController extends Controller
 
         try {
             $phone = trimPhone($request->phone);
-            $user = User::where('phone', $phone)->first();
-            if($user) throw new Exception('User already has account');
+            $email = $request->email;
+            $user = null;
+            if($phone && $phone != "") $user = User::where('phone', $phone)->first();
+            if($email && $email != "") $user = User::where('email', $email)->first();
+           
+            if ($user) throw new Exception('User already has account');
             $userData = [
                 'name' => $request->name,
                 'email' => $request->email,
-                'phone' => $phone,
-                'country_id' => $request->country_id,
+                'phone' => $phone??null,
+                'country_id' => $request->country_id??1,
                 'password' => Hash::make($request->password),
             ];
 
@@ -104,8 +108,8 @@ class AuthController extends Controller
             $tokens = $user->createToken('API-TOKEN');
 
 
-            if ($request->inform) {
-                $this->informAccountCreation($user, $request->password);
+            if ($request->inform && $request->inform != "") {
+                $this->informAccountCreation($user, $request->password, $request->authwith);
             }
 
             DB::commit();
@@ -126,12 +130,13 @@ class AuthController extends Controller
         }
     }
 
-    public function informAccountCreation(User $user, $password)
+    public function informAccountCreation(User $user, $password, $authwith)
     {
-        $message = __("Your account has been created successfully. You can access all services of kertech with this account. Access your account with this phone number and password is $password
+        $message = "Your account has been created successfully. You can access all services of kertech with this one account. Access your account with this $authwith and password is $password 
+            Please don't share your password with anyone else.
             
             Thanks for choosing Ker Labs.
-            ");
+            ";
 
         if ($user->phone) {
             $country = Country::find($user->country_id);
@@ -206,7 +211,7 @@ class AuthController extends Controller
     // }
     public function updatePdassword(ChangePassword $request)
     {
-        if($request->new_password !== $request->password_confirmation) {
+        if ($request->new_password !== $request->password_confirmation) {
             return response([
                 "message" => "The password confirmation field confirmation does not match.",
                 "errors" => [
@@ -228,12 +233,11 @@ class AuthController extends Controller
         if (Hash::check($request->old_password, $user->password)) {
             $user->password = Hash::make($request->new_password);
             $user->save();
-            
+
             return response([
                 'status' => 'success',
                 'massage' => 'You have successfully changed your password, and you have loged out'
             ]);
-          
         } else {
             return response([
                 'status' => 'fail',
@@ -249,7 +253,7 @@ class AuthController extends Controller
         if ($user && isPhoneOrEmail($request->phone == 'phone')) {
 
             $country = Country::find($request->country_id);
-            $candidate = $country->dial_code . trimPhone($request->phone);                 
+            $candidate = $country->dial_code . trimPhone($request->phone);
             $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
 
             if ($this->isVerified($verification, $request->verification_code)) {

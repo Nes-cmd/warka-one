@@ -15,11 +15,12 @@
 
             <input type="hidden" name="authwith" :value="authwith" id="">
             <input type="hidden" name="country_id" value="{{ $selectedCountry->id }}" id="">
+            @if(count($options) > 1 && in_array('email', $options) && in_array('phone', $options))
             <div class="border border-radius-2 rounded flex justify-around py-2 mb-4">
                 <button type="button" :class="authwith == 'phone'?'bg-blue-600':'bg-gray-600'" class=" text-white w-[40%] py-2 rounded" x-on:click="() => {authwith = 'phone'}">Phone</button>
                 <button type="button" :class="authwith == 'email'?'bg-blue-600':'bg-gray-600'" class="text-white w-[40%] py-2 rounded" x-on:click="() => {authwith = 'email'}">Email</button>
             </div>
-
+            @endif
             <!-- Email Address -->
             <div class="relative mb-4" x-show="authwith == 'email'">
                 <x-input-label for="email" :value="__('Email')" />
