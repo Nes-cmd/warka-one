@@ -31,15 +31,18 @@ class AuthenticatedSessionController extends Controller
             parse_str(parse_url($intended, PHP_URL_QUERY), $queryParams);
             $clientId = $queryParams['client_id'] ?? null;
         }
+        
         $client = null;
         $options = ['email', 'phone'];
+        $registrationEnabled = true;
         if($clientId && $client = Client::find($clientId)){
             $options = $client->use_auth_types;
+            $registrationEnabled = $client->registration_enabled;
         }
 
         $authwith = count($options) == 1?$options[0]:'email';
 
-        $registrationEnabled = $client->registration_enabled;
+        
         
 
         $countries = Country::all();
