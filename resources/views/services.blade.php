@@ -105,7 +105,7 @@
                 </p>
                 <div>
                     <a href="{{ route('contact') }}" class="dark:text-white/70 text-slate-900 px-4 py-2 rounded-full border border-slate-900 dark:border-white/40 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
-                        Contact Sales
+                        Contact Us
                     </a>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 <nav class="flex justify-between items-center py-4 bg-transparent">
-    <a class="" href="/"><x-application-logo /></a>
+    <a class="h-10" href="/"><x-application-logo /></a>
     
     <!-- Desktop Navigation -->
     <ul class="sm:flex items-center gap-3 hidden">
