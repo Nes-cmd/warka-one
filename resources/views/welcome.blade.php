@@ -3,7 +3,7 @@
         <section class="flex w-full flex-col items-center ">
             <div class="max-w-5xl mx-auto py-10">
                 <h1 class="text-slate-900 font-extrabold text-4xl sm:text-5xl lg:text-6xl tracking-tight text-center dark:text-white">
-                    Make your life easier With KerTech’s <span class="text-secondary"> secure,</span> Reliable and Fast Technology
+                    Make your life easier With Kerlab’s <span class="text-secondary"> secure,</span> Reliable and Fast Technology
                 </h1>
                 <p class=" mt-6 text-lg text-slate-600 text-center max-w-3xl mx-auto dark:text-slate-400">
                     Welcome to Ker Labs, where we revolutionize the way you manage your digital world. Imagine having one account to rule them all—a centralized hub that simplifies your online experience and brings together a multitude of solutions. With our Single Sign-On (SSO) technology, we provide a seamless and efficient way to access and manage all your digital resources from a single personality.
@@ -56,7 +56,7 @@
                         </svg>
                     </div>
                     <h1 class="text-slate-900 font-extrabold text-xl sm:text-2xl lg:text-2xl tracking-tight  dark:text-secondary-400">
-                        <a href="https://wallet.kertech.co">Ker Wallet</a>
+                        <a href="https://wallet.kertech.co">Kiray Pays</a>
                     </h1>
                     <div class="rounded-lg dark:bg-[#1E293B] bg-white/40 w-full  p-4">
                         <a href="https://wallet.kertech.co" class="mt-6 text-lg text-slate-600 hover:text-secondary-300 text-center max-w-3xl mx-auto dark:text-slate-400">
@@ -73,7 +73,7 @@
 
                     </div>
                     <h1 class="text-slate-900 font-extrabold text-xl sm:text-2xl lg:text-2xl tracking-tight  dark:text-secondary-400">
-                        <a href="https://pms.kertech.co"> Ker Appartment Management</a>
+                        <a href="https://betoch.kertech.co"> Betoch System</a>
                     </h1>
                     <div class="rounded-lg dark:bg-[#1E293B] bg-white/40 w-full p-4">
                         <a href="https://pms.kertech.co" class="mt-6 text-lg hover:text-secondary-300 text-slate-600 text-center max-w-3xl mx-auto dark:text-slate-400">

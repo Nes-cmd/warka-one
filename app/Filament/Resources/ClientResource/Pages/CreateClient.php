@@ -15,7 +15,8 @@ class CreateClient extends CreateRecord
         $data['personal_access_client'] = false;
         $data['password_client'] = false;
         $data['revoked'] = false;
-        $data['secret'] = \Str::random(40);
+      //   $data['secret'] = \Str::random(40);
+        $data['user_id'] = auth()->user()->id;
         $record = $this->getModel()::create($data);
         return $record;
      }

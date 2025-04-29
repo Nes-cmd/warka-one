@@ -60,7 +60,8 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->email == 'nesrusadik0@gmail.com';
+        return true;
+        return $this->email_verified_at != null && $this->phone_verified_at != null;
     }
 
     protected static function boot()
@@ -76,5 +77,10 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 
     public function userDetail() : HasOne {
         return $this->hasOne(UserDetail::class);
+    }
+
+    public function otps()
+    {
+        return $this->hasMany(\App\Models\Otp::class);
     }
 }

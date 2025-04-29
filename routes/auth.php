@@ -48,3 +48,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });
+
+// Add this new route for requesting OTPs for login
+Route::post('/request-login-otp', [AuthenticatedSessionController::class, 'requestLoginOTP'])
+    ->middleware('guest')
+    ->name('request-login-otp');
