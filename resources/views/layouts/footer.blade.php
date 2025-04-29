@@ -10,10 +10,10 @@
                     <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Services</h2>
                     <ul class="text-gray-500 dark:text-gray-400 font-medium">
                         <li class="mb-4">
-                            <a href="https://wallet.kertech.co" class="hover:underline">Ker Wallet</a>
+                            <a href="https://wallet.kertech.co" class="hover:underline">Kiray Pays</a>
                         </li>
                         <li>
-                            <a href="https://pms.kertech.co" class="hover:underline">Ker Apt Mng</a>
+                            <a href="https://pms.kertech.co" class="hover:underline">Betoch Apt Mng</a>
                         </li>
                     </ul>
                 </div>

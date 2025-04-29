@@ -8,7 +8,6 @@
                 <p class=" mt-6 text-lg text-slate-600 text-center max-w-3xl mx-auto dark:text-slate-400">
                     Welcome to Ker Labs, where we revolutionize the way you manage your digital world. Imagine having one account to rule them all—a centralized hub that simplifies your online experience and brings together a multitude of solutions. With our Single Sign-On (SSO) technology, we provide a seamless and efficient way to access and manage all your digital resources from a single personality.
                 </p>
-
             </div>
             <a href="#services" class="h-12 flex items-center bg-primary hover:bg-primary-500 dark:bg-primary-500 hover:dark:bg-primary-600 cursor-pointer font-semibold text-gray-50 rounded-lg justify-center px-6 w-72">
                 Our Services
@@ -60,7 +59,7 @@
                     </h1>
                     <div class="rounded-lg dark:bg-[#1E293B] bg-white/40 w-full  p-4">
                         <a href="https://wallet.kertech.co" class="mt-6 text-lg text-slate-600 hover:text-secondary-300 text-center max-w-3xl mx-auto dark:text-slate-400">
-                            With Ker Wallet, managing your online money has never been easier. Say goodbye to the hassle of carrying physical cash or fumbling with multiple payment methods. Our secure and user-friendly platform allows you to effortlessly make online transactions, send and receive funds, and keep track of your financial activities—all from the convenience of one centralized ker-one account.
+                            With Kiray Pays, managing your online money has never been easier. Say goodbye to the hassle of carrying physical cash or fumbling with multiple payment methods. Our secure and user-friendly platform allows you to effortlessly make online transactions, send and receive funds, and keep track of your financial activities—all from the convenience of one centralized ker-one account.
                         </a>
                     </div>
                 </div>
@@ -86,8 +85,8 @@
         </section>
         <section class="md:px-10 lg:px-20 w-full my-10 ">
             <div class="w-full p-4 text-center bg-transparent border-b dark:border-gray-700 border-gray-300  rounded-lg shadow sm:p-8 dark:bg-transparent ">
-                <h5 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">Get paid fast from anywhere</h5>
-                <p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">Stay up to date and move work forward with <span class="text-secondary-400">Ker Wallet</span> on iOS & Android. Download the app today.</p>
+                <h5 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">Manage your apartment with ease</h5>
+                <p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">Stay up to date and move work forward with <span class="text-secondary-400">Betoch Apt Mng</span> on iOS & Android. Download the app today.</p>
                 <div class="items-center justify-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4 rtl:space-x-reverse">
                     <a href="#" class="w-full sm:w-auto bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700">
                         <svg class="me-3 w-7 h-7" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="apple" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">

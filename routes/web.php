@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OAuthClientController;
+use App\Http\Controllers\ContactController;
 
 
 Route::controller(AssumptionController::class)->group(function(){
@@ -68,3 +69,7 @@ Route::middleware(['auth'])->prefix('oauth')->group(function () {
     Route::delete('clients/{client}', [OAuthClientController::class, 'destroy'])->name('clients.destroy');
     Route::get('clients/{client}/regenerate-secret', [OAuthClientController::class, 'regenerateSecret'])->name('clients.regenerate-secret');
 });
+
+// Contact Routes
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');

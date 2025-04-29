@@ -165,7 +165,7 @@
                     <a href="{{ route('clients.index') }}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mr-4">
                         Cancel
                     </a>
-                    <x-primary-button>
+                    <x-primary-button class="bg-primary text-white px-4 py-2 rounded-lg shadow-md hover:bg-primary-600 transition-colors duration-300">
                         Update Application
                     </x-primary-button>
                 </div>

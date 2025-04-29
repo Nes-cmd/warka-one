@@ -6,7 +6,7 @@
         </div>
 
         <div class="bg-gray-100 dark:bg-slate-800 rounded-lg p-6 shadow-md">
-            <form action="{{ route('oauth.clients.store') }}" method="POST">
+            <form action="{{ route('clients.store') }}" method="POST">
                 @csrf
                 
                 <div class="grid grid-cols-1 gap-6">
@@ -72,7 +72,7 @@
                     <a href="{{ route('clients.index') }}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mr-4">
                         Cancel
                     </a>
-                    <x-primary-button>
+                    <x-primary-button class="bg-primary text-white px-4 py-2 rounded-lg shadow-md hover:bg-primary-600 transition-colors duration-300">
                         Create Application
                     </x-primary-button>
                 </div>
