@@ -12,6 +12,7 @@
                 <div class="flex space-x-4 pl-4 mt-4">
                     <div  class="{{ Route::is('account')?'border-b-primary dark:border-b-secondary border-b-2':'' }}  dark:text-white"><a href="{{route('account')}}">My Account</a></div> 
                     <div class="{{ Route::is('profile.update-profile')?'border-b-primary dark:border-b-secondary border-b-2':'' }}  dark:text-white"><a href="{{route('profile.update-profile')}}">Edit Profile</a></div> 
+                    <div class="{{ Route::is('clients.index')?'border-b-primary dark:border-b-secondary border-b-2':'' }}  dark:text-white"><a href="{{route('clients.index')}}">My Apps</a></div>
                 </div>
             </div>
            

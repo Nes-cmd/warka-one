@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('oauth_clients', function (Blueprint $table) {
             $table->string('pass_type')->nullable()->after('registration_enabled');
+            $table->string('description')->nullable()->after('registration_enabled');
         });
     }
 
@@ -23,6 +24,7 @@ return new class extends Migration
     {
         Schema::table('oauth_clients', function (Blueprint $table) {
             $table->dropColumn('pass_type');
+            $table->dropColumn('description');
         });
     }
 };

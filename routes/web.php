@@ -7,6 +7,7 @@ use App\Http\Controllers\VerificationController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OAuthClientController;
 
 
 Route::controller(AssumptionController::class)->group(function(){
@@ -26,6 +27,8 @@ Route::middleware('auth')->group(function () {
     Route::get('profile-setting', [ProfileController::class, 'edit'])->name('profile.update-profile');
     Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('profile/logout-session', [ProfileController::class, 'logoutSession'])->name('profile.logout-session');
+    Route::post('profile/revoke-token', [ProfileController::class, 'revokeToken'])->name('profile.revoke-token');
 });
 
 Route::middleware('auth')->get('authflow/must-verify', [VerificationController::class, 'mustVerify'])->name('must-verify-otp');
@@ -53,4 +56,15 @@ Route::get('tt', function () {
     $op = SmsSend::send("251940678725", "Selam there, Your confirmation code is 4236");
 
     dd($op->json());
+});
+
+// OAuth Clients Management Routes
+Route::middleware(['auth'])->prefix('oauth')->group(function () {
+    Route::get('clients', [OAuthClientController::class, 'index'])->name('clients.index');
+    Route::get('clients/create', [OAuthClientController::class, 'create'])->name('clients.create');
+    Route::post('clients', [OAuthClientController::class, 'store'])->name('clients.store');
+    Route::get('clients/{client}/edit', [OAuthClientController::class, 'edit'])->name('clients.edit');
+    Route::post('clients/{client}', [OAuthClientController::class, 'update'])->name('clients.update');
+    Route::delete('clients/{client}', [OAuthClientController::class, 'destroy'])->name('clients.destroy');
+    Route::get('clients/{client}/regenerate-secret', [OAuthClientController::class, 'regenerateSecret'])->name('clients.regenerate-secret');
 });
