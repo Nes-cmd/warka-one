@@ -13,6 +13,11 @@ A modern authentication service that provides seamless Single Sign-On (SSO) capa
   - [Integration Guide](#integration-guide)
     - [Prerequisites](#prerequisites)
     - [Step 1: Set Up Your Routes](#step-1-set-up-your-routes)
+    - [Step 2: Implement the Authorization Flow](#step-2-implement-the-authorization-flow)
+    - [Step 3: Handle the Callback](#step-3-handle-the-callback)
+    - [Step 4: Using the User Data](#step-4-using-the-user-data)
+  - [Authentication Flow](#authentication-flow)
+  - [Troubleshooting](#troubleshooting)
 
 ## Key Features
 
@@ -64,3 +69,88 @@ Add two main routes to your application:
 
 1. **Authorization Initiation Route**: This route will redirect users to Kerone for authentication
 2. **Callback Route**: The redirect URL where Kerone will send the user after authentication
+
+### Step 2: Implement the Authorization Flow
+
+When a user needs to log in, redirect them to the Kerone authorization endpoint. Here's an example implementation in Laravel:
+
+```php
+// Example implementation in Laravel
+$query = http_build_query([
+    'client_id' => env('KERONE_CLIENT_ID'),
+    'redirect_uri' => url('/') . "/auth/callback",
+    'response_type' => 'code',
+    'scope' => '',
+]);
+
+return redirect(env('KERONE_AUTH_URL') . '/oauth/authorize?' . $query);
+```
+
+> **Important**: The `redirect_uri` in your code MUST exactly match the redirect URL you registered in the Kerone dashboard. Even slight differences (like trailing slashes or http vs https) will cause authentication to fail.
+
+### Step 3: Handle the Callback
+
+After the user authenticates with Kerone, they will be redirected back to your callback URL with an authorization code. You'll need to exchange this code for an access token:
+
+```php
+// Example implementation in Laravel
+if (isset($request->code) && $request->code) {
+    $response = Http::post(env('KERONE_AUTH_URL') . '/oauth/token', [
+        'grant_type' => 'authorization_code',
+        'client_id' => env('KERONE_CLIENT_ID'),
+        'client_secret' => env('KERONE_CLIENT_SECRET'),
+        'redirect_uri' => url('/') . "/auth/callback",
+        'code' => $request->code,
+    ]);
+    $response = $response->json();
+
+    // check if the response includes access_token 
+    if (isset($response['access_token']) && $response['access_token']) {
+        // Store the access token in session for future API requests
+        $access_token = $response['access_token'];
+        session(['access_token' => $access_token]);
+        
+        // Use the access token to get user information
+        $userResponse = Http::withToken($access_token)
+            ->get(env('KERONE_AUTH_URL') . '/api/user');
+        
+        if ($userResponse->successful()) {
+            $userData = $userResponse->json();
+            
+            // Login or create a user in your system based on the user data
+            // ...
+            
+            // Redirect to your application's dashboard
+            return redirect('/dashboard');
+        }
+    }
+    
+    // Handle error cases
+    return redirect('/login')->withErrors('Authentication failed');
+}
+```
+
+### Step 4: Using the User Data
+
+After successful authentication, you can use the returned data to:
+
+1. Create a new user account if it doesn't exist
+2. Log in the existing user
+3. Redirect the user to the intended application
+
+## Authentication Flow
+
+1. User initiates login
+2. Kerone redirects to authorization endpoint
+3. User authenticates
+4. Kerone redirects to callback route
+5. Callback route handles the response
+6. User is redirected to intended application
+
+## Troubleshooting
+
+If you encounter issues, please check the following:
+
+1. Ensure your `client_id` and `client_secret` are correct
+2. Verify your redirect URLs are configured correctly
+3. Check Kerone's status and documentation for any known issues
