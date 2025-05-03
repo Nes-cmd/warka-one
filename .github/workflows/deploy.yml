@@ -1,43 +1,20 @@
 name: Deploy to FTP Server
 
 on:
-  workflow_run:
-    workflows: ["Run Tests"]
-    types:
-      - completed
-    branches:
-      - main
+  push:
+    branches: [ main ]  # Change to your main branch name if different
 
 jobs:
   deploy:
-    # Only run if the tests workflow succeeded
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Set up PHP version (replace '8.0' with your desired PHP version)
-      - name: Set up PHP 8.3
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'  # Specify your version here
-          extensions: mbstring, bcmath, zip, xml, curl  # Add any extensions your app needs
-
-      - name: Create .env for SQLite
-        run: |
-          cp .env.example .env
-          echo "DB_CONNECTION=sqlite" >> .env
-          echo "DB_DATABASE=:memory:" >> .env
-
-      # Install PHP dependencies (Composer)
-      - name: Install PHP dependencies
-        run: composer install --no-dev --optimize-autoloader
-
+      # Only include Node.js related steps for assets
       - name: Install NPM Dependencies
         run: npm ci
-
+        
       - name: Build assets
         run: npm run build
 
@@ -52,5 +29,16 @@ jobs:
             **/node_modules/**
             .env
             .env.example
-            tests/**
-            phpunit.xml
+            **vendor/**
+            
+      - name: SSH into server and run post-deployment commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            cd ${{ secrets.SERVER_PROJECT_PATH }}
+            composer install --no-dev --optimize-autoloader
+            php artisan optimize:clear
+            php artisan migrate --force
