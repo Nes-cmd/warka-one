@@ -110,7 +110,7 @@
                         </div>
                         <div class="col-span-2">
                             <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300">Redirect URL</h3>
-                            <div class="mt-1 bg-gray-50 dark:bg-gray-700 p-2 rounded relative flex justify-between items-center">
+                            <div class="mt-1 lg:w-[50%] bg-gray-50 dark:bg-gray-700 p-2 rounded relative flex justify-between items-center">
                                 <p class="text-sm break-all pr-8">{{ $client->redirect }}</p>
                                 <button 
                                     class="absolute right-2 text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-secondary-400" 
@@ -120,8 +120,7 @@
                                         copied = true;
                                         setTimeout(() => copied = false, 2000);
                                     "
-                                    title="Copy to clipboard"
-                                >
+                                    title="Copy to clipboard">
                                     <span x-show="!copied">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                             <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />

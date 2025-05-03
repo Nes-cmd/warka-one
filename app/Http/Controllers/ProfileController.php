@@ -111,13 +111,15 @@ class ProfileController extends Controller
     public function edit(): View
     {
         $user = User::with('userDetail')->where('id', auth()->id())->first();
-        
         $genders = GenderEnum::cases();
+
+        $countries = Country::all();
 
 
         return view('profile.update-profile', [
             'user' => $user,
             'genders' => $genders,
+            'countries' => $countries,
         ]);
     }
 
@@ -128,26 +130,35 @@ class ProfileController extends Controller
     {
         $user = $request->user();
         $userDetail = UserDetail::where('user_id', $user->id)->first();
-
-       
-        $user->fill($request->validated());
+        
+        $user->fill([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+        ]);
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
 
         if ($user->isDirty('phone')) {
-            $user->phone = trimPhone($request->phone);
             $user->phone_verified_at = null;
         }
-
+        
         $user->save();
 
+        // Update user details
+        if (!$userDetail) {
+            $userDetail = new UserDetail(['user_id' => $user->id]);
+        }
+       
         $userDetail->gender = $request->gender;
         $userDetail->birth_date = $request->birth_date;
         $userDetail->save();
+
+        // dd($userDetail);
      
-        return back()->with('status', 'profile-updated');
+        return back()->with('status', 'Profile updated successfully.');
     }
 
     /**
@@ -205,5 +216,87 @@ class ProfileController extends Controller
         }
         
         return back()->with('error', 'Unable to revoke application access.');
+    }
+
+    /**
+     * Show the phone verification form.
+     */
+    public function showVerifyPhone(Request $request): View
+    {
+        // Check if there's a verification in progress
+        if (!session('verification_phone')) {
+            return redirect()->route('profile.update-profile');
+        }
+        
+        return view('auth.verify-phone', [
+            'phone' => session('verification_phone'),
+        ]);
+    }
+
+    /**
+     * Verify the phone verification code.
+     */
+    public function verifyPhone(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'code' => ['required', 'numeric', 'digits:6'],
+        ]);
+        
+        $user = $request->user();
+        
+        // Find the latest unexpired OTP for this user
+        $otp = $user->otps()
+            ->where('code', $request->code)
+            ->where('expires_at', '>', now())
+            ->latest()
+            ->first();
+        
+        if (!$otp) {
+            return back()->withErrors(['code' => 'The verification code is invalid or has expired.']);
+        }
+        
+        // Mark phone as verified
+        $user->phone_verified_at = now();
+        $user->save();
+        
+        // Delete used OTPs for this user
+        $user->otps()->delete();
+        
+        // Clear verification session data
+        session()->forget(['verification_phone', 'verification_for']);
+        
+        return redirect()->route('profile.update-profile')
+            ->with('status', 'Your phone number has been verified successfully.');
+    }
+
+    /**
+     * Resend the verification code.
+     */
+    public function resendVerification(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+        
+        // Delete existing OTPs
+        $user->otps()->delete();
+        
+        // Generate a new verification code
+        $verificationCode = rand(100000, 999999);
+        
+        // Store the new code
+        $otp = new \App\Models\Otp([
+            'code' => $verificationCode,
+            'expires_at' => now()->addMinutes(10),
+        ]);
+        
+        $user->otps()->save($otp);
+        
+        // Send the new verification code
+        try {
+            \App\Helpers\SmsSend::send($user->phone, "Your verification code is: $verificationCode");
+            return back()->with('status', 'A new verification code has been sent to your phone.');
+        } catch (\Exception $e) {
+            \Log::error("Failed to resend verification SMS: " . $e->getMessage());
+            return back()->withErrors(['phone' => 'Unable to send verification code. Please try again.']);
+        }
     }
 }

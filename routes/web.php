@@ -22,6 +22,7 @@ Route::view('mail', 'emailtemp');
 Route::view('about', 'about');
 Route::view('services', 'services');
 Route::view('contact', 'contact');
+Route::view('documentation', 'documentation')->name('documentation');
 
 Route::middleware('auth')->group(function () {
     Route::get('account', [ProfileController::class, 'index'])->name('account');
@@ -30,6 +31,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('profile/logout-session', [ProfileController::class, 'logoutSession'])->name('profile.logout-session');
     Route::post('profile/revoke-token', [ProfileController::class, 'revokeToken'])->name('profile.revoke-token');
+    
+    // Phone verification routes
+    Route::get('/verify-phone', [VerificationController::class, 'verifyPhone'])->name('verify-phone');
+    Route::post('/verify-phone', [VerificationController::class, 'processVerifyPhone'])->name('verify-phone.verify');
+    Route::post('/resend-phone-verification', [VerificationController::class, 'resendPhoneVerification'])->name('verify-phone.resend');
+    Route::post('/initiate-phone-verification', [VerificationController::class, 'initiatePhoneVerification'])
+        ->name('initiate-phone-verification');
 });
 
 Route::middleware('auth')->get('authflow/must-verify', [VerificationController::class, 'mustVerify'])->name('must-verify-otp');

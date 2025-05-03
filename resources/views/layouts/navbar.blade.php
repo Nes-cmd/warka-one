@@ -9,9 +9,9 @@
         <x-nav-link href="/services" :active="request()->is('services')">
             About
         </x-nav-link>
-        <!-- <x-nav-link href="/about" :active="request()->is('about')">
-            About
-        </x-nav-link> -->
+        <x-nav-link href="/documentation" :active="request()->is('documentation')">
+            Documentation
+        </x-nav-link>
         <x-nav-link href="/contact" :active="request()->is('contact')">
             Contact us
         </x-nav-link>
@@ -124,9 +124,9 @@
         <x-nav-link href="/services" :active="request()->is('services')" class="w-full">
             About
         </x-nav-link>
-        <!-- <x-nav-link href="/about" :active="request()->is('about')" class="w-full">
-            About
-        </x-nav-link> -->
+        <x-nav-link href="/documentation" :active="request()->is('documentation')" class="w-full">
+            Documentation
+        </x-nav-link>
         <x-nav-link href="/contact" :active="request()->is('contact')" class="w-full">
             Contact us
         </x-nav-link>

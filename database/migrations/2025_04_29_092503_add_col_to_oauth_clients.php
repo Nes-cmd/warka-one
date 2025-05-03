@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('oauth_clients', function (Blueprint $table) {
-            $table->string('pass_type')->nullable()->after('registration_enabled');
+            $table->string('pass_type')->default('password')->after('registration_enabled');
             $table->string('description')->nullable()->after('registration_enabled');
         });
     }
