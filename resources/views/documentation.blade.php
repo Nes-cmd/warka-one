@@ -130,7 +130,7 @@
                                 </p>
 
                                 <div class="bg-slate-800 rounded-lg p-4 overflow-x-auto dark:bg-slate-700">
-                                    <pre class="text-green-400"><code>// Example routes setup in Laravel
+                                    <pre class="text-green-500"><code>// Example routes setup in Laravel
 use App\Http\Controllers\AuthController;
 
 Route::get('/login', [AuthController::class, 'redirectToKerone'])->name('login');
@@ -146,7 +146,7 @@ Route::get('/callback', [AuthController::class, 'handleKeroneCallback'])->name('
                                 </p>
 
                                 <div class="bg-slate-800 rounded-lg p-4 overflow-x-auto dark:bg-slate-700">
-                                    <pre class="text-green-400"><code>/**
+                                    <pre class="text-green-500"><code>/**
  * Redirect the user to the Kerone authorization page.
  */
 public function redirectToKerone()
@@ -171,7 +171,7 @@ public function redirectToKerone()
                                 </p>
 
                                 <div class="bg-slate-800 rounded-lg p-4 overflow-x-auto dark:bg-slate-700">
-                                    <pre class="text-green-400"><code>/**
+                                    <pre class="text-green-500"><code>/**
  * Handle the callback from Kerone.
  */
 public function handleKeroneCallback(Request $request)

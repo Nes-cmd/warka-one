@@ -6,6 +6,12 @@
         </div>
         @endif
 
+        @if(session('flash_error'))
+        <div class="mb-4 font-medium text-sm text-red-600 dark:text-red-400 p-4 bg-red-100 dark:bg-red-900/20 rounded-lg">
+            {{ session('flash_error') }}
+        </div>
+        @endif
+
         <div class="flex flex-col md:flex-row gap-6">
             <!-- Sidebar Navigation -->
             <div class="w-full md:w-1/5">
@@ -24,8 +30,14 @@
                             Update Password
                         </button>
                         <button
+                            id="kyc-tab-btn"
+                            class="w-full text-left px-4 py-3 border-l-4 border-transparent text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/10"
+                            onclick="showTab('kyc')">
+                            KYC Verification
+                        </button>
+                        <button
                             id="danger-tab-btn"
-                            class="w-full text-left px-4 py-3 border-l-4 border-transparent text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/10"
+                            class="w-full text-left px-4 py-3 border-l-4 border-transparent text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/10 mt-4"
                             onclick="showTab('danger')">
                             Danger Zone
                         </button>
@@ -65,18 +77,20 @@
                             <x-input-label for="phone" :value="__('Phone Number')" />
                             <div class="flex mt-1">
                                 <select
-                                    wire:model="country_id"
+                                    name="country_id"
+                                    
                                     class="rounded-l-md border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white focus:border-primary-500 dark:focus:border-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 shadow-sm"
                                    >
                                     @foreach($countries as $country)
-                                    <option value="{{ $country->id }}">
+                                    <option value="{{ $country->id }}" {{ old('country_id', $user->country_id) == $country->id ? 'selected' : '' }}>
                                         {{ $country->dial_code }}
                                     </option>
                                     @endforeach
                                 </select>
                                 <x-text-input
                                     id="phone"
-                                    wire:model.defer="phone"
+                                    name="phone"
+                                    :value="old('phone', $user->phone)"
                                     class="block w-full rounded-l-none {{ !$user->phone_verified_at && $user->phone ? 'rounded-r-none border-r-0' : '' }}"
                                     type="text"
                                     />
@@ -167,6 +181,29 @@
                     </form>
                 </div>
 
+                <!-- KYC Verification Tab (Hidden by default) -->
+                <div id="kyc-tab" class="hidden">
+                    <div class="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6">
+                        <div class="text-center py-8">
+                            <div class="mb-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-secondary-500 dark:text-secondary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                            </div>
+                            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Advanced Account Verification</h2>
+                            <p class="text-lg text-slate-600 dark:text-slate-400 mb-6">
+                                Our KYC verification system is coming soon. This feature will allow you to verify your identity for enhanced security and access to premium features.
+                            </p>
+                            <div class="inline-flex items-center px-4 py-2 bg-secondary-100 dark:bg-secondary-900/30 text-secondary-800 dark:text-secondary-300 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Coming Soon
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Danger Zone Tab (Hidden by default) -->
                 <div id="danger-tab" class="hidden bg-white dark:bg-slate-800 rounded-lg p-6 shadow-md mb-6">
                     <h2 class="text-xl font-semibold mb-4 text-red-600 dark:text-red-400">Danger Zone</h2>
@@ -232,22 +269,25 @@
                 // Hide all tabs
                 document.getElementById('profile-tab').classList.add('hidden');
                 document.getElementById('password-tab').classList.add('hidden');
+                document.getElementById('kyc-tab').classList.add('hidden');
                 document.getElementById('danger-tab').classList.add('hidden');
 
-                // Reset all tab button styles - new styling for inactive tabs
+                // Reset all tab button styles
                 document.getElementById('profile-tab-btn').classList.remove('border-primary-500', 'bg-primary-50', 'dark:bg-primary-900/20', 'text-primary-700', 'dark:text-primary-300');
                 document.getElementById('password-tab-btn').classList.remove('border-primary-500', 'bg-primary-50', 'dark:bg-primary-900/20', 'text-primary-700', 'dark:text-primary-300');
+                document.getElementById('kyc-tab-btn').classList.remove('border-primary-500', 'bg-primary-50', 'dark:bg-primary-900/20', 'text-primary-700', 'dark:text-primary-300');
                 document.getElementById('danger-tab-btn').classList.remove('border-red-500', 'bg-red-50', 'dark:bg-red-900/20', 'text-red-700', 'dark:text-red-300');
 
                 // Set default inactive styles
                 document.getElementById('profile-tab-btn').classList.add('border-transparent', 'text-gray-700', 'dark:text-gray-300', 'hover:bg-gray-50', 'dark:hover:bg-gray-700/10');
                 document.getElementById('password-tab-btn').classList.add('border-transparent', 'text-gray-700', 'dark:text-gray-300', 'hover:bg-gray-50', 'dark:hover:bg-gray-700/10');
+                document.getElementById('kyc-tab-btn').classList.add('border-transparent', 'text-gray-700', 'dark:text-gray-300', 'hover:bg-gray-50', 'dark:hover:bg-gray-700/10');
                 document.getElementById('danger-tab-btn').classList.add('border-transparent', 'text-red-600', 'dark:text-red-400', 'hover:bg-red-50', 'dark:hover:bg-red-900/10');
 
                 // Show selected tab and highlight its button
                 document.getElementById(tabName + '-tab').classList.remove('hidden');
 
-                if (tabName === 'profile' || tabName === 'password') {
+                if (tabName === 'profile' || tabName === 'password' || tabName === 'kyc') {
                     // Apply active styles for regular tabs
                     document.getElementById(tabName + '-tab-btn').classList.add('border-primary-500', 'bg-primary-50', 'dark:bg-primary-900/20', 'text-primary-700', 'dark:text-primary-300');
                     document.getElementById(tabName + '-tab-btn').classList.remove('border-transparent', 'text-gray-700', 'dark:text-gray-300', 'hover:bg-gray-50', 'dark:hover:bg-gray-700/10');

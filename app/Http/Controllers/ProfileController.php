@@ -22,7 +22,7 @@ class ProfileController extends Controller
     {
         // Get current user with details
         $user = User::with('userDetail', 'country')->where('id', auth()->id())->first();
-        
+
         // Create at least one session entry for the current session
         $currentSession = [
             'id' => $request->session()->getId(),
@@ -30,14 +30,14 @@ class ProfileController extends Controller
             'user_agent' => $request->userAgent(),
             'last_active' => now()->toDateTimeString(),
         ];
-        
+
         // Parse user agent (temporary solution without Agent package)
         $userAgent = $currentSession['user_agent'];
-        
+
         // Simple user agent parsing
         $browser = 'Unknown Browser';
         $platform = 'Unknown Platform';
-        
+
         if (strpos($userAgent, 'Chrome') !== false) {
             $browser = 'Chrome';
         } elseif (strpos($userAgent, 'Firefox') !== false) {
@@ -49,7 +49,7 @@ class ProfileController extends Controller
         } elseif (strpos($userAgent, 'MSIE') !== false || strpos($userAgent, 'Trident') !== false) {
             $browser = 'Internet Explorer';
         }
-        
+
         if (strpos($userAgent, 'Windows') !== false) {
             $platform = 'Windows';
         } elseif (strpos($userAgent, 'Mac') !== false) {
@@ -63,7 +63,7 @@ class ProfileController extends Controller
         } elseif (strpos($userAgent, 'Android') !== false) {
             $platform = 'Android';
         }
-        
+
         $sessions = collect([$currentSession])->map(function ($session) use ($request, $browser, $platform) {
             return [
                 'id' => $session['id'],
@@ -76,10 +76,10 @@ class ProfileController extends Controller
                 'user_agent' => $session['user_agent'],
             ];
         });
-        
+
         // Store in session for view
         $request->session()->put('sessions', $sessions);
-        
+
         // Get unique authorized applications
         $uniqueTokens = $request->user()->tokens()
             ->with('client')
@@ -90,7 +90,7 @@ class ProfileController extends Controller
                 return $clientTokens->sortByDesc('last_used_at')->first();
             })
             ->values();
-        
+
         // Paginate the collection manually
         $perPage = 5; // Number of apps per page
         $currentPage = $request->input('page', 1);
@@ -101,7 +101,7 @@ class ProfileController extends Controller
             $currentPage,
             ['path' => $request->url(), 'query' => $request->query()]
         );
-        
+
         return view('profile.index', [
             'user' => $user,
             'authorizedApps' => $pagedTokens,
@@ -126,15 +126,17 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
+
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $user = $request->user();
         $userDetail = UserDetail::where('user_id', $user->id)->first();
-        
+
         $user->fill([
             'name' => $request->name,
             'email' => $request->email,
-            'phone' => $request->phone,
+            'phone' => $request->phone ? trimPhone($request->phone) : null,
+            'country_id' => $request->country_id,
         ]);
 
         if ($user->isDirty('email')) {
@@ -144,20 +146,21 @@ class ProfileController extends Controller
         if ($user->isDirty('phone')) {
             $user->phone_verified_at = null;
         }
-        
-        $user->save();
 
-        // Update user details
         if (!$userDetail) {
             $userDetail = new UserDetail(['user_id' => $user->id]);
         }
-       
-        $userDetail->gender = $request->gender;
-        $userDetail->birth_date = $request->birth_date;
-        $userDetail->save();
 
-        // dd($userDetail);
-     
+        try {
+            $user->save();
+
+            $userDetail->gender = $request->gender;
+            $userDetail->birth_date = $request->birth_date;
+            $userDetail->save();
+        } catch (\Exception $e) {
+            return back()->with('flash_error', 'Unable to update profile. Please try again.');
+        }
+
         return back()->with('status', 'Profile updated successfully.');
     }
 
@@ -193,10 +196,10 @@ class ProfileController extends Controller
         if ($request->session_id) {
             // Logic to invalidate the specific session
             // This would require a DB implementation for sessions
-            
+
             return back()->with('status', 'Session has been revoked successfully.');
         }
-        
+
         return back()->with('error', 'Unable to revoke session.');
     }
 
@@ -209,12 +212,12 @@ class ProfileController extends Controller
     public function revokeToken(Request $request)
     {
         $token = $request->user()->tokens()->find($request->token_id);
-        
+
         if ($token) {
             $token->delete();
             return back()->with('status', 'Application access has been revoked.');
         }
-        
+
         return back()->with('error', 'Unable to revoke application access.');
     }
 
@@ -227,7 +230,7 @@ class ProfileController extends Controller
         if (!session('verification_phone')) {
             return redirect()->route('profile.update-profile');
         }
-        
+
         return view('auth.verify-phone', [
             'phone' => session('verification_phone'),
         ]);
@@ -241,30 +244,30 @@ class ProfileController extends Controller
         $request->validate([
             'code' => ['required', 'numeric', 'digits:6'],
         ]);
-        
+
         $user = $request->user();
-        
+
         // Find the latest unexpired OTP for this user
         $otp = $user->otps()
             ->where('code', $request->code)
             ->where('expires_at', '>', now())
             ->latest()
             ->first();
-        
+
         if (!$otp) {
             return back()->withErrors(['code' => 'The verification code is invalid or has expired.']);
         }
-        
+
         // Mark phone as verified
         $user->phone_verified_at = now();
         $user->save();
-        
+
         // Delete used OTPs for this user
         $user->otps()->delete();
-        
+
         // Clear verification session data
         session()->forget(['verification_phone', 'verification_for']);
-        
+
         return redirect()->route('profile.update-profile')
             ->with('status', 'Your phone number has been verified successfully.');
     }
@@ -275,21 +278,21 @@ class ProfileController extends Controller
     public function resendVerification(Request $request): RedirectResponse
     {
         $user = $request->user();
-        
+
         // Delete existing OTPs
         $user->otps()->delete();
-        
+
         // Generate a new verification code
         $verificationCode = rand(100000, 999999);
-        
+
         // Store the new code
         $otp = new \App\Models\Otp([
             'code' => $verificationCode,
             'expires_at' => now()->addMinutes(10),
         ]);
-        
+
         $user->otps()->save($otp);
-        
+
         // Send the new verification code
         try {
             \App\Helpers\SmsSend::send($user->phone, "Your verification code is: $verificationCode");
