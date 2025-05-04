@@ -88,7 +88,7 @@
                 <x-nav-link :href="route('login')" :active="request()->routeIs('login')" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
                     Login
                 </x-nav-link>
-                <x-nav-link :href="route('register')" :active="request()->routeIs('register')">
+                <x-nav-link :href="url('authflow/get-otp?for=register')" :active="request()->routeIs('register')">
                     <div class="border border-primary bg-primary text-white px-4 py-1.5 rounded-lg hover:bg-primary-600 transition-colors">
                         Register
                     </div>

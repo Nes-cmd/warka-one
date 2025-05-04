@@ -96,7 +96,7 @@
         <div class="w-full flex items-center justify-center mt-4 text-secondary-400 hover:text-primary-300">
             @if (Route::has('login'))
             <a href="{{ route('login',) }}" class=" text-sm rounded-md focus:outline-none ">
-                {{ __('Oooh, I remembered my password?') }} <span class="underline dark:text-gray-200 hover:text-primary-300">Log in</span>
+                {{ __('Back to login?') }} <span class="underline dark:text-gray-200 hover:text-primary-300">Log in</span>
             </a>
             @endif
 
