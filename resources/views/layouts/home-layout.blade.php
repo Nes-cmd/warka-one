@@ -7,6 +7,25 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="description" content="Secure single sign-on authentication system for seamless access to all our services">
+    <meta name="keywords" content="SSO, authentication, login, secure access">
+    <meta name="author" content="Your Company Name">
+    
+    <!-- Open Graph / Facebook Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ config('app.name', 'Laravel') }} - Secure Single Sign-On">
+    <meta property="og:description" content="Secure single sign-on authentication system for seamless access to all our services">
+    <meta property="og:image" content="{{ asset('assets/kerbrands/ker-min.png') }}">
+    
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ url()->current() }}">
+    <meta name="twitter:title" content="{{ config('app.name', 'Laravel') }} - Secure Single Sign-On">
+    <meta name="twitter:description" content="Secure single sign-on authentication system for seamless access to all our services">
+    <meta name="twitter:image" content="{{ asset('assets/kerbrands/ker-min.png') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
