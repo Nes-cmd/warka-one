@@ -76,9 +76,10 @@
 
 
 
-            <div class="h-16" x-show="authwith == 'phone'">
+                
+            <div x-show="authwith == 'phone'">
                 <x-input-label for="phone" :value="__('Phone')" />
-
+                
                 <div class="mb-8 flex">
 
                     <div class="rounded">
