@@ -81,3 +81,7 @@ Route::middleware(['auth'])->prefix('oauth')->group(function () {
 // Contact Routes
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
+
+Route::group(['prefix' => 'your-package', 'middleware' => ['web']], function () {
+    // Your package routes here
+});

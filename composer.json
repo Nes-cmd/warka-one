@@ -62,7 +62,10 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [],
+            "providers": [
+                "YourVendor\\YourPackage\\PackageServiceProvider"
+            ]
         }
     },
     "config": {
