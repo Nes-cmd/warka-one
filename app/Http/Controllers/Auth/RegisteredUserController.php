@@ -22,10 +22,17 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
-    public function create(): View
+    public function create()
     {
         $authflowData = session('authflow');
-        
+        if($authflowData == null ){
+            return redirect('authflow/get-otp?for=register');
+        }
+        if($authflowData['authwith']?? null == null){
+            return redirect('authflow/get-otp?for=register');
+        }
+       
+
         return view('auth.register', compact('authflowData'));
     }
 

@@ -11,15 +11,15 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
-use Laravel\Passport\Passport;
 
 class AuthenticatedSessionController extends Controller
 {
-    protected $maxAttempts = 5; // Number of failed attempts allowed
-    protected $decayMinutes = 30; // Time until they can try again
+    protected $maxAttempts = 5; 
+    protected $decayMinutes = 30; 
     /**
      * Display the login view.
      */
@@ -101,7 +101,7 @@ class AuthenticatedSessionController extends Controller
         if ($authMethod == 'password' && Hash::check($request->password, $user->password)) {
             $authenticated = true;
         } else if ($authMethod == 'otp') {
-            // For OTP, use the existing verification code system
+            // For OTP, use the  existing verification code system
             $candidate = '';
             
             if ($authwith == 'email') {
@@ -116,24 +116,18 @@ class AuthenticatedSessionController extends Controller
                 }
             }
             
-            \Log::debug("Checking OTP for candidate: " . $candidate);
-            \Log::debug("OTP from request: " . $request->otp);
-            
             $verification = \App\Models\VerificationCode::where('candidate', $candidate)
                 ->where('verification_code', $request->otp)
                 ->latest()
                 ->first();
             
             if ($verification) {
-                \Log::debug("Verification found: " . $verification->id);
-                \Log::debug("Status: " . $verification->status);
-                
                 // Update status to verified
                 $verification->status = 'verified';
                 $verification->save();
                 $authenticated = true;
             } else {
-                \Log::debug("No verification found matching the criteria");
+                Log::debug("No verification found matching the criteria");
             }
         }
         
@@ -189,7 +183,7 @@ class AuthenticatedSessionController extends Controller
         
         // Send OTP using your existing verification system
         if ($user) {
-            \Log::debug("Sending OTP to user: " . $user->id);
+            Log::debug("Sending OTP to user: " . $user->id);
             
             try {
                 if ($authWith == 'email') {
@@ -198,7 +192,7 @@ class AuthenticatedSessionController extends Controller
                         ->receiver($identifier)
                         ->send();
                     
-                    \Log::debug("OTP sent via email to: " . $identifier);
+                    Log::debug("OTP sent via email to: " . $identifier);
                 } else {
                     // For phone, get the country dial code first
                     $country = Country::find($user->country_id);
@@ -209,19 +203,19 @@ class AuthenticatedSessionController extends Controller
                         ->receiver($fullPhone)
                         ->send();
                     
-                    \Log::debug("OTP sent via SMS to: " . $fullPhone);
+                    Log::debug("OTP sent via SMS to: " . $fullPhone);
                 }
                 
                 return response()->json(['success' => true]);
             } catch (\Exception $e) {
-                \Log::error("Error sending OTP: " . $e->getMessage());
+                Log::error("Error sending OTP: " . $e->getMessage());
                 return response()->json([
                     'success' => false,
                     'message' => 'Failed to send verification code. Please try again.'
                 ]);
             }
         } else {
-            \Log::debug("User not found for " . $authWith . ": " . $identifier);
+            Log::debug("User not found for " . $authWith . ": " . $identifier);
             // Don't reveal user existence, pretend we sent an OTP
             return response()->json(['success' => true]);
         }

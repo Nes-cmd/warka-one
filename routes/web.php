@@ -61,7 +61,7 @@ curl -XPOST -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZGVudGlmaWVyIjoid
     'https://api.afromessage.com/api/send'
 */
 
-Route::get('tt', function () {
+Route::get('test-sms', function () {
     $op = SmsSend::send("251940678725", "Selam there, Your confirmation code is 4236");
 
     dd($op->json());
