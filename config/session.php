@@ -18,7 +18,7 @@ return [
     |
     */
 
-    'driver' => env('SESSION_DRIVER', 'file'),
+    'driver' => env('SESSION_DRIVER', 'database'),
 
     /*
     |--------------------------------------------------------------------------
@@ -210,5 +210,18 @@ return [
     */
 
     'partitioned' => false,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Concurrent Login Control
+    |--------------------------------------------------------------------------
+    |
+    | This option controls whether users can have multiple concurrent sessions.
+    | When set to false, users will be logged out from other devices/browsers
+    | when they log in from a new location.
+    |
+    */
+
+    'allow_concurrent_login' => env('ALLOW_CONCURRENT_LOGIN', false),
 
 ];

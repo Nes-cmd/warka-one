@@ -10,9 +10,11 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -64,6 +66,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+      
         $authwith = $request->authwith;
         $authMethod = $request->auth_method ?? 'password';
         
@@ -94,7 +97,7 @@ class AuthenticatedSessionController extends Controller
                 throw ValidationException::withMessages(['otp' => 'Invalid verification code']);
             }
         }
-        
+        $this->logoutFromOtherSessions($user);
         // Authentication logic based on method
         $authenticated = false;
         
@@ -233,5 +236,21 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    public function logoutFromOtherSessions($user)
+    {
+        if ($user && !config('session.allow_concurrent_login')) {
+            $userId = $user->id;
+            // Invalidate all other sessions except current
+            DB::table('sessions')
+                ->where('user_id', $userId)
+                // ->where('id', '!=', $currentSessionId)
+                ->delete();
+
+            return true;
+        }
+        info('concurrent login was allowed');
+        return false;
     }
 }
