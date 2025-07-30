@@ -18,9 +18,11 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrustProxies::class,
         \Illuminate\Http\Middleware\HandleCors::class,
         \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
+         \App\Http\Middleware\SlowlorisProtection::class, 
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \App\Http\Middleware\HstsHeader::class,
     ];
 
     /**
@@ -33,11 +35,12 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-           
             \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\ContentSecurityPolicy::class, // Advanced nonce-based CSP
+            \App\Http\Middleware\SecurityHeaders::class,
         ],
 
         'api' => [

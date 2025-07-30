@@ -1,6 +1,55 @@
 # Enable Rewrite Engine
 RewriteEngine On
 
+# Slowloris Protection
+<IfModule mod_reqtimeout.c>
+    # Set timeouts for request headers and body
+    RequestReadTimeout header=20-40,MinRate=500 body=20,MinRate=500
+</IfModule>
+
+<IfModule mod_evasive24.c>
+    # Enable mod_evasive if available (install separately)
+    DOSHashTableSize    2048
+    DOSPageCount        3
+    DOSPageInterval     1
+    DOSSiteCount        50
+    DOSSiteInterval     1
+    DOSBlockingPeriod   600
+</IfModule>
+
+# Limit request size to prevent large payload attacks
+<IfModule mod_security.c>
+    SecRequestBodyLimit 10485760
+    SecRequestBodyNoFilesLimit 131072
+</IfModule>
+
+<IfModule mod_headers.c>
+    # Allow specific domains for cross-origin requests
+    Header always set Access-Control-Allow-Origin %{AccessControlAllowOrigin}e env=AccessControlAllowOrigin
+
+    # Allow methods and headers
+    Header always set Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE"
+    Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+
+    # Optional: Allow credentials if needed
+    # Header always set Access-Control-Allow-Credentials "true"
+</IfModule>
+
+# Handle preflight OPTIONS requests
+<IfModule mod_rewrite.c>
+    RewriteCond %{REQUEST_METHOD} OPTIONS
+    RewriteRule ^(.*)$ $1 [R=200,L]
+</IfModule>
+
+# Block known WordPress attack paths
+<IfModule mod_rewrite.c>
+    RewriteCond %{REQUEST_URI} ^/wordpress/wp-admin/setup-config\.php$ [NC,OR]
+    RewriteCond %{REQUEST_URI} ^/wp-admin [NC,OR]
+    RewriteCond %{REQUEST_URI} ^/wp-login\.php$ [NC]
+    RewriteRule .* - [F]
+</IfModule>
+
+
 # Redirect www to non-www
 RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
 RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
@@ -31,11 +80,18 @@ Options -Indexes
 
 # Protect against some common exploits
 <IfModule mod_headers.c>
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
     Header set X-XSS-Protection "1; mode=block"
     Header set X-Content-Type-Options "nosniff"
     Header set X-Frame-Options "DENY"
     Header set Referrer-Policy "strict-origin-when-cross-origin"
-    #   Header set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self';"
+    
+    # Connection management headers for security
+    Header always set Connection "close"
+    Header always set Keep-Alive "timeout=5, max=100"
+    
+    # Note: CSP is now handled by Laravel middleware for nonce-based security
+    # Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://fonts.bunny.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://fonts.bunny.net; img-src 'self' data: https://ui-avatars.com; font-src 'self' https://fonts.gstatic.com https://fonts.bunny.net; connect-src 'self'; frame-src 'self';"
 </IfModule>
 
 # Set default charset
