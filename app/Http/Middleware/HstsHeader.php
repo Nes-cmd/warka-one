@@ -16,9 +16,7 @@ class HstsHeader
         $response = $next($request);
 
         // Add HSTS header for HTTPS requests (and local testing)
-        if ($request->secure() || app()->environment('local')) {
-            $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
-        }
+        $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
 
         // Add X-XSS-Protection header
         $response->headers->set('X-XSS-Protection', '1; mode=block');

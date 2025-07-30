@@ -38,28 +38,6 @@ class ContentSecurityPolicy
      */
     private function buildContentSecurityPolicy(string $nonce, Request $request): string
     {
-        $isDevelopment = app()->environment('local');
-
-        // Use very permissive CSP for development to avoid breaking frontend
-        info("isDevelopment: $isDevelopment");
-        if ($isDevelopment) {
-            return implode('; ', [
-                "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: http: https:",
-                "script-src 'self' 'unsafe-inline' 'unsafe-eval' http: https: data: blob:",
-                "style-src 'self' 'unsafe-inline' http: https: data:",
-                "img-src 'self' data: blob: http: https:",
-                "font-src 'self' data: http: https:",
-                "connect-src 'self' ws: wss: http: https:",
-                "media-src 'self' data: blob: http: https:",
-                "object-src 'none'",
-                "base-uri 'self'",
-                "form-action 'self'",
-                "frame-ancestors 'self'",
-                "frame-src 'self'"
-            ]);
-        }
-
-        // Production CSP with framework-aware security
        
         $isLivewireRoute = $this->hasLivewire($request);
         

@@ -6,6 +6,7 @@ use App\Models\Country;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
 
 class VerifyAuth
 {
@@ -16,8 +17,8 @@ class VerifyAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(auth()->check()){
-            $user = auth()->user();
+        if(Auth::check()){
+            $user = Auth::user();
             if($user->email_verified_at != null || $user->phone_verified_at != null){
                 return $next($request);
             }
