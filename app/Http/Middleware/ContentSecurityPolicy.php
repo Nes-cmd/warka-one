@@ -8,6 +8,23 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Str;
 use App\Services\CspHashGenerator;
 
+/**
+ * Content Security Policy Middleware
+ * 
+ * This middleware implements a secure CSP that supports:
+ * - Alpine.js with 'unsafe-eval' for reactivity
+ * - Livewire with WebSocket connections and inline scripts
+ * - Vite development server with HMR support
+ * - Nonce-based security for inline scripts
+ * - Hash-based security for known inline scripts/styles
+ * 
+ * Key security features:
+ * - Blocks 'unsafe-inline' scripts (uses nonces instead)
+ * - Allows 'unsafe-inline' styles for Alpine.js/Livewire compatibility
+ * - Restricts script sources to trusted CDNs and self
+ * - Prevents clickjacking with frame-ancestors
+ * - Blocks object embeds for security
+ */
 class ContentSecurityPolicy
 {
     /**
@@ -38,8 +55,8 @@ class ContentSecurityPolicy
      */
     private function buildContentSecurityPolicy(string $nonce, Request $request): string
     {
-       
         $isLivewireRoute = $this->hasLivewire($request);
+        $isDevelopment = app()->environment('local', 'development');
         
         // Base CSP for production - strict security
         $policies = [
@@ -50,48 +67,65 @@ class ContentSecurityPolicy
             "frame-ancestors 'self'", // Prevent clickjacking
         ];
 
-        
-        // For other routes, use strict nonce/hash-based security
+        // Script-src: Allow Alpine.js and Livewire to function
         $scriptSrc = [
             "'self'",
             "'nonce-{$nonce}'",
-            // Only allow specific trusted CDNs
+            "'unsafe-eval'", // Required for Alpine.js reactivity and Livewire
+            // Trusted CDNs
             "https://cdnjs.cloudflare.com",
             "https://cdn.jsdelivr.net",
         ];
         
-        // Add specific hashes for known inline scripts (only for non-framework routes)
+        // Add Vite development server support
+        if ($isDevelopment) {
+            $scriptSrc[] = "http://nes-live.com:5173"; // Vite dev server
+            $scriptSrc[] = "ws://nes-live.com:5173"; // Vite HMR WebSocket
+        }
+        
+        // Add specific hashes for known inline scripts
         $scriptSrc = array_merge($scriptSrc, $this->getScriptHashes());
         
-
         $policies[] = "script-src " . implode(' ', $scriptSrc);
 
-        
-        // For other routes, use strict nonce/hash-based security
+        // Style-src: Allow inline styles with nonce and common patterns
         $styleSrc = [
             "'self'",
             "'nonce-{$nonce}'",
+            "'unsafe-inline'", // Required for dynamic styles from Alpine.js and Livewire
             // Font and style CDNs
             "https://fonts.googleapis.com",
             "https://fonts.bunny.net",
             "https://cdnjs.cloudflare.com",
         ];
         
-        // Add hashes for known inline styles (only for non-framework routes)
+        // Add Vite development server support for styles
+        if ($isDevelopment) {
+            $styleSrc[] = "http://nes-live.com:5173";
+        }
+        
+        // Add hashes for known inline styles
         $styleSrc = array_merge($styleSrc, $this->getStyleHashes());
         
-
         $policies[] = "style-src " . implode(' ', $styleSrc);
 
         // Other directives
         $policies[] = "img-src 'self' data: https://ui-avatars.com";
         $policies[] = "font-src 'self' https://fonts.gstatic.com https://fonts.bunny.net";
         
-        // Connect-src: Allow WebSockets for Livewire and local dev server
+        // Connect-src: Allow WebSockets for Livewire and AJAX requests
         $connectSrc = ["'self'"];
         if ($isLivewireRoute) {
             $connectSrc[] = "ws:";
             $connectSrc[] = "wss:";
+        }
+        // Allow local development server WebSocket connections
+        if ($isDevelopment) {
+            $connectSrc[] = "ws://localhost:*";
+            $connectSrc[] = "ws://127.0.0.1:*";
+            $connectSrc[] = "ws://[::1]:*";
+            $connectSrc[] = "ws://nes-live.com:5173"; // Vite HMR
+            $connectSrc[] = "http://nes-live.com:5173"; // Vite dev server
         }
 
         $policies[] = "connect-src " . implode(' ', $connectSrc);
@@ -106,13 +140,15 @@ class ContentSecurityPolicy
     }
 
     /**
-     * Check if request likely uses Livewire
+     * Check if request likely uses Livewire or Alpine.js
      */
     private function hasLivewire(Request $request): bool
     {
         return $request->hasHeader('X-Livewire') ||
+               $request->hasHeader('X-CSRF-TOKEN') ||
                str_contains($request->path(), 'livewire') ||
-               $request->has('_token'); // Most Livewire requests have CSRF token
+               $request->has('_token') || // Most Livewire requests have CSRF token
+               $request->wantsJson(); // AJAX requests often from Livewire/Alpine
     }
 
     /**
@@ -121,9 +157,72 @@ class ContentSecurityPolicy
     private function getScriptHashes(): array
     {
         return [
-            // Add hashes for specific inline scripts you control
-            // Example: "'sha256-hash-of-your-inline-script'"
-            // You can generate these hashes for your specific inline scripts
+            // Theme toggle script from layouts
+            CspHashGenerator::generateHash("
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    "),
+            // Alternative theme script format
+            CspHashGenerator::generateHash("
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (localStorage.getItem('theme') == 'dark') {
+            document.documentElement.classList.add('dark');
+            console.log('dark');
+        } else {
+            console.log('light');
+            document.documentElement.classList.remove('dark')
+        }
+    "),
+            // Theme toggle functionality script
+            CspHashGenerator::generateHash("
+        var themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        var themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+
+        // Change the icons inside the button based on previous settings
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            themeToggleLightIcon.classList.remove('hidden');
+        } else {
+            themeToggleDarkIcon.classList.remove('hidden');
+        }
+
+        var themeToggleBtn = document.getElementById('theme-toggle');
+
+        themeToggleBtn.addEventListener('click', function() {
+
+            // toggle icons inside button
+            themeToggleDarkIcon.classList.toggle('hidden');
+            themeToggleLightIcon.classList.toggle('hidden');
+
+            // if set via local storage previously
+            if (localStorage.getItem('theme')) {
+                if (localStorage.getItem('theme') === 'light') {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                }
+
+                // if NOT set via local storage previously
+            } else {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+            }
+
+        });
+    "),
+            // Common Alpine.js initialization patterns
+            CspHashGenerator::generateHash("Alpine.start()"),
+            CspHashGenerator::generateHash("window.Alpine = Alpine; Alpine.start();"),
         ];
     }
 

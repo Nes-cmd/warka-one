@@ -15,8 +15,7 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <script>
-        
+    <script nonce="{{ csp_nonce() }}">
         // On page load or when changing themes, best to add inline in `head` to avoid FOUC
         if (localStorage.getItem('theme') == 'dark') {
             document.documentElement.classList.add('dark');
