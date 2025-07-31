@@ -69,10 +69,10 @@ class ContentSecurityPolicy
         ];
 
         // Form-action: Allow forms to be submitted to current domain
-        // In production, restrict to 'self' only
-        if (!$isDevelopment) {
-            $policies[] = "form-action 'self'";
-        }
+        // // In production, restrict to 'self' only
+        // if (!$isDevelopment) {
+        //     $policies[] = "form-action 'self'";
+        // }
         // In development, no form-action restriction for easier development
         
         // Script-src: Allow Alpine.js and Livewire to function
