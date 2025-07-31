@@ -12,8 +12,14 @@
     <div x-data="{
         authwith : $persist( '{{ $authwith }}' )
         }" x-init="
-        $wire.authwith = authwith;
-        console.log(authwith)
+        $nextTick(() => {
+            if (typeof $wire !== 'undefined') {
+                $wire.authwith = authwith;
+                console.log('Set authwith to:', authwith);
+            } else {
+                console.warn('$wire not available yet');
+            }
+        })
         " class="space-y-6">
 
         <!-- Email Address -->
@@ -23,7 +29,7 @@
                 @if(count($options) > 1 && in_array('phone', $options))
                 <button type="button" 
                         class="text-sm text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 font-medium underline"
-                        x-on:click="() => {authwith = 'phone'; $wire.authwith='phone'}">
+                        x-on:click="() => {authwith = 'phone'; $wire && ($wire.authwith='phone')}">
                     Use phone instead
                 </button>
                 @endif
@@ -39,7 +45,7 @@
                 @if(count($options) > 1 && in_array('email', $options))
                 <button type="button" 
                         class="text-sm text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 font-medium underline"
-                        x-on:click="() => {authwith = 'email'; $wire.authwith='email'}">
+                        x-on:click="() => {authwith = 'email'; $wire && ($wire.authwith='email')}">
                     Use email instead
                 </button>
                 @endif
@@ -76,7 +82,7 @@
                              :id="$id('dropdown-button')" style="display: none;" 
                              class="absolute left-0 top-full z-10 mt-1 w-64 bg-white dark:bg-gray-700 shadow-lg rounded-lg border border-gray-200 dark:border-gray-600 max-h-60 overflow-y-auto">
                             @foreach($countries as $country)
-                            <button type="button" x-on:click="open = false; $wire.changeCountry({{ $country->id }})" 
+                            <button type="button" x-on:click="open = false; $wire && $wire.changeCountry({{ $country->id }})" 
                                     class="flex items-center w-full px-3 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-600 first:rounded-t-lg last:rounded-b-lg">
                                 <img class="w-5 h-5 mr-3" src="{{ asset($country->flag_url) }}" alt="">
                                 <span class="font-medium">{{ $country->dial_code }}</span>
@@ -93,24 +99,33 @@
             <x-input-error :messages="$errors->get('phone')" class="mt-2" />
         </div>
 
+        <!-- Error Messages -->
+        @if ($errors->has('general'))
+        <div class="bg-red-50 dark:bg-red-900/50 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg">
+            <p class="text-sm">{{ $errors->first('general') }}</p>
+        </div>
+        @endif
+
         <!-- Submit Button -->
         <div class="pt-4">
             <x-primary-button wire:click="getCode" 
-                             class="w-full py-3 flex items-center justify-center text-lg font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 focus:ring-2 focus:ring-primary-500">
+                             wire:loading.attr="disabled"
+                             class="w-full py-3 flex items-center justify-center text-lg font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 focus:ring-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
                 
-                    <span wire:loading class="">
+                <!-- Loading state -->
+                <span wire:loading wire:target="getCode" class="flex items-center">
                     <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                  
+                    {{ __('Sending...') }}
                 </span>
-                <span class="">
+                
+                <!-- Default state -->
+                <span wire:loading.remove wire:target="getCode" class="flex items-center">
                     <i class="fas fa-paper-plane mr-2"></i>
                     {{ __('Get Verification Code') }}
                 </span>
-
-                
             </x-primary-button>
         </div>
 

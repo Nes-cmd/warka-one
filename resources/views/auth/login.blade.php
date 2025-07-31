@@ -7,6 +7,11 @@
         <p class="text-gray-600 dark:text-gray-400">Sign in to your account</p>
     </div>
 
+    @php
+        $numberofoptions = count($options);
+    @endphp
+
+
     <form @submit="isLoading = true" method="POST" action="{{ route('login') }}" class="space-y-6"
         x-data="{ 
             isLoading: false,
@@ -47,17 +52,21 @@
 
         <div x-data="{
                 authwith: $persist('{{ $authwith }}'),
-                authMethod: '{{ $authMethod ?? 'password' }}'
+                authMethod: '{{ $authMethod ?? 'password' }}',
+                numberofoptions: '{{ $numberofoptions }}',
+                
             }">
             @csrf
             <input type="hidden" name="authwith" x-model="authwith">
             <input type="hidden" name="auth_method" x-model="authMethod">
 
+            
+
             <!-- Email Address -->
-            <div x-show="authwith === 'email' || (count($options) === 1 && $options[0] === 'email')" class="space-y-2">
+            <div x-show="authwith === 'email' || (numberofoptions == 1 && $options[0] === 'email')" class="space-y-2">
                 <div class="flex items-center justify-between">
                     <x-input-label for="email" :value="__('Email Address')" />
-                    @if(count($options) > 1)
+                    @if($numberofoptions > 1)
                     <button type="button" 
                             class="text-sm text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 font-medium underline"
                             x-on:click="authwith = 'phone'; otpRequested = false; authTypeMessage = ''; otpMessage = '';">
@@ -76,10 +85,10 @@
             </div>
 
             <!-- Phone Number -->
-            <div x-show="authwith === 'phone' || (count($options) === 1 && $options[0] === 'phone')" class="space-y-2">
+            <div x-show="authwith === 'phone' || (numberofoptions == 1 && $options[0] === 'phone')" class="space-y-2">
                 <div class="flex items-center justify-between">
                     <x-input-label for="phone" :value="__('Phone Number')" />
-                    @if(count($options) > 1)
+                    @if($numberofoptions > 1)
                     <button type="button" 
                             class="text-sm text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 font-medium underline"
                             x-on:click="authwith = 'email'; otpRequested = false; authTypeMessage = ''; otpMessage = '';">
@@ -239,7 +248,7 @@
         </div>
     </form>
 
-    <script>
+    <script nonce="{{ csp_nonce() }}">
         function togglePasswordVisibility() {
             var passwordInput = document.getElementById('passwordInput');
             var toggleIcon = document.getElementById('togglePasswordIcon');

@@ -250,7 +250,7 @@ class AuthenticatedSessionController extends Controller
 
             return true;
         }
-        info('concurrent login was allowed');
+        
         return false;
     }
 }

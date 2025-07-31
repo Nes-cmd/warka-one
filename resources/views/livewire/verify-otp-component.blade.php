@@ -10,10 +10,10 @@
         currentIndex: 0,
         
         resetResend(id, shouldSend = true) {
-            if(id == 'resendsms' && shouldSend){
+            if(id == 'resendsms' && shouldSend && $wire){
                 $wire.resendSMS();
             }
-            if(id == 'resendemail' && shouldSend){
+            if(id == 'resendemail' && shouldSend && $wire){
                 $wire.resendEmail();
             }
 
@@ -60,7 +60,9 @@
             }
             
             // Update Livewire model
-            $wire.verificationCode = this.code.join('');
+            if ($wire) {
+                $wire.verificationCode = this.code.join('');
+            }
         },
         
         handleKeydown(index, event) {

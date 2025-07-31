@@ -36,7 +36,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
     <!-- Scripts -->
     @livewireStyles
-    @livewireScripts
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -105,6 +104,8 @@
 
         });
     </script>
+
+    @livewireScripts
 </body>
 
 </html>

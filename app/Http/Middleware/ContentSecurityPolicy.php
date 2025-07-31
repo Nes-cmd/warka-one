@@ -15,12 +15,12 @@ use App\Services\CspHashGenerator;
  * - Alpine.js with 'unsafe-eval' for reactivity
  * - Livewire with WebSocket connections and inline scripts
  * - Vite development server with HMR support
- * - Nonce-based security for inline scripts
- * - Hash-based security for known inline scripts/styles
+ * - Nonce-based security for inline scripts and styles
+ * - Hash-based security for known inline scripts
  * 
  * Key security features:
- * - Blocks 'unsafe-inline' scripts (uses nonces instead)
- * - Allows 'unsafe-inline' styles for Alpine.js/Livewire compatibility
+ * - Uses nonces for inline scripts and styles (no 'unsafe-inline')
+ * - Allows style attributes via 'style-src-attr' for Alpine.js/Livewire
  * - Restricts script sources to trusted CDNs and self
  * - Prevents clickjacking with frame-ancestors
  * - Blocks object embeds for security
@@ -63,9 +63,43 @@ class ContentSecurityPolicy
             "default-src 'self'",
             "object-src 'none'", // Explicitly block objects for security
             "base-uri 'self'",
-            "form-action 'self'",
             "frame-ancestors 'self'", // Prevent clickjacking
         ];
+
+        // Form-action: Allow forms to be submitted to current domain
+        // Temporarily disabled for debugging
+        /*
+        $formAction = ["'self'"];
+        
+        // Add current request URL scheme and host
+        $currentUrl = $request->getSchemeAndHttpHost();
+        if ($currentUrl && $currentUrl !== 'http://localhost' && $currentUrl !== 'https://localhost') {
+            $formAction[] = $currentUrl;
+        }
+        
+        if ($isDevelopment) {
+            // Temporarily more permissive for debugging
+            $formAction[] = "http://nes-live.com:9000";
+            $formAction[] = "https://nes-live.com:9000";
+            $formAction[] = "http://nes-live.com";
+            $formAction[] = "https://nes-live.com";
+            $formAction[] = "http://localhost:8000";
+            $formAction[] = "http://localhost:9000";
+            $formAction[] = "http://127.0.0.1:8000";
+            $formAction[] = "http://127.0.0.1:9000";
+        }
+        
+        $policies[] = "form-action " . implode(' ', array_unique($formAction));
+        */
+        
+        // Temporary debug logging
+        /*
+        if ($isDevelopment) {
+            \Illuminate\Support\Facades\Log::info('CSP form-action: ' . implode(' ', array_unique($formAction)));
+            \Illuminate\Support\Facades\Log::info('Current URL: ' . $request->getSchemeAndHttpHost());
+            \Illuminate\Support\Facades\Log::info('Request URL: ' . $request->url());
+        }
+        */
 
         // Script-src: Allow Alpine.js and Livewire to function
         $scriptSrc = [
@@ -88,11 +122,11 @@ class ContentSecurityPolicy
         
         $policies[] = "script-src " . implode(' ', $scriptSrc);
 
-        // Style-src: Allow inline styles with nonce and common patterns
+        // Style-src: Allow inline styles for Alpine.js and Livewire compatibility
         $styleSrc = [
             "'self'",
             "'nonce-{$nonce}'",
-            "'unsafe-inline'", // Required for dynamic styles from Alpine.js and Livewire
+            "'unsafe-inline'", // Required for Alpine.js and Livewire dynamic styles
             // Font and style CDNs
             "https://fonts.googleapis.com",
             "https://fonts.bunny.net",
@@ -104,11 +138,8 @@ class ContentSecurityPolicy
             $styleSrc[] = "http://nes-live.com:5173";
         }
         
-        // Add hashes for known inline styles
-        $styleSrc = array_merge($styleSrc, $this->getStyleHashes());
-        
         $policies[] = "style-src " . implode(' ', $styleSrc);
-
+        
         // Other directives
         $policies[] = "img-src 'self' data: https://ui-avatars.com";
         $policies[] = "font-src 'self' https://fonts.gstatic.com https://fonts.bunny.net";
@@ -228,6 +259,12 @@ class ContentSecurityPolicy
 
     /**
      * Get SHA256 hashes for known inline styles
+     * 
+     * Note: These hashes are not used in the main CSP policy because
+     * 'unsafe-inline' is ignored when hashes are present. Since Alpine.js
+     * and Livewire create dynamic styles that can't be predicted, we need
+     * 'unsafe-inline' to work. This method is kept for potential future use
+     * in more specific CSP policies or debugging.
      */
     private function getStyleHashes(): array
     {

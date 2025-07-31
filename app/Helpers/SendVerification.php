@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Mail\VerificationCode;
 use App\Models\VerificationCode as ModelsVerificationCode;
+use App\Helpers\SmsSend;
 use Exception;
 use Illuminate\Support\Facades\Mail;
 
@@ -36,19 +37,29 @@ class SendVerification {
         }
 
         $verificationCode = rand(100000, 999999);
-        if($this->via == 'mail'){
-            $status = Mail::to($this->receiver)->send(new VerificationCode($verificationCode));
-        }
-        elseif($this->via == 'sms'){
-            $status = SmsSend::send($this->receiver, "Your verification code is $verificationCode");
+        $status = false;
+        
+        try {
+            if($this->via == 'mail'){
+                $status = Mail::to($this->receiver)->send(new VerificationCode($verificationCode));
+            }
+            elseif($this->via == 'sms'){
+                $status = SmsSend::send($this->receiver, "Your verification code is $verificationCode");
+            }
+        } catch (Exception $e) {
+            \Illuminate\Support\Facades\Log::error('SendVerification error: ' . $e->getMessage());
+            return false;
         }
 
-        return ModelsVerificationCode::create([
-            'code_is_for' => $this->via == 'sms'?'phone':'email',
-            'verification_code' => $verificationCode,
-            'candidate' => $this->receiver,
-            'expire_at' => now()->addMinutes(5),
-        ]);
+        if ($status !== false) {
+            return ModelsVerificationCode::create([
+                'code_is_for' => $this->via == 'sms'?'phone':'email',
+                'verification_code' => $verificationCode,
+                'candidate' => $this->receiver,
+                'expire_at' => now()->addMinutes(5),
+            ]);
+        }
         
+        return false;
     }
 }
