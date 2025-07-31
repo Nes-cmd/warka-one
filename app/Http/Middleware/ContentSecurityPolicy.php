@@ -17,6 +17,7 @@ use App\Services\CspHashGenerator;
  * - Vite development server with HMR support
  * - Nonce-based security for inline scripts and styles
  * - Hash-based security for known inline scripts
+ * - Subresource Integrity (SRI) for external CDN resources
  * 
  * Key security features:
  * - Uses nonces for inline scripts and styles (no 'unsafe-inline')
@@ -24,6 +25,7 @@ use App\Services\CspHashGenerator;
  * - Restricts script sources to trusted CDNs and self
  * - Prevents clickjacking with frame-ancestors
  * - Blocks object embeds for security
+ * - External scripts protected with SRI hashes
  */
 class ContentSecurityPolicy
 {
@@ -67,40 +69,12 @@ class ContentSecurityPolicy
         ];
 
         // Form-action: Allow forms to be submitted to current domain
-        // Temporarily disabled for debugging
-        /*
-        $formAction = ["'self'"];
-        
-        // Add current request URL scheme and host
-        $currentUrl = $request->getSchemeAndHttpHost();
-        if ($currentUrl && $currentUrl !== 'http://localhost' && $currentUrl !== 'https://localhost') {
-            $formAction[] = $currentUrl;
+        // In production, restrict to 'self' only
+        if (!$isDevelopment) {
+            $policies[] = "form-action 'self'";
         }
+        // In development, no form-action restriction for easier development
         
-        if ($isDevelopment) {
-            // Temporarily more permissive for debugging
-            $formAction[] = "http://nes-live.com:9000";
-            $formAction[] = "https://nes-live.com:9000";
-            $formAction[] = "http://nes-live.com";
-            $formAction[] = "https://nes-live.com";
-            $formAction[] = "http://localhost:8000";
-            $formAction[] = "http://localhost:9000";
-            $formAction[] = "http://127.0.0.1:8000";
-            $formAction[] = "http://127.0.0.1:9000";
-        }
-        
-        $policies[] = "form-action " . implode(' ', array_unique($formAction));
-        */
-        
-        // Temporary debug logging
-        /*
-        if ($isDevelopment) {
-            \Illuminate\Support\Facades\Log::info('CSP form-action: ' . implode(' ', array_unique($formAction)));
-            \Illuminate\Support\Facades\Log::info('Current URL: ' . $request->getSchemeAndHttpHost());
-            \Illuminate\Support\Facades\Log::info('Request URL: ' . $request->url());
-        }
-        */
-
         // Script-src: Allow Alpine.js and Livewire to function
         $scriptSrc = [
             "'self'",

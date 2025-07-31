@@ -61,7 +61,7 @@
             
             // Update Livewire model
             if ($wire) {
-                $wire.verificationCode = this.code.join('');
+            $wire.verificationCode = this.code.join('');
             }
         },
         

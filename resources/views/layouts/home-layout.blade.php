@@ -30,10 +30,14 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.5/cdn.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.5/cdn.js" 
+            integrity="sha384-i4ER82fbwIxLr8kgnfV/JkETYbBfAYvwnBVDRIi8U8+flnn+vmCWh8fxnFBopd51" 
+            crossorigin="anonymous"></script>
 
     <link rel="icon" href="{{ asset('assets/kerbrands/ker-min.png')}}">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js" 
+            integrity="sha384-J8C0MvgX4WP58J4N2W99vCKd2J6z99ynOJ5bEfE6jeP7kVTW1drYtv/jzrxM5jbm" 
+            crossorigin="anonymous"></script>
     <!-- Scripts -->
     @livewireStyles
 

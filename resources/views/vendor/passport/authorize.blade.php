@@ -6,46 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name') }} - Authorization</title>
     
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: {
-                             DEFAULT: "#2c2768",
-                            50: "#eef1ff",
-                            100: "#e1e6fe",
-                            200: "#c8d1fd",
-                            300: "#a7b2fa",
-                            400: "#8389f6",
-                            500: "#6966ee",
-                            600: "#5849e2",
-                            700: "#4c3bc7",
-                            800: "#3e32a1",
-                            900: "#2c2768",
-                            950: "#211c4a",
-                        },
-                        secondary: {
-                            DEFAULT: "#f3a433",
-                            50: "#fef9ec",
-                            100: "#fcebc9",
-                            200: "#f9d58e",
-                            300: "#f5ba54",
-                            400: "#f3a433",
-                            500: "#ec7f14",
-                            600: "#d15c0e",
-                            700: "#ad3f10",
-                            800: "#8d3113",
-                            900: "#742913",
-                            950: "#421306",
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+        
     
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">

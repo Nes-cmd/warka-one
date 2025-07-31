@@ -14,7 +14,7 @@
         }" x-init="
         $nextTick(() => {
             if (typeof $wire !== 'undefined') {
-                $wire.authwith = authwith;
+        $wire.authwith = authwith;
                 console.log('Set authwith to:', authwith);
             } else {
                 console.warn('$wire not available yet');

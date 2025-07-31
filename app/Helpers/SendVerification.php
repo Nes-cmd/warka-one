@@ -40,11 +40,11 @@ class SendVerification {
         $status = false;
         
         try {
-            if($this->via == 'mail'){
-                $status = Mail::to($this->receiver)->send(new VerificationCode($verificationCode));
-            }
-            elseif($this->via == 'sms'){
-                $status = SmsSend::send($this->receiver, "Your verification code is $verificationCode");
+        if($this->via == 'mail'){
+            $status = Mail::to($this->receiver)->send(new VerificationCode($verificationCode));
+        }
+        elseif($this->via == 'sms'){
+            $status = SmsSend::send($this->receiver, "Your verification code is $verificationCode");
             }
         } catch (Exception $e) {
             \Illuminate\Support\Facades\Log::error('SendVerification error: ' . $e->getMessage());
@@ -52,12 +52,12 @@ class SendVerification {
         }
 
         if ($status !== false) {
-            return ModelsVerificationCode::create([
-                'code_is_for' => $this->via == 'sms'?'phone':'email',
-                'verification_code' => $verificationCode,
-                'candidate' => $this->receiver,
-                'expire_at' => now()->addMinutes(5),
-            ]);
+        return ModelsVerificationCode::create([
+            'code_is_for' => $this->via == 'sms'?'phone':'email',
+            'verification_code' => $verificationCode,
+            'candidate' => $this->receiver,
+            'expire_at' => now()->addMinutes(5),
+        ]);
         }
         
         return false;
