@@ -125,8 +125,8 @@
 
                             <!-- Panel -->
                             <div x-ref="panel" x-show="open" x-transition.origin.top.left x-on:click.outside="close($refs.button)" 
-                                 :id="$id('dropdown-button')" style="display: none;" 
-                                 class="absolute left-0 top-full z-10 mt-1 w-64 bg-white dark:bg-gray-700 shadow-lg rounded-lg border border-gray-200 dark:border-gray-600 max-h-60 overflow-y-auto">
+                                 :id="$id('dropdown-button')" 
+                                 class="absolute left-0 top-full hidden z-10 mt-1 w-64 bg-white dark:bg-gray-700 shadow-lg rounded-lg border border-gray-200 dark:border-gray-600 max-h-60 overflow-y-auto">
                                 @foreach($countries as $country)
                                 <button type="button" x-on:click="open = false" 
                                         class="flex items-center w-full px-3 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-600 first:rounded-t-lg last:rounded-b-lg">
@@ -153,7 +153,7 @@
                                   name="password" autocomplete="current-password" placeholder="Enter your password" />
                     
                     <button type="button" class="absolute inset-y-0 right-0 px-4 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none" 
-                            onclick="togglePasswordVisibility()">
+                            id="passwordVisiblityToggle">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="togglePasswordIcon">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 12s3-8 10-8 10 8 10 8-3 8-10 8-10-8-10-8z" />
@@ -249,6 +249,8 @@
     </form>
 
     <script nonce="{{ csp_nonce() }}">
+        document.getElementById('passwordVisiblityToggle').addEventListener('click', togglePasswordVisibility);
+        
         function togglePasswordVisibility() {
             var passwordInput = document.getElementById('passwordInput');
             var toggleIcon = document.getElementById('togglePasswordIcon');

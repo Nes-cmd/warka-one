@@ -79,8 +79,8 @@
 
                         <!-- Panel -->
                         <div x-ref="panel" x-show="open" x-transition.origin.top.left x-on:click.outside="close($refs.button)" 
-                             :id="$id('dropdown-button')" style="display: none;" 
-                             class="absolute left-0 top-full z-10 mt-1 w-64 bg-white dark:bg-gray-700 shadow-lg rounded-lg border border-gray-200 dark:border-gray-600 max-h-60 overflow-y-auto">
+                             :id="$id('dropdown-button')"
+                             class="absolute left-0 hidden top-full z-10 mt-1 w-64 bg-white dark:bg-gray-700 shadow-lg rounded-lg border border-gray-200 dark:border-gray-600 max-h-60 overflow-y-auto">
                             @foreach($countries as $country)
                             <button type="button" x-on:click="open = false; $wire && $wire.changeCountry({{ $country->id }})" 
                                     class="flex items-center w-full px-3 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-600 first:rounded-t-lg last:rounded-b-lg">
@@ -113,7 +113,7 @@
                              class="w-full py-3 flex items-center justify-center text-lg font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 focus:ring-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
                 
                 <!-- Loading state -->
-                <span wire:loading wire:target="getCode" class="flex items-center">
+                <span wire:target="getCode" wire:loading class="flex items-center">
                     <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -122,7 +122,7 @@
                 </span>
                 
                 <!-- Default state -->
-                <span wire:loading.remove wire:target="getCode" class="flex items-center">
+                <span wire:target="getCode" wire:loading.remove  class="flex items-center">
                     <i class="fas fa-paper-plane mr-2"></i>
                     {{ __('Get Verification Code') }}
                 </span>

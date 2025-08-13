@@ -164,7 +164,7 @@
                                                     Current Session
                                                 </span>
                                             @else
-                                                <form action="{{ route('profile.logout-session') }}" method="POST">
+                                                <form action="{{ route('profile.revoke-session') }}" method="POST">
                                                     @csrf
                                                     <input type="hidden" name="session_id" value="{{ $session['id'] }}">
                                                     <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
