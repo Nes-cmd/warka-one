@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Country;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class VerificationController extends Controller
 {
@@ -20,11 +21,12 @@ class VerificationController extends Controller
         return view('auth.verify-otp');
     }
 
-    public function mustVerify(){
+    public function mustVerify($verify){
         
         $user = auth()->user();
+        
         $verifyData = [
-            'authwith' => $user->email?'email':'phone',
+            'authwith' => $verify,
             'email'    => $user->email,
             'otpIsFor' => 'must-verify',
             'phone'    => $user->phone,
@@ -131,7 +133,7 @@ class VerificationController extends Controller
             
             return back()->with('status', 'A new verification code has been sent to your phone.');
         } catch (\Exception $e) {
-            \Log::error("Failed to resend verification SMS: " . $e->getMessage());
+            Log::error("Failed to resend verification SMS: " . $e->getMessage());
             return back()->withErrors(['code' => 'Unable to send verification code. Please try again.']);
         }
     }
@@ -174,7 +176,7 @@ class VerificationController extends Controller
                 'user_id' => $user->id,
                 'code' => $verificationCode,
                 'for' => 'phone-verify',
-                'expire_at' => now()->addMinutes(10),
+                'expire_at' => now()->addMinutes(5),
             ]);
             
             // Send the verification code via SMS
@@ -183,7 +185,7 @@ class VerificationController extends Controller
             return redirect()->route('verify-phone')
                 ->with('status', 'We sent a verification code to your phone.');
         } catch (\Exception $e) {
-            \Log::error("Failed to send verification SMS: " . $e->getMessage());
+            Log::error("Failed to send verification SMS: " . $e->getMessage());
             return back()->withErrors(['phone' => 'Unable to send verification code. Please try again.']);
         }
     }

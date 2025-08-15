@@ -24,7 +24,7 @@ Route::view('services', 'services');
 Route::view('contact', 'contact');
 Route::view('documentation', 'documentation')->name('documentation');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified-auth'])->group(function () {
     Route::get('account', [ProfileController::class, 'index'])->name('account');
     Route::get('profile-setting', [ProfileController::class, 'edit'])->name('profile.update-profile');
     Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -36,11 +36,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/verify-phone', [VerificationController::class, 'verifyPhone'])->name('verify-phone');
     Route::post('/verify-phone', [VerificationController::class, 'processVerifyPhone'])->name('verify-phone.verify');
     Route::post('/resend-phone-verification', [VerificationController::class, 'resendPhoneVerification'])->name('verify-phone.resend');
-    Route::post('/initiate-phone-verification', [VerificationController::class, 'initiatePhoneVerification'])
-        ->name('initiate-phone-verification');
+    Route::post('/initiate-phone-verification', [VerificationController::class, 'initiatePhoneVerification'])->name('initiate-phone-verification');
 });
 
-Route::middleware('auth')->get('authflow/must-verify', [VerificationController::class, 'mustVerify'])->name('must-verify-otp');
+Route::middleware(['auth', 'throttle:10,5'])->get('authflow/must-verify/{verify}', [VerificationController::class, 'mustVerify'])->name('must-verify-otp');
 
 
 Route::get('logout-sso-client', function (Request $request) {
@@ -68,7 +67,7 @@ Route::get('test-sms', function () {
 });
 
 // OAuth Clients Management Routes
-Route::middleware(['auth'])->prefix('oauth')->group(function () {
+Route::middleware(['auth', 'verified-auth'])->prefix('oauth')->group(function () {
     Route::get('clients', [OAuthClientController::class, 'index'])->name('clients.index');
     Route::get('clients/create', [OAuthClientController::class, 'create'])->name('clients.create');
     Route::post('clients', [OAuthClientController::class, 'store'])->name('clients.store');

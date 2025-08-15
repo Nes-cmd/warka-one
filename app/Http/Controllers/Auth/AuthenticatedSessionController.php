@@ -21,7 +21,7 @@ use Illuminate\View\View;
 class AuthenticatedSessionController extends Controller
 {
     protected $maxAttempts = 5; 
-    protected $decayMinutes = 30; 
+    protected $decayMinutes = 30;
     /**
      * Display the login view.
      */

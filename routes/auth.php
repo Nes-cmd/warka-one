@@ -19,7 +19,8 @@ Route::middleware('guest')->group(function () {
     
     Route::post('register', [RegisteredUserController::class, 'store']);
     
-    // Route::middleware('throttle:30,5')->group(function () {
+    // Best case trotle:10 tries lock for 5 minutes
+    Route::middleware('throttle:10,5')->group(function () {
         Route::get('authflow/get-otp', [VerificationController::class, 'index'])->name('get-otp');
         Route::get('authflow/verify', [VerificationController::class, 'verifyView'])->name('verify-otp');
         Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
@@ -27,13 +28,12 @@ Route::middleware('guest')->group(function () {
         Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
         Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
         Route::get('reset-password/', [NewPasswordController::class, 'create'])->name('password.reset');
-    // });
+    });
 
-
-    Route::middleware('throttle:30,5')->post('reset-password', [NewPasswordController::class, 'store'])->name('password.store');
+    Route::middleware('throttle:10,5')->post('reset-password', [NewPasswordController::class, 'store'])->name('password.store');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified-auth'])->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)->name('verification.notice');
 
     Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)->middleware(['signed', 'throttle:6,1'])->name('verification.verify');
