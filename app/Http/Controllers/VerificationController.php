@@ -21,16 +21,26 @@ class VerificationController extends Controller
         return view('auth.verify-otp');
     }
 
-    public function mustVerify($verify){
+    public function mustVerify(Request $request){
         
         $user = auth()->user();
+
+        $intendedFallback = $request->fallback;
+        if($user->phone && $user->phone_verified_at && $request->verify == 'phone'){
+            return $intendedFallback? redirect($intendedFallback. '?hash='.$user->id):back();
+        }
+
+        if($user->email && $user->email_verified_at && $request->verify == 'email'){
+            return $intendedFallback? redirect($intendedFallback. '?hash='.$user->id):back();
+        }
         
         $verifyData = [
-            'authwith' => $verify,
+            'authwith' => $request->verify,
             'email'    => $user->email,
             'otpIsFor' => 'must-verify',
             'phone'    => $user->phone,
             'country'  => Country::find($user->country_id),
+            'fallback' => $intendedFallback
         ];
 
         session()->put('authflow', $verifyData);

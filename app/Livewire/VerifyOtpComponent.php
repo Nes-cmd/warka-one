@@ -110,7 +110,13 @@ class VerifyOtpComponent extends Component
                     $user->{$verifyColumn} = now();
                     $user->save();
                     $verification->delete();
+
+                    $intendedFallback = session('authflow')['fallback']??null;
                     session()->forget('authflow');
+
+                    if($intendedFallback){
+                        return redirect($intendedFallback. '?hash='.$user->id);
+                    }
 
                     return redirect()->intended(RouteServiceProvider::HOME);
                 }

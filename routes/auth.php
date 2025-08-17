@@ -46,9 +46,9 @@ Route::middleware(['auth', 'verified-auth'])->group(function () {
 
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
 
-    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });
 
+Route::middleware('auth')->post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 // Add this new route for requesting OTPs for login
 Route::post('/request-login-otp', [AuthenticatedSessionController::class, 'requestLoginOTP'])
     ->middleware('guest')

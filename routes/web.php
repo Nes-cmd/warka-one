@@ -39,7 +39,7 @@ Route::middleware(['auth', 'verified-auth'])->group(function () {
     Route::post('/initiate-phone-verification', [VerificationController::class, 'initiatePhoneVerification'])->name('initiate-phone-verification');
 });
 
-Route::middleware(['auth', 'throttle:10,5'])->get('authflow/must-verify/{verify}', [VerificationController::class, 'mustVerify'])->name('must-verify-otp');
+Route::middleware(['auth', 'throttle:10,5'])->get('authflow/must-verify', [VerificationController::class, 'mustVerify'])->name('must-verify-otp');
 
 
 Route::get('logout-sso-client', function (Request $request) {

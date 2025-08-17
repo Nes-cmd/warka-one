@@ -138,11 +138,11 @@ class AuthenticatedSessionController extends Controller
             Auth::login($user);
             $request->session()->regenerate();
 
-            $authColumn = "{$authwith}_verified_at";
+            // $authColumn = "{$authwith}_verified_at";
             
-            if ($user->{$authColumn} == null) {
-                return redirect()->route('must-verify-otp');
-            }
+            // if ($user->{$authColumn} == null) {
+            //     return redirect()->route('must-verify-otp');
+            // }
             
             return redirect()->intended(RouteServiceProvider::HOME);
         }
