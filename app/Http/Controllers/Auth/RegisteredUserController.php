@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rules\Password;
 
 class RegisteredUserController extends Controller
 {
@@ -47,7 +48,7 @@ class RegisteredUserController extends Controller
        
         $request->validate([
             'name'     => ['required', 'string', 'max:255'],
-            'password' => ['required', 'confirmed', 'min:6'],
+            'password' => ['required', 'confirmed', Password::min(8)->letters()->numbers()->uncompromised()],
         ]);
        
         DB::beginTransaction();

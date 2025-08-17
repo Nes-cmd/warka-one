@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rules\Password as RulesPassword;
 
 class NewPasswordController extends Controller
 {
@@ -34,7 +35,7 @@ class NewPasswordController extends Controller
     {
         $request->validate([
             // 'email' => ['required', 'email'],
-            'password' => ['required', 'confirmed', 'min:6'],
+            'password' => ['required', 'confirmed', RulesPassword::min(8)->letters()->numbers()->uncompromised()],
         ]);
 
         DB::beginTransaction();

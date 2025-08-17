@@ -6,8 +6,10 @@ use App\Helpers\SendVerification;
 use Livewire\Component;
 use App\Models\VerificationCode as ModelsVerificationCode;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class VerifyOtpComponent extends Component
 {
@@ -79,10 +81,9 @@ class VerifyOtpComponent extends Component
         $key = 'authflow/must-verify:' . $identifier;
 
         if (RateLimiter::tooManyAttempts($key, 5)) { // 3 attempts per minute
-            // $seconds = RateLimiter::availableIn($key);
-            // $this->addError('otp', );
-            // return;
-            abort(429, "Too many OTP requests. Try again later");
+            
+            throw new HttpException(429, 'Too many OTP requests. Try again later.');
+            return redirect()->route('error.429');
         }
 
         RateLimiter::hit($key, 300); // 1 min cooldown

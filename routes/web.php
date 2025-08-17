@@ -9,11 +9,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OAuthClientController;
 use App\Http\Controllers\ContactController;
-
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 Route::controller(AssumptionController::class)->group(function(){
     Route::get('detail', 'fix_all_user_has_detail');
 });
+
+Route::get('test', function(){
+    throw new HttpException(429, 'Too many OTP requests. Try again later.');
+})->name('error.429');
 
 Route::redirect('et', '/');
 Route::view('/', 'welcome');
