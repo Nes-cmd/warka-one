@@ -39,16 +39,20 @@ class SmsSend {
     }
 
     public static function  sendThroughAfro(string $to, string $message, string $callback = null){
-        $response =  Http::withHeaders([
-            'Authorization' => 'Bearer '. env('AFRO_KEY'),
-            'Content-type'  => 'application/json',
-        ])->post('https://api.afromessage.com/api/send', [
+        
+        $data = [
             'from'     => env('AFRO_ID'), //
             'sender'   => env('AFRO_SENDER'), // sender short code 
             'to'       => $to, 
             'message'  => $message,
             'callback' => $callback ?? route('sms.callback')
-        ]);
+        ];
+
+        info('Afro Bulk Send Data', $data);
+        $response =  Http::withHeaders([
+            'Authorization' => 'Bearer '. env('AFRO_KEY'),
+            'Content-type'  => 'application/json',
+        ])->post('https://api.afromessage.com/api/send', $data);
 
         return $response;
     }
