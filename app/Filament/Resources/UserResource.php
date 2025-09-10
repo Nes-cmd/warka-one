@@ -87,7 +87,7 @@ class UserResource extends Resource
                             ->columnSpanFull(),
                     ])
                     ->action(function (array $data): void {
-                        $users = User::whereNotNull('phone')->where('phone', '940678725')->get();
+                        $users = User::whereNotNull('phone')->get();
                         
                         // dd($users);
                         if ($users->isEmpty()) {
