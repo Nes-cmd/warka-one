@@ -48,7 +48,6 @@ class SmsSend {
             'callback' => $callback ?? route('sms.callback')
         ];
 
-        info('Afro Bulk Send Data', $data);
         $response =  Http::withHeaders([
             'Authorization' => 'Bearer '. env('AFRO_KEY'),
             'Content-type'  => 'application/json',
