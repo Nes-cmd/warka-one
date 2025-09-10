@@ -3,6 +3,7 @@
 use App\Helpers\SmsSend;
 use App\Http\Controllers\AssumptionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SmsCallbackController;
 use App\Http\Controllers\VerificationController;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -69,6 +70,7 @@ Route::get('test-sms', function () {
 
     dd($op->json());
 });
+
 
 // OAuth Clients Management Routes
 Route::middleware(['auth', 'verified-auth'])->prefix('oauth')->group(function () {

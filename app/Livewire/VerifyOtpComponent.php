@@ -83,7 +83,7 @@ class VerifyOtpComponent extends Component
         if (RateLimiter::tooManyAttempts($key, 5)) { // 3 attempts per minute
             
             throw new HttpException(429, 'Too many OTP requests. Try again later.');
-            return redirect()->route('error.429');
+            // return redirect()->route('error.429');
         }
 
         RateLimiter::hit($key, 300); // 1 min cooldown

@@ -38,7 +38,7 @@ class SmsSend {
         return json_decode($result);
     }
 
-    public static function  sendThroughAfro(string $to, string $message){
+    public static function  sendThroughAfro(string $to, string $message, string $callback = null){
         $response =  Http::withHeaders([
             'Authorization' => 'Bearer '. env('AFRO_KEY'),
             'Content-type'  => 'application/json',
@@ -47,8 +47,27 @@ class SmsSend {
             'sender'   => env('AFRO_SENDER'), // sender short code 
             'to'       => $to, 
             'message'  => $message,
-            'callback' => url('/')
+            'callback' => $callback ?? route('sms.callback')
         ]);
+
+        return $response;
+    }
+
+    public static function sendBulkAfro(array $to, string $message, string $campaign = null, string $createCallback = null, string $statusCallback = null){
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer '. env('AFRO_KEY'),
+            'Content-type'  => 'application/json',
+        ])->post('https://api.afromessage.com/api/bulk_send', [
+            'from'            => env('AFRO_ID'),
+            'sender'          => env('AFRO_SENDER'),
+            'to'              => $to, // Array of phone numbers
+            'message'         => $message,
+            'campaign'        => $campaign,
+            'createCallback'  => $createCallback ?? route('sms.callback'),
+            'statusCallback'  => $statusCallback ?? route('sms.callback')
+        ]);
+
+        info('Afro Bulk Send Response', $response->json());
 
         return $response;
     }

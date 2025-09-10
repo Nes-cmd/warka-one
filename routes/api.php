@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\VerificationController;
+use App\Http\Controllers\SmsCallbackController;
 use App\Http\Resources\CountryResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,3 +29,5 @@ Route::middleware('auth:api')->get('/user/get', function (Request $request) {
     return $request->user();
 });
 
+// SMS Callback Route - No authentication required as this is called by SMS provider
+Route::get('sms/callback', [SmsCallbackController::class, 'handleCallback'])->name('sms.callback');
