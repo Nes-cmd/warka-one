@@ -126,17 +126,20 @@ class UserResource extends Resource
                                 );
                                 
                                 if ($response->successful()) {
-                                    // Mark all SMS messages as sent
+                                    // Update SMS messages with provider response but keep as PENDING
+                                    // Let callback system handle actual delivery status
                                     foreach ($smsMessages as $smsMessage) {
-                                        $smsMessage->markAsSent(
-                                            $response->json('message_id') ?? null,
-                                            $response->json() ?? null
-                                        );
+                                        $smsMessage->update([
+                                            'message_id' => $response->json('message_id') ?? null,
+                                            'response_data' => $response->json() ?? null,
+                                            'sent_at' => now(),
+                                            // Keep status as PENDING - callback will update to SENT/DELIVERED/FAILED
+                                        ]);
                                     }
                                     
                                     Notification::make()
-                                        ->title('Bulk SMS Sent Successfully')
-                                        ->body("SMS sent to ALL " . count($phoneNumbers) . " users with phone numbers using Bulk API")
+                                        ->title('Bulk SMS Submitted Successfully')
+                                        ->body("SMS submitted to provider for ALL " . count($phoneNumbers) . " users. Delivery status will be updated via callbacks.")
                                         ->success()
                                         ->send();
                                 } else {
@@ -249,12 +252,13 @@ class UserResource extends Resource
                             
                             if ($response->successful()) {
                                 // Create SMS record AFTER successful API call
+                                // Keep status as PENDING - callback will update to SENT/DELIVERED/FAILED
                                 $smsMessage = SmsMessage::create([
                                     'smsable_id' => $record->id,
                                     'smsable_type' => User::class,
                                     'phone_number' => $record->phone,
                                     'message' => $data['message'],
-                                    'status' => SmsMessage::STATUS_SENT,
+                                    'status' => SmsMessage::STATUS_PENDING,
                                     'provider' => SmsMessage::PROVIDER_AFRO,
                                     'campaign' => $data['campaign'] ?? null,
                                     'message_id' => $response->json('message_id') ?? null, // Store provider's message ID
@@ -263,8 +267,8 @@ class UserResource extends Resource
                                 ]);
                                 
                                 Notification::make()
-                                    ->title('SMS Sent Successfully')
-                                    ->body("SMS sent to {$record->name} ({$record->phone})")
+                                    ->title('SMS Submitted Successfully')
+                                    ->body("SMS submitted to provider for {$record->name} ({$record->phone}). Delivery status will be updated via callbacks.")
                                     ->success()
                                     ->send();
                             } else {
@@ -368,6 +372,7 @@ class UserResource extends Resource
                                     
                                 if ($response->successful()) {
                                     // Create SMS records AFTER successful bulk API call
+                                    // Keep status as PENDING - callback will update to SENT/DELIVERED/FAILED
                                     foreach ($records as $record) {
                                         if ($record->phone) {
                                             SmsMessage::create([
@@ -375,7 +380,7 @@ class UserResource extends Resource
                                                 'smsable_type' => User::class,
                                                 'phone_number' => $record->phone,
                                                 'message' => $data['message'],
-                                                'status' => SmsMessage::STATUS_SENT,
+                                                'status' => SmsMessage::STATUS_PENDING,
                                                 'provider' => SmsMessage::PROVIDER_AFRO,
                                                 'campaign' => $data['campaign'] ?? null,
                                                 'message_id' => $response->json('message_id') ?? null,
@@ -386,8 +391,8 @@ class UserResource extends Resource
                                     }
                                     
                                     Notification::make()
-                                        ->title('Bulk SMS Sent Successfully')
-                                        ->body("SMS sent to " . count($phoneNumbers) . " users using Bulk API: " . implode(', ', $usersWithPhones))
+                                        ->title('Bulk SMS Submitted Successfully')
+                                        ->body("SMS submitted to provider for " . count($phoneNumbers) . " users. Delivery status will be updated via callbacks.")
                                         ->success()
                                         ->send();
                                 } else {
