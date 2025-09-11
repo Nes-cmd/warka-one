@@ -43,4 +43,3 @@ jobs:
             php artisan optimize:clear
             php artisan migrate --force
             php artisan queue:restart
-            php artisan queue:clear
