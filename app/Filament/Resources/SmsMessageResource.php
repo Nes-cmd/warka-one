@@ -12,6 +12,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -272,12 +273,44 @@ class SmsMessageResource extends Resource
                         'App\\Models\\User' => 'User',
                     ]),
                     
+                Tables\Filters\SelectFilter::make('campaign')
+                    ->label('Campaign')
+                    ->options(function () {
+                        // Get all unique campaigns from SMS messages
+                        $campaigns = SmsMessage::select('campaign')
+                            ->distinct()
+                            ->whereNotNull('campaign')
+                            ->where('campaign', '!=', '')
+                            ->orderBy('campaign')
+                            ->pluck('campaign', 'campaign')
+                            ->toArray();
+                        
+                        // Add "No Campaign" option for null/empty campaigns
+                        $campaigns['no_campaign'] = 'No Campaign';
+                        
+                        return $campaigns;
+                    })
+                    ->query(function (Builder $query, array $data): Builder {
+                        if (!$data['value']) {
+                            return $query;
+                        }
+                        
+                        if ($data['value'] === 'no_campaign') {
+                            return $query->where(function ($q) {
+                                $q->whereNull('campaign')
+                                  ->orWhere('campaign', '');
+                            });
+                        }
+                        
+                        return $query->where('campaign', $data['value']);
+                    }),
+                    
                 Tables\Filters\Filter::make('created_at')
                     ->form([
-                        Forms\Components\DatePicker::make('created_from')
-                            ->label('Created from'),
-                        Forms\Components\DatePicker::make('created_until')
-                            ->label('Created until'),
+                        Forms\Components\DateTimePicker::make('created_from')
+                            ->label('Created from')->native(false),
+                        Forms\Components\DateTimePicker::make('created_until')
+                            ->label('Created until')->native(false),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
@@ -291,6 +324,8 @@ class SmsMessageResource extends Resource
                             );
                     }),
             ])
+            ->filtersFormWidth(MaxWidth::Medium)
+            ->filtersFormColumns(2)
             ->actions([
                 Tables\Actions\Action::make('retry')
                     ->label('Retry')
@@ -565,6 +600,7 @@ class SmsMessageResource extends Resource
     {
         return [
             'index' => Pages\ListSmsMessages::route('/'),
+            'view' => Pages\ViewSmsMessage::route('/{record}'),
         ];
     }
 }
