@@ -22,7 +22,9 @@ class SendBatchSmsJob implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        public array $smsMessageIds,
+        public array $recipients,
+        public string $message,
+        public ?string $campaign = null,
         public string $provider = 'afro'
     ) {
         //
@@ -34,74 +36,97 @@ class SendBatchSmsJob implements ShouldQueue
     public function handle(): void
     {
         Log::info('SendBatchSmsJob started', [
-            'sms_message_ids' => $this->smsMessageIds,
+            'recipients_count' => count($this->recipients),
             'provider' => $this->provider,
-            'count' => count($this->smsMessageIds)
+            'message_preview' => substr($this->message, 0, 50) . '...'
         ]);
 
-        $smsMessages = SmsMessage::whereIn('id', $this->smsMessageIds)
-            ->where('status', SmsMessage::STATUS_PENDING)
-            ->get();
-
-        if ($smsMessages->isEmpty()) {
-            Log::warning('SendBatchSmsJob: No pending SMS messages found', [
-                'sms_message_ids' => $this->smsMessageIds
-            ]);
-            return;
-        }
-
-        foreach ($smsMessages as $smsMessage) {
+        foreach ($this->recipients as $recipient) {
             try {
-                $this->sendSingleSms($smsMessage);
+                $this->sendSingleSms($recipient);
                 
                 // Add small delay between SMS to avoid rate limiting
                 usleep(100000); // 0.1 second delay
                 
             } catch (\Exception $e) {
                 Log::error('SendBatchSmsJob: Failed to send SMS', [
-                    'sms_message_id' => $smsMessage->id,
+                    'recipient_id' => $recipient->id ?? 'unknown',
+                    'phone' => $recipient->phone ?? 'unknown',
                     'error' => $e->getMessage(),
                     'trace' => $e->getTraceAsString()
                 ]);
                 
-                $smsMessage->markAsFailed($e->getMessage());
+                // Create failed SMS record
+                SmsMessage::create([
+                    'smsable_id' => $recipient->id,
+                    'smsable_type' => get_class($recipient),
+                    'phone_number' => $recipient->phone,
+                    'message' => $this->message,
+                    'status' => SmsMessage::STATUS_FAILED,
+                    'provider' => SmsMessage::PROVIDER_AFRO,
+                    'campaign' => $this->campaign,
+                    'error_message' => $e->getMessage(),
+                ]);
             }
         }
 
         Log::info('SendBatchSmsJob completed', [
-            'processed_count' => $smsMessages->count(),
-            'sms_message_ids' => $this->smsMessageIds
+            'processed_count' => count($this->recipients),
+            'provider' => $this->provider
         ]);
     }
 
     /**
      * Send individual SMS message
      */
-    private function sendSingleSms(SmsMessage $smsMessage): void
+    private function sendSingleSms($recipient): void
     {
         $response = SmsSend::sendThroughAfro(
-            $smsMessage->phone_number,
-            $smsMessage->message
+            $recipient->phone,
+            $this->message
         );
 
         if ($response->successful()) {
-            $smsMessage->markAsSent(
-                $response->json('messageId') ?? null,
-                $response->json() ?? null
-            );
+            $messageId = $response->json('response.message_id') ?? null;
+            
+            // Create SMS record AFTER successful send
+            SmsMessage::create([
+                'smsable_id' => $recipient->id,
+                'smsable_type' => get_class($recipient),
+                'phone_number' => $recipient->phone,
+                'message' => $this->message,
+                'status' => SmsMessage::STATUS_PENDING, // Let callback handle status updates
+                'provider' => SmsMessage::PROVIDER_AFRO,
+                'campaign' => $this->campaign,
+                'message_id' => $messageId,
+                'response_data' => $response->json(),
+                'sent_at' => now(),
+            ]);
             
             Log::info('SMS sent successfully via job', [
-                'sms_message_id' => $smsMessage->id,
-                'phone_number' => $smsMessage->phone_number,
-                'provider_message_id' => $response->json('messageId')
+                'recipient_id' => $recipient->id,
+                'phone_number' => $recipient->phone,
+                'provider_message_id' => $messageId
             ]);
         } else {
             $errorMessage = 'API returned unsuccessful response: ' . $response->status();
-            $smsMessage->markAsFailed($errorMessage);
+            
+            // Create failed SMS record
+            SmsMessage::create([
+                'smsable_id' => $recipient->id,
+                'smsable_type' => get_class($recipient),
+                'phone_number' => $recipient->phone,
+                'message' => $this->message,
+                'status' => SmsMessage::STATUS_FAILED,
+                'provider' => SmsMessage::PROVIDER_AFRO,
+                'campaign' => $this->campaign,
+                'error_message' => $errorMessage,
+                'response_data' => $response->json(),
+            ]);
             
             Log::warning('SMS failed via job', [
-                'sms_message_id' => $smsMessage->id,
-                'phone_number' => $smsMessage->phone_number,
+                'recipient_id' => $recipient->id,
+                'phone_number' => $recipient->phone,
                 'status' => $response->status(),
                 'response' => $response->json()
             ]);
@@ -114,17 +139,23 @@ class SendBatchSmsJob implements ShouldQueue
     public function failed(\Throwable $exception): void
     {
         Log::error('SendBatchSmsJob failed', [
-            'sms_message_ids' => $this->smsMessageIds,
+            'recipients_count' => count($this->recipients),
             'error' => $exception->getMessage(),
             'trace' => $exception->getTraceAsString()
         ]);
 
-        // Mark all SMS messages as failed
-        SmsMessage::whereIn('id', $this->smsMessageIds)
-            ->where('status', SmsMessage::STATUS_PENDING)
-            ->update([
+        // Create failed SMS records for all recipients
+        foreach ($this->recipients as $recipient) {
+            SmsMessage::create([
+                'smsable_id' => $recipient->id,
+                'smsable_type' => get_class($recipient),
+                'phone_number' => $recipient->phone,
+                'message' => $this->message,
                 'status' => SmsMessage::STATUS_FAILED,
-                'error_message' => 'Job failed: ' . $exception->getMessage()
+                'provider' => SmsMessage::PROVIDER_AFRO,
+                'campaign' => $this->campaign,
+                'error_message' => 'Job failed: ' . $exception->getMessage(),
             ]);
+        }
     }
 }

@@ -8,10 +8,19 @@ use Filament\Actions;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
+use Illuminate\Support\Facades\Log;
 
 class ViewSmsMessage extends ViewRecord
 {
     protected static string $resource = SmsMessageResource::class;
+
+    public function mount(int | string $record): void
+    {
+        parent::mount($record);
+        
+        // Ensure the smsable relationship is loaded
+        $this->record->load('smsable');
+    }
 
     public function infolist(Infolist $infolist): Infolist
     {
@@ -31,7 +40,13 @@ class ViewSmsMessage extends ViewRecord
                             
                         Infolists\Components\TextEntry::make('smsable.name')
                             ->label('Recipient Name')
-                            ->placeholder('Unknown'),
+                            ->placeholder('Unknown')
+                            ->formatStateUsing(function ($state, $record) {
+                                if ($record->smsable && method_exists($record->smsable, 'name')) {
+                                    return $record->smsable->name ?? 'Unknown';
+                                }
+                                return 'Unknown';
+                            }),
                             
                         Infolists\Components\TextEntry::make('phone_number')
                             ->label('Phone Number')
@@ -42,7 +57,15 @@ class ViewSmsMessage extends ViewRecord
                             ->label('Message Content')
                             ->columnSpanFull()
                             ->copyable()
-                            ->formatStateUsing(fn (string $state): string => $state),
+                            ->formatStateUsing(function ($state) {
+                                if (is_string($state)) {
+                                    return $state;
+                                }
+                                if (is_array($state) || is_object($state)) {
+                                    return json_encode($state, JSON_PRETTY_PRINT);
+                                }
+                                return (string) $state;
+                            }),
                             
                         Infolists\Components\TextEntry::make('status')
                             ->label('Status')
@@ -105,19 +128,34 @@ class ViewSmsMessage extends ViewRecord
                             ->label('Error Message')
                             ->placeholder('No errors')
                             ->color('danger')
-                            ->columnSpanFull(),
+                            ->columnSpanFull()
+                            ->formatStateUsing(function ($state) {
+                                if (is_string($state)) {
+                                    return $state;
+                                }
+                                if (is_array($state) || is_object($state)) {
+                                    return json_encode($state, JSON_PRETTY_PRINT);
+                                }
+                                return (string) $state;
+                            }),
                     ])
                     ->visible(fn (SmsMessage $record): bool => !is_null($record->error_message)),
                     
                 Infolists\Components\Section::make('Provider Response')
                     ->schema([
-                        Infolists\Components\TextEntry::make('response_data')
+                        Infolists\Components\TextEntry::make('response')
                             ->label('Response Data')
-                            ->formatStateUsing(function ($state) {
-                                if (is_array($state)) {
-                                    return json_encode($state, JSON_PRETTY_PRINT);
+                            ->formatStateUsing(function ($record) {
+                                if (is_array($record->response_data)) {
+                                    return json_encode($record->response_data, JSON_PRETTY_PRINT);
                                 }
-                                return $state ?? 'No response data';
+                                if (is_object($record->response_data)) {
+                                    return json_encode($record->response_data, JSON_PRETTY_PRINT);
+                                }
+                                if (is_string($record->response_data)) {
+                                    return $record->response_data;
+                                }
+                                return 'No response data';
                             })
                             ->columnSpanFull()
                             ->copyable(),
@@ -138,45 +176,36 @@ class ViewSmsMessage extends ViewRecord
                 ->modalHeading('Retry SMS')
                 ->modalDescription('Are you sure you want to retry sending this SMS?')
                 ->action(function (SmsMessage $record): void {
-                    try {
-                        $response = \App\Helpers\SmsSend::sendThroughAfro($record->phone_number, $record->message);
-                        
-                        if ($response->successful()) {
-                            $record->update([
-                                'status' => SmsMessage::STATUS_PENDING, // Keep as pending, let callback handle status
-                                'message_id' => $response->json('message_id') ?? null,
-                                'response_data' => $response->json() ?? null,
-                                'sent_at' => now(),
-                                'error_message' => null,
-                            ]);
-                            
-                            \Filament\Notifications\Notification::make()
-                                ->title('SMS Retry Successful')
-                                ->body("SMS retry submitted to provider for {$record->phone_number}. Status will be updated via callbacks.")
-                                ->success()
-                                ->send();
-                        } else {
-                            $record->update([
-                                'status' => SmsMessage::STATUS_FAILED,
-                                'error_message' => 'Retry failed: API returned unsuccessful response',
-                                'response_data' => $response->json() ?? null,
-                            ]);
-                            
-                            \Filament\Notifications\Notification::make()
-                                ->title('SMS Retry Failed')
-                                ->body('Failed to retry SMS. Please check your configuration.')
-                                ->danger()
-                                ->send();
-                        }
-                    } catch (\Exception $e) {
-                        $record->update([
-                            'status' => SmsMessage::STATUS_FAILED,
-                            'error_message' => 'Retry failed: ' . $e->getMessage(),
-                        ]);
-                        
+                    // For retry, we need to get the smsable model
+                    $smsable = $record->smsable;
+                    
+                    if (!$smsable) {
                         \Filament\Notifications\Notification::make()
-                            ->title('SMS Retry Error')
-                            ->body('An error occurred while retrying SMS: ' . $e->getMessage())
+                            ->title('SMS Retry Failed')
+                            ->body('Cannot retry SMS: Associated model not found.')
+                            ->danger()
+                            ->send();
+                        return;
+                    }
+                    
+                    // Use service method for retry
+                    $newSmsMessage = \App\Helpers\SmsSend::sendAndCreateRecord(
+                        $record->phone_number,
+                        $record->message,
+                        $smsable,
+                        $record->campaign
+                    );
+                    
+                    if ($newSmsMessage->status === SmsMessage::STATUS_PENDING) {
+                        \Filament\Notifications\Notification::make()
+                            ->title('SMS Retry Successful')
+                            ->body("SMS retry submitted to provider for {$record->phone_number}. Status will be updated via callbacks.")
+                            ->success()
+                            ->send();
+                    } else {
+                        \Filament\Notifications\Notification::make()
+                            ->title('SMS Retry Failed')
+                            ->body('Failed to retry SMS. Please check your configuration.')
                             ->danger()
                             ->send();
                     }

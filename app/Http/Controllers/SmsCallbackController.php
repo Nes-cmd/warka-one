@@ -37,9 +37,16 @@ class SmsCallbackController extends Controller
             $smsMessage = SmsMessage::where('message_id', $messageId)->first();
             
             if (!$smsMessage) {
+                // Debug: Let's see what message_ids we have in the database
+                $recentMessages = SmsMessage::where('created_at', '>=', now()->subHours(2))
+                    ->select('id', 'message_id', 'phone_number', 'status', 'created_at')
+                    ->get();
+                
                 Log::warning('SMS Callback: Message not found', [
                     'message_id' => $messageId,
-                    'callback_data' => $request->all()
+                    'callback_data' => $request->all(),
+                    'recent_messages' => $recentMessages->toArray(),
+                    'total_recent_count' => $recentMessages->count()
                 ]);
                 return response()->json(['error' => 'Message not found'], 404);
             }

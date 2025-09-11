@@ -100,64 +100,33 @@ class SmsMessageResource extends Resource
                         }
                         
                         if ($data['send_method'] === 'bulk_api') {
-                            // Use bulk API
-                            try {
-                                $response = SmsSend::sendBulkAfro(
-                                    $phoneNumbers, 
-                                    $data['message'], 
-                                    $data['campaign'] ?? null
-                                );
-                                
-                                if ($response->successful()) {
-                                    // Update SMS messages with provider response but keep as PENDING
-                                    // Let callback system handle actual delivery status
-                                    foreach ($smsMessages as $smsMessage) {
-                                        $smsMessage->update([
-                                            'message_id' => $response->json('message_id') ?? null,
-                                            'response_data' => $response->json() ?? null,
-                                            'sent_at' => now(),
-                                            // Keep status as PENDING - callback will update to SENT/DELIVERED/FAILED
-                                        ]);
-                                    }
-                                    
-                                    Notification::make()
-                                        ->title('Bulk SMS Submitted Successfully')
-                                        ->body("SMS submitted to provider for ALL " . count($phoneNumbers) . " users. Delivery status will be updated via callbacks.")
-                                        ->success()
-                                        ->send();
-                                } else {
-                                    // Mark all SMS messages as failed
-                                    foreach ($smsMessages as $smsMessage) {
-                                        $smsMessage->markAsFailed('Bulk API returned unsuccessful response');
-                                    }
-                                    
-                                    Notification::make()
-                                        ->title('Bulk SMS Failed')
-                                        ->body('Failed to send bulk SMS to all users. Please check your configuration.')
-                                        ->danger()
-                                        ->send();
-                                }
-                            } catch (\Exception $e) {
-                                // Mark all SMS messages as failed
-                                foreach ($smsMessages as $smsMessage) {
-                                    $smsMessage->markAsFailed($e->getMessage());
-                                }
-                                
+                            // Use service method for immediate bulk execution
+                            $result = SmsSend::sendBulkAndCreateRecords(
+                                $users->toArray(), 
+                                $data['message'], 
+                                $data['campaign'] ?? null
+                            );
+                            
+                            if ($result['success']) {
                                 Notification::make()
-                                    ->title('Bulk SMS Error')
-                                    ->body('An error occurred while sending bulk SMS: ' . $e->getMessage())
+                                    ->title('Bulk SMS Submitted Successfully')
+                                    ->body("SMS submitted to provider for ALL " . count($phoneNumbers) . " users. Delivery status will be updated via callbacks.")
+                                    ->success()
+                                    ->send();
+                            } else {
+                                Notification::make()
+                                    ->title('Bulk SMS Failed')
+                                    ->body($result['message'])
                                     ->danger()
                                     ->send();
                             }
                         } else {
                             // Use single API with jobs (batch processing)
-                            $smsMessageIds = collect($smsMessages)->pluck('id')->toArray();
-                            
-                            // Split into batches of 500
-                            $batches = array_chunk($smsMessageIds, 500);
+                            // Split users into batches of 500
+                            $batches = array_chunk($users->toArray(), 500);
                             
                             foreach ($batches as $batch) {
-                                SendBatchSmsJob::dispatch($batch, 'afro');
+                                SendBatchSmsJob::dispatch($batch, $data['message'], $data['campaign'] ?? null, 'afro');
                             }
                             
                             Notification::make()
@@ -188,7 +157,13 @@ class SmsMessageResource extends Resource
                 Tables\Columns\TextColumn::make('smsable.name')
                     ->label('Recipient')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->formatStateUsing(function ($state, $record) {
+                        if ($record->smsable && method_exists($record->smsable, 'name')) {
+                            return $record->smsable->name ?? 'Unknown';
+                        }
+                        return 'Unknown';
+                    }),
                     
                 Tables\Columns\TextColumn::make('phone_number')
                     ->label('Phone')
@@ -199,9 +174,21 @@ class SmsMessageResource extends Resource
                 Tables\Columns\TextColumn::make('message')
                     ->label('Message')
                     ->limit(50)
+                    ->formatStateUsing(function ($state) {
+                        if (is_string($state)) {
+                            return $state;
+                        }
+                        if (is_array($state) || is_object($state)) {
+                            return json_encode($state, JSON_PRETTY_PRINT);
+                        }
+                        return (string) $state;
+                    })
                     ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
                         $state = $column->getState();
-                        return strlen($state) > 50 ? $state : null;
+                        if (is_string($state)) {
+                            return strlen($state) > 50 ? $state : null;
+                        }
+                        return null;
                     }),
                     
                 Tables\Columns\TextColumn::make('status')
@@ -342,7 +329,7 @@ class SmsMessageResource extends Resource
                             if ($response->successful()) {
                                 $record->update([
                                     'status' => SmsMessage::STATUS_SENT,
-                                    'message_id' => $response->json('message_id') ?? null,
+                                    'message_id' => $response->json('response.message_id') ?? null,
                                     'response_data' => $response->json() ?? null,
                                     'sent_at' => now(),
                                     'error_message' => null,
@@ -437,23 +424,8 @@ class SmsMessageResource extends Resource
                             return;
                         }
                         
-                        // Create new SMS records for the bulk send
-                        foreach ($records as $record) {
-                            if ($record->phone_number && $record->smsable_id && $record->smsable_type) {
-                                $smsMessages[] = SmsMessage::create([
-                                    'smsable_id' => $record->smsable_id,
-                                    'smsable_type' => $record->smsable_type,
-                                    'phone_number' => $record->phone_number,
-                                    'message' => $data['message'],
-                                    'status' => SmsMessage::STATUS_PENDING,
-                                    'provider' => SmsMessage::PROVIDER_AFRO,
-                                    'campaign' => $data['campaign'] ?? null,
-                                ]);
-                            }
-                        }
-                        
                         if ($data['send_method'] === 'bulk_api') {
-                            // Use bulk API
+                            // Use bulk API - send immediately and create records
                             try {
                                 $response = SmsSend::sendBulkAfro(
                                     $phoneNumbers, 
@@ -462,15 +434,24 @@ class SmsMessageResource extends Resource
                                 );
                                 
                                 if ($response->successful()) {
-                                    // Update SMS messages with provider response but keep as PENDING
-                                    // Let callback system handle actual delivery status
-                                    foreach ($smsMessages as $smsMessage) {
-                                        $smsMessage->update([
-                                            'message_id' => $response->json('message_id') ?? null,
-                                            'response_data' => $response->json() ?? null,
-                                            'sent_at' => now(),
-                                            // Keep status as PENDING - callback will update to SENT/DELIVERED/FAILED
-                                        ]);
+                                    $messageId = $response->json('response.message_id') ?? null;
+                                    
+                                    // Create new SMS records AFTER successful send
+                                    foreach ($records as $record) {
+                                        if ($record->phone_number && $record->smsable_id && $record->smsable_type) {
+                                            SmsMessage::create([
+                                                'smsable_id' => $record->smsable_id,
+                                                'smsable_type' => $record->smsable_type,
+                                                'phone_number' => $record->phone_number,
+                                                'message' => $data['message'],
+                                                'status' => SmsMessage::STATUS_PENDING, // Let callback handle status updates
+                                                'provider' => SmsMessage::PROVIDER_AFRO,
+                                                'campaign' => $data['campaign'] ?? null,
+                                                'message_id' => $messageId,
+                                                'response_data' => $response->json(),
+                                                'sent_at' => now(),
+                                            ]);
+                                        }
                                     }
                                     
                                     Notification::make()
@@ -479,9 +460,21 @@ class SmsMessageResource extends Resource
                                         ->success()
                                         ->send();
                                 } else {
-                                    // Mark all SMS messages as failed
-                                    foreach ($smsMessages as $smsMessage) {
-                                        $smsMessage->markAsFailed('Bulk API returned unsuccessful response');
+                                    // Create failed SMS records
+                                    foreach ($records as $record) {
+                                        if ($record->phone_number && $record->smsable_id && $record->smsable_type) {
+                                            SmsMessage::create([
+                                                'smsable_id' => $record->smsable_id,
+                                                'smsable_type' => $record->smsable_type,
+                                                'phone_number' => $record->phone_number,
+                                                'message' => $data['message'],
+                                                'status' => SmsMessage::STATUS_FAILED,
+                                                'provider' => SmsMessage::PROVIDER_AFRO,
+                                                'campaign' => $data['campaign'] ?? null,
+                                                'error_message' => 'Bulk API returned unsuccessful response',
+                                                'response_data' => $response->json(),
+                                            ]);
+                                        }
                                     }
                                     
                                     Notification::make()
@@ -491,9 +484,20 @@ class SmsMessageResource extends Resource
                                         ->send();
                                 }
                             } catch (\Exception $e) {
-                                // Mark all SMS messages as failed
-                                foreach ($smsMessages as $smsMessage) {
-                                    $smsMessage->markAsFailed($e->getMessage());
+                                // Create failed SMS records
+                                foreach ($records as $record) {
+                                    if ($record->phone_number && $record->smsable_id && $record->smsable_type) {
+                                        SmsMessage::create([
+                                            'smsable_id' => $record->smsable_id,
+                                            'smsable_type' => $record->smsable_type,
+                                            'phone_number' => $record->phone_number,
+                                            'message' => $data['message'],
+                                            'status' => SmsMessage::STATUS_FAILED,
+                                            'provider' => SmsMessage::PROVIDER_AFRO,
+                                            'campaign' => $data['campaign'] ?? null,
+                                            'error_message' => $e->getMessage(),
+                                        ]);
+                                    }
                                 }
                                 
                                 Notification::make()
@@ -504,13 +508,23 @@ class SmsMessageResource extends Resource
                             }
                         } else {
                             // Use single API with jobs (batch processing)
-                            $smsMessageIds = collect($smsMessages)->pluck('id')->toArray();
+                            // Get recipients for jobs
+                            $recipients = [];
+                            foreach ($records as $record) {
+                                if ($record->phone_number && $record->smsable_id && $record->smsable_type) {
+                                    // Get the actual recipient model
+                                    $recipient = $record->smsable;
+                                    if ($recipient) {
+                                        $recipients[] = $recipient;
+                                    }
+                                }
+                            }
                             
                             // Split into batches of 500
-                            $batches = array_chunk($smsMessageIds, 500);
+                            $batches = array_chunk($recipients, 500);
                             
                             foreach ($batches as $batch) {
-                                SendBatchSmsJob::dispatch($batch, 'afro');
+                                SendBatchSmsJob::dispatch($batch, $data['message'], $data['campaign'] ?? null, 'afro');
                             }
                             
                             Notification::make()
@@ -547,7 +561,7 @@ class SmsMessageResource extends Resource
                                         if ($response->successful()) {
                                             $record->update([
                                                 'status' => SmsMessage::STATUS_SENT,
-                                                'message_id' => $response->json('message_id') ?? null,
+                                                'message_id' => $response->json('response.message_id') ?? null,
                                                 'response_data' => $response->json() ?? null,
                                                 'sent_at' => now(),
                                                 'error_message' => null,
