@@ -239,6 +239,7 @@ class SmsMessageResource extends Resource
                     ->dateTime('M d, Y H:i')
                     ->sortable(),
             ])
+            ->paginationPageOptions([25, 50, 100, 200, 500, 1000])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
                     ->options([
