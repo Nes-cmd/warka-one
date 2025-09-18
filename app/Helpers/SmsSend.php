@@ -4,16 +4,79 @@ namespace App\Helpers;
 
 use App\Models\SmsMessage;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class SmsSend {
-    public static function send(string $to, string $message, string $via = 'afro'){
-        if(env('SMS_VIA') == 'afro'){
-            return self::sendThroughAfro($to, $message);
+    public static function send(string $to, string $message, $smsable = null, string $campaign = null, string $via = 'afro'){
+        // Create SMS record first
+        $smsMessage = self::createSmsRecord($to, $message, $smsable, $campaign, $via);
+
+        try {
+            // Send SMS
+            if($via == 'afro'){
+                $response = self::sendThroughAfro($to, $message);
+            } else {
+                $response = self::sendThroughFaris($to, $message);
+            }
+            
+            // Update record based on response
+            self::updateSmsRecord($smsMessage, $response);
+        } catch (Exception $e) {
+            self::updateSmsRecordOnError($smsMessage, $e);
         }
-        
-        return self::sendThroughFaris($to, $message);
+
+        return $smsMessage;
+    }
+
+    /**
+     * Create SMS record
+     */
+    private static function createSmsRecord(string $to, string $message, $smsable = null, string $campaign = null, string $via = 'afro'): SmsMessage
+    {
+        return SmsMessage::create([
+            'smsable_id' => $smsable ? $smsable->id : null,
+            'smsable_type' => $smsable ? get_class($smsable) : null,
+            'phone_number' => $to,
+            'message' => $message,
+            'status' => SmsMessage::STATUS_PENDING,
+            'provider' => $via === 'afro' ? SmsMessage::PROVIDER_AFRO : SmsMessage::PROVIDER_FARIS,
+            'campaign' => $campaign,
+        ]);
+    }
+
+    /**
+     * Update SMS record based on successful response
+     */
+    private static function updateSmsRecord(SmsMessage $smsMessage, $response): void
+    {
+        if ($response && (is_object($response) ? $response->successful() : true)) {
+            $messageId = is_object($response) ? $response->json('response.message_id') : null;
+            $smsMessage->update([
+                'status' => SmsMessage::STATUS_PENDING, // Let callback handle final status
+                'message_id' => $messageId,
+                'response_data' => is_object($response) ? $response->json() : $response,
+                'sent_at' => now(),
+            ]);
+        } else {
+            $smsMessage->update([
+                'status' => SmsMessage::STATUS_FAILED,
+                'error_message' => 'API returned unsuccessful response',
+                'response_data' => is_object($response) ? $response->json() : $response,
+            ]);
+        }
+    }
+
+    /**
+     * Update SMS record on error
+     */
+    private static function updateSmsRecordOnError(SmsMessage $smsMessage, \Exception $e): void
+    {
+        $smsMessage->update([
+            'status' => SmsMessage::STATUS_FAILED,
+            'error_message' => $e->getMessage(),
+        ]);
     }
 
     public static function sendThroughFaris(string $toPhone, string $message){
@@ -92,192 +155,6 @@ class SmsSend {
         return $response;
     }
 
-    /**
-     * Send SMS and create record (for immediate execution)
-     */
-    public static function sendAndCreateRecord(string $to, string $message, $smsable, string $campaign = null): ?SmsMessage
-    {
-        try {
-            $response = self::sendThroughAfro($to, $message);
-            
-            if ($response->successful()) {
-                $messageId = $response->json('response.message_id') ?? null;
-                
-                // Create SMS record AFTER successful send
-                $smsMessage = SmsMessage::create([
-                    'smsable_id' => $smsable->id,
-                    'smsable_type' => get_class($smsable),
-                    'phone_number' => $to,
-                    'message' => $message,
-                    'status' => SmsMessage::STATUS_PENDING, // Let callback handle status updates
-                    'provider' => SmsMessage::PROVIDER_AFRO,
-                    'campaign' => $campaign,
-                    'message_id' => $messageId,
-                    'response_data' => $response->json(),
-                    'sent_at' => now(),
-                ]);
-                
-                Log::info('SMS sent and record created', [
-                    'sms_message_id' => $smsMessage->id,
-                    'phone_number' => $to,
-                    'provider_message_id' => $messageId,
-                    'smsable_type' => get_class($smsable),
-                    'smsable_id' => $smsable->id
-                ]);
-                
-                return $smsMessage;
-            } else {
-                // Create failed SMS record
-                $smsMessage = SmsMessage::create([
-                    'smsable_id' => $smsable->id,
-                    'smsable_type' => get_class($smsable),
-                    'phone_number' => $to,
-                    'message' => $message,
-                    'status' => SmsMessage::STATUS_FAILED,
-                    'provider' => SmsMessage::PROVIDER_AFRO,
-                    'campaign' => $campaign,
-                    'error_message' => 'API returned unsuccessful response',
-                    'response_data' => $response->json(),
-                ]);
-                
-                Log::warning('SMS failed and record created', [
-                    'sms_message_id' => $smsMessage->id,
-                    'phone_number' => $to,
-                    'status' => $response->status(),
-                    'smsable_type' => get_class($smsable),
-                    'smsable_id' => $smsable->id
-                ]);
-                
-                return $smsMessage;
-            }
-        } catch (\Exception $e) {
-            // Create failed SMS record
-            $smsMessage = SmsMessage::create([
-                'smsable_id' => $smsable->id,
-                'smsable_type' => get_class($smsable),
-                'phone_number' => $to,
-                'message' => $message,
-                'status' => SmsMessage::STATUS_FAILED,
-                'provider' => SmsMessage::PROVIDER_AFRO,
-                'campaign' => $campaign,
-                'error_message' => $e->getMessage(),
-            ]);
-            
-            Log::error('SMS exception and record created', [
-                'sms_message_id' => $smsMessage->id,
-                'phone_number' => $to,
-                'error' => $e->getMessage(),
-                'smsable_type' => get_class($smsable),
-                'smsable_id' => $smsable->id
-            ]);
-            
-            return $smsMessage;
-        }
-    }
-
-    /**
-     * Send bulk SMS and create records (for immediate execution)
-     */
-    public static function sendBulkAndCreateRecords(array $recipients, string $message, string $campaign = null): array
-    {
-        $phoneNumbers = [];
-        $smsMessages = [];
-        
-        // Extract phone numbers
-        foreach ($recipients as $recipient) {
-            if ($recipient->phone) {
-                $phoneNumbers[] = $recipient->phone;
-            }
-        }
-        
-        if (empty($phoneNumbers)) {
-            return ['success' => false, 'message' => 'No phone numbers found', 'sms_messages' => []];
-        }
-        
-        try {
-            $response = self::sendBulkAfro($phoneNumbers, $message, $campaign);
-            
-            if ($response->successful()) {
-                $messageId = $response->json('response.message_id') ?? null;
-                
-                // Create SMS records AFTER successful bulk send
-                foreach ($recipients as $recipient) {
-                    if ($recipient->phone) {
-                        $smsMessages[] = SmsMessage::create([
-                            'smsable_id' => $recipient->id,
-                            'smsable_type' => get_class($recipient),
-                            'phone_number' => $recipient->phone,
-                            'message' => $message,
-                            'status' => SmsMessage::STATUS_PENDING, // Let callback handle status updates
-                            'provider' => SmsMessage::PROVIDER_AFRO,
-                            'campaign' => $campaign,
-                            'message_id' => $messageId,
-                            'response_data' => $response->json(),
-                            'sent_at' => now(),
-                        ]);
-                    }
-                }
-                
-                Log::info('Bulk SMS sent and records created', [
-                    'phone_count' => count($phoneNumbers),
-                    'sms_records_created' => count($smsMessages),
-                    'provider_message_id' => $messageId,
-                    'campaign' => $campaign
-                ]);
-                
-                return ['success' => true, 'message' => 'Bulk SMS sent successfully', 'sms_messages' => $smsMessages];
-            } else {
-                // Create failed SMS records
-                foreach ($recipients as $recipient) {
-                    if ($recipient->phone) {
-                        $smsMessages[] = SmsMessage::create([
-                            'smsable_id' => $recipient->id,
-                            'smsable_type' => get_class($recipient),
-                            'phone_number' => $recipient->phone,
-                            'message' => $message,
-                            'status' => SmsMessage::STATUS_FAILED,
-                            'provider' => SmsMessage::PROVIDER_AFRO,
-                            'campaign' => $campaign,
-                            'error_message' => 'Bulk API returned unsuccessful response',
-                            'response_data' => $response->json(),
-                        ]);
-                    }
-                }
-                
-                Log::warning('Bulk SMS failed and records created', [
-                    'phone_count' => count($phoneNumbers),
-                    'sms_records_created' => count($smsMessages),
-                    'status' => $response->status()
-                ]);
-                
-                return ['success' => false, 'message' => 'Bulk SMS failed', 'sms_messages' => $smsMessages];
-            }
-        } catch (\Exception $e) {
-            // Create failed SMS records
-            foreach ($recipients as $recipient) {
-                if ($recipient->phone) {
-                    $smsMessages[] = SmsMessage::create([
-                        'smsable_id' => $recipient->id,
-                        'smsable_type' => get_class($recipient),
-                        'phone_number' => $recipient->phone,
-                        'message' => $message,
-                        'status' => SmsMessage::STATUS_FAILED,
-                        'provider' => SmsMessage::PROVIDER_AFRO,
-                        'campaign' => $campaign,
-                        'error_message' => $e->getMessage(),
-                    ]);
-                }
-            }
-            
-            Log::error('Bulk SMS exception and records created', [
-                'phone_count' => count($phoneNumbers),
-                'sms_records_created' => count($smsMessages),
-                'error' => $e->getMessage()
-            ]);
-            
-            return ['success' => false, 'message' => 'Bulk SMS error: ' . $e->getMessage(), 'sms_messages' => $smsMessages];
-        }
-    }
 
 }
 

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Exports\UserExporter;
 use App\Filament\Resources\UserResource\Pages;
 use App\Helpers\SmsSend;
 use App\Jobs\SendBatchSmsJob;
@@ -227,7 +228,7 @@ class UserResource extends Resource
                     ->visible(fn (User $record): bool => !is_null($record->phone)),
             ])
             ->bulkActions([
-               
+                    Tables\Actions\ExportBulkAction::make()->exporter(UserExporter::class),
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\BulkAction::make('send_bulk_sms')
                         ->label('Send Bulk SMS')
