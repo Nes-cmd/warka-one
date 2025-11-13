@@ -29,23 +29,10 @@ class VerifyOtpComponent extends Component
         $this->email    = $authflowData['email'];
         $this->country  = $authflowData['country']; 
 
-        $this->verificationFor = $authflowData['otpIsFor'];
-       
-
-        $intended = session()->get('url.intended');
-        $clientId = null;
-        if ($intended && strpos($intended, 'oauth/authorize') !== false) {
-            $queryParams = [];
-            parse_str(parse_url($intended, PHP_URL_QUERY), $queryParams);
-            $clientId = $queryParams['client_id'] ?? null;
+        if(!$this->country){
+            $this->country = Country::first();
         }
-        $client = null;
-        $options = ['email', 'phone'];
-        if($clientId && $client = \App\Models\Passport\Client::find($clientId)){
-            $options = $client->use_auth_types;
-        }
-        $this->options = $options;
-
+    
         
         if($this->verificationFor === 'must-verify'){
             $this->resend();
