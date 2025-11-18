@@ -5,7 +5,7 @@
 
     <div x-data="{
         authwith : $persist('{{ old('authwith')?old('authwith'):$authwith }}'),
-        resendin : $persist(59),
+        resendin : $persist(89),
         code: ['', '', '', '', '', ''],
         currentIndex: 0,
         
@@ -30,7 +30,7 @@
                     resendButton.disabled = false
                     resendButton.classList.add('bg-primary-50', 'hover:bg-primary-100')
                     resendButton.classList.remove('bg-gray-400', 'cursor-not-allowed')
-                    this.resendin = 60
+                    this.resendin = 90
                 } 
                 else {
                     this.resendin--;
@@ -77,7 +77,7 @@
         },
         
         init(){
-            if(this.resendin < 60){
+            if(this.resendin < 90){
                 this.resetResend(this.authwith == 'phone'?'resendsms':'resendemail', false)
             }
         }
