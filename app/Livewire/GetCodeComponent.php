@@ -48,13 +48,13 @@ class GetCodeComponent extends Component
 
     public function getCode()
     {
-       
         if ($this->authwith == 'phone') {
             $this->validate([
                 'phone' => ['required', 'min:9', 'max:9', $this->otpIsFor == 'register' ? 'unique:users,phone' : 'exists:users,phone']
             ]);
             $fullPhone = $this->selectedCountry->dial_code . $this->phone;
             $status = SendVerification::make()->via('sms')->receiver($fullPhone)->send();
+            
         }
         if ($this->authwith == 'email') {
             $this->validate([

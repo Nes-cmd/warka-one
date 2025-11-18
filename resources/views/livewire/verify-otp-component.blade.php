@@ -10,11 +10,11 @@
         currentIndex: 0,
         
         resetResend(id, shouldSend = true) {
-            if(id == 'resendsms' && shouldSend && $wire){
-                $wire.resendSMS();
+            if(id == 'resendsms' && shouldSend && this.$wire){
+                this.$wire.resendSMS();
             }
-            if(id == 'resendemail' && shouldSend && $wire){
-                $wire.resendEmail();
+            if(id == 'resendemail' && shouldSend && this.$wire){
+                this.$wire.resendEmail();
             }
 
             var resendButton = document.getElementById(id)
@@ -60,8 +60,8 @@
             }
             
             // Update Livewire model
-            if ($wire) {
-            $wire.verificationCode = this.code.join('');
+            if (this.$wire) {
+            this.$wire.verificationCode = this.code.join('');
             }
         },
         

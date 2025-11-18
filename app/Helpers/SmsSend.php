@@ -11,23 +11,41 @@ use Illuminate\Support\Facades\Log;
 class SmsSend {
     public static function send(string $to, string $message, $smsable = null, string $campaign = null, string $via = 'afro'){
         // Create SMS record first
-        $smsMessage = self::createSmsRecord($to, $message, $smsable, $campaign, $via);
-
+        if($smsable){
+            $smsMessage = self::createSmsRecord($to, $message, $smsable, $campaign, $via);
+        }
+       
         try {
             // Send SMS
             if($via == 'afro'){
                 $response = self::sendThroughAfro($to, $message);
+               
             } else {
                 $response = self::sendThroughFaris($to, $message);
             }
             
             // Update record based on response
-            self::updateSmsRecord($smsMessage, $response);
+            if($smsable){
+                self::updateSmsRecord($smsMessage, $response);
+            }
+            else{
+                return $response;
+            }
         } catch (Exception $e) {
-            self::updateSmsRecordOnError($smsMessage, $e);
+            if($smsable){
+                self::updateSmsRecordOnError($smsMessage, $e);
+            }
+            else{
+                return false;
+            }
         }
 
-        return $smsMessage;
+        if($smsable){
+            return $smsMessage;
+        }
+        else{
+            return true;
+        }
     }
 
     /**

@@ -8,6 +8,8 @@ use App\Helpers\SmsSend;
 use Exception;
 use Illuminate\Support\Facades\Mail;
 
+use function Laravel\Prompts\info;
+
 class SendVerification {
 
     protected $via;
@@ -28,8 +30,9 @@ class SendVerification {
         $this->receiver = $to;
         return $this;
     }
-    public function send() {
 
+    public function send() {
+       
         $previos = ModelsVerificationCode::where('candidate', $this->receiver)->latest()->first();
         
         if($previos && $previos->expire_at->gte(now())){
@@ -38,13 +41,15 @@ class SendVerification {
 
         $verificationCode = rand(100000, 999999);
         $status = false;
-        
+       
         try {
         if($this->via == 'mail'){
             $status = Mail::to($this->receiver)->send(new VerificationCode($verificationCode));
         }
         elseif($this->via == 'sms'){
             $status = SmsSend::send($this->receiver, "Your verification code is $verificationCode");
+           
+           
             }
         } catch (Exception $e) {
             \Illuminate\Support\Facades\Log::error('SendVerification error: ' . $e->getMessage());

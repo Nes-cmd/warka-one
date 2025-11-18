@@ -41,7 +41,6 @@ class VerifyOtpComponent extends Component
        
     }
     public function resend(){
-        
         $identifier = auth()->id() ?? request()->ip();
         $key = 'authflow/must-verify:' . $identifier;
          if (RateLimiter::tooManyAttempts($key, 5)) { // 3 attempts per minute
@@ -57,6 +56,7 @@ class VerifyOtpComponent extends Component
         }
     }
     public function resendSMS(){
+        info("resendSMS was hit at backend");
         $fullPhone = $this->country->dial_code . $this->phone;
         SendVerification::make()->via('sms')->receiver($fullPhone)->send();
     }

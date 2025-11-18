@@ -25,6 +25,9 @@
             document.documentElement.classList.remove('dark')
         }
     </script>
+
+    
+    @livewireStyles
 </head>
 
 <body class="font-sans antialiased bg-white dark:bg-[#0F172A]">
@@ -45,6 +48,8 @@
             {{ $slot }}
         </main>
     </div>
+
+   
 </body>
 
 </html>
