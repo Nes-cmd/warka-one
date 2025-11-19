@@ -29,11 +29,11 @@ class VerifyOtpComponent extends Component
         $this->phone    = $authflowData['phone']; 
         $this->email    = $authflowData['email'];
         $this->country  = $authflowData['country']; 
+        $this->verificationFor = $authflowData['otpIsFor'];
 
         if(!$this->country){
             $this->country = Country::first();
         }
-    
         
         if($this->verificationFor === 'must-verify'){
             $this->resend();
@@ -56,7 +56,6 @@ class VerifyOtpComponent extends Component
         }
     }
     public function resendSMS(){
-        info("resendSMS was hit at backend");
         $fullPhone = $this->country->dial_code . $this->phone;
         SendVerification::make()->via('sms')->receiver($fullPhone)->send();
     }
@@ -85,7 +84,6 @@ class VerifyOtpComponent extends Component
                             ->where('expire_at', '>=', now())
                             ->latest()
                             ->first();
-
 
         if($verification){
             
