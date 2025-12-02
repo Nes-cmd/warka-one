@@ -56,6 +56,7 @@ class NewPasswordController extends Controller
             $user = $authflowData['authwith'] == 'email'?User::where('email', $candidate)->first() : User::where('phone',$authflowData['phone'])->first();
 
             $user->password = Hash::make($request->password);
+            $user->must_reset_password = false; // Clear must_reset_password flag when user resets password voluntarily
             $user->save();
             
             $verification->delete();

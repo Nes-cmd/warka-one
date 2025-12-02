@@ -32,6 +32,7 @@ class User extends Authenticatable implements FilamentUser
         'country_id',
         'phone_verified_at',
         'email_verified_at',
+        'must_reset_password',
     ];
 
     /**
@@ -53,6 +54,7 @@ class User extends Authenticatable implements FilamentUser
         'email_verified_at' => 'datetime',
         'phone_verified_at' => 'datetime',
         'password'          => 'hashed',
+        'must_reset_password' => 'boolean',
     ];
 
     protected $primaryKey = 'id';

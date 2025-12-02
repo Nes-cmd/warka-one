@@ -22,6 +22,7 @@ class PasswordController extends Controller
 
         $request->user()->update([
             'password' => Hash::make($validated['password']),
+            'must_reset_password' => false, // Clear must_reset_password flag when user changes password voluntarily
         ]);
 
         return back()->with('status', 'password-updated');

@@ -144,6 +144,11 @@ class AuthenticatedSessionController extends Controller
             //     return redirect()->route('must-verify-otp');
             // }
             
+            // Check if user must reset password
+            if ($user->must_reset_password) {
+                return redirect()->route('password.must-reset');
+            }
+            
             return redirect()->intended(RouteServiceProvider::HOME);
         }
 
