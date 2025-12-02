@@ -35,7 +35,7 @@ class NewPasswordController extends Controller
     {
         $request->validate([
             // 'email' => ['required', 'email'],
-            'password' => ['required', 'confirmed', RulesPassword::min(6)->letters()->numbers()->uncompromised()],
+            'password' => ['required', 'confirmed', RulesPassword::min(6)->letters()->numbers()->uncompromised(10)],
         ]);
 
         DB::beginTransaction();
