@@ -16,7 +16,12 @@
         "vite": "^5.0.0"
     },
     "dependencies": {
+        "@alpinejs/csp": "^3.13.5",
         "@alpinejs/persist": "^3.13.3",
-        "@alpinejs/csp": "^3.13.5"
+        "@inertiajs/react": "^2.3.13",
+        "@vitejs/plugin-react": "^5.1.2",
+        "react": "^19.2.4",
+        "react-dom": "^19.2.4",
+        "ziggy-js": "^2.6.0"
     }
 }

@@ -1,0 +1,126 @@
+import React from 'react';
+import { Head, Link } from '@inertiajs/react';
+import HomeLayout from '../Layouts/HomeLayout';
+
+export default function Welcome() {
+    return (
+        <HomeLayout title="Welcome">
+            <main>
+                <section className="flex w-full flex-col items-center">
+                    <div className="max-w-5xl mx-auto py-10">
+                        <h1 className="text-slate-900 font-extrabold text-4xl sm:text-5xl lg:text-6xl tracking-tight text-center dark:text-white">
+                            Make your life easier With Kerlab's <span className="text-secondary"> secure,</span> Reliable and Fast Technology
+                        </h1>
+                        <p className="mt-6 text-lg text-slate-600 text-center max-w-3xl mx-auto dark:text-slate-400">
+                            Welcome to Ker Labs, where we revolutionize the way you manage your digital world. Imagine having one account to rule them all—a centralized hub that simplifies your online experience and brings together a multitude of solutions. With our Single Sign-On (SSO) technology, we provide a seamless and efficient way to access and manage all your digital resources from a single personality.
+                        </p>
+                    </div>
+                    <a href="#services" className="h-12 flex items-center bg-primary hover:bg-primary-500 dark:bg-primary-500 hover:dark:bg-primary-600 cursor-pointer font-semibold text-gray-50 rounded-lg justify-center px-6 w-72">
+                        Our Products
+                    </a>
+                </section>
+
+                <section className="max-w-6xl mx-auto my-10 md:px-10 md:mb-40 mb-20">
+                    <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-0 justify-center lg:justify-end relative">
+                        <div className="rounded-xl dark:bg-gray-300 bg-white/30 flex justify-center">
+                            <img src="/assets/image/insurance.svg" alt="home hero" className="w-2/3" />
+                        </div>
+                        <div className="lg:absolute lg:top-1/2 lg:-translate-y-1/2 lg:left-0 xl:left-[5%] bg-white dark:bg-[#1E293B] shadow-sm py-4 w-full md:w-2/3 lg:w-[470px] rounded-xl flex flex-col items-center gap-2">
+                            <div className="w-20 h-20 rounded-full">
+                                <img src="/assets/image/Preview.svg" alt="" className="dark:invert-0" />
+                            </div>
+                            <p className="mt-6 text-lg text-slate-600 text-center max-w-3xl mx-auto dark:text-slate-400">
+                                Gone are the days of juggling multiple usernames and passwords for various platforms and services. With Ker Labs, you can create one account and unlock a world of possibilities.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <div className="max-w-5xl mx-auto py-10">
+                        <h1 className="text-slate-900 font-extrabold text-3xl sm:text-4xl lg:text-5xl tracking-tight text-center dark:text-white">
+                            Your Passport to Seamless Access Across Multiple Platforms with Our <span className="text-secondary"> SSO</span> Login!
+                        </h1>
+                        <p className="mt-6 text-lg text-slate-600 text-center max-w-3xl mx-auto dark:text-slate-400">
+                            The convenience of having everything in one place cannot be overstated. Imagine effortlessly switching between different services without the need to remember countless login credentials
+                        </p>
+                    </div>
+                </section>
+                
+                <section id="services" className="w-full lg:px-20 md:px-10 flex flex-col items-center my-10">
+                    <h1 className="text-slate-900 font-extrabold text-3xl sm:text-4xl lg:text-5xl tracking-tight dark:text-white my-10">
+                        Our Products    
+                    </h1>
+                    <div className="grid lg:grid-cols-2 grid-cols-1 gap-10 my-5">
+                        <div className="flex items-center flex-col gap-4">
+                            <div className="rounded-full text-secondary-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-16 h-16">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+                                </svg>
+                            </div>
+                            <h1 className="text-slate-900 font-extrabold text-xl sm:text-2xl lg:text-2xl tracking-tight dark:text-secondary-400">
+                                <a href="https://wallet.kertech.co">Kiray Pays</a>
+                            </h1>
+                            <div className="rounded-lg dark:bg-[#1E293B] bg-white/40 w-full p-4">
+                                <a href="https://wallet.kertech.co" className="mt-6 text-lg text-slate-600 hover:text-secondary-300 text-center max-w-3xl mx-auto dark:text-slate-400">
+                                    With Kiray Pays, managing your online money has never been easier. Say goodbye to the hassle of carrying physical cash or fumbling with multiple payment methods. Our secure and user-friendly platform allows you to effortlessly make online transactions, send and receive funds, and keep track of your financial activities—all from the convenience of one centralized ker-one account.
+                                </a>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center flex-col gap-4">
+                            <div className="rounded-full text-secondary-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-16 h-16">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205 3 1m1.5.5-1.5-.5M6.75 7.364V3h-3v18m3-13.636 10.5-3.819" />
+                                </svg>
+                            </div>
+                            <h1 className="text-slate-900 font-extrabold text-xl sm:text-2xl lg:text-2xl tracking-tight dark:text-secondary-400">
+                                <a href="https://betoch.kertech.co">Betoch System</a>
+                            </h1>
+                            <div className="rounded-lg dark:bg-[#1E293B] bg-white/40 w-full p-4">
+                                <a href="https://betoch.kertech.co" className="mt-6 text-lg hover:text-secondary-300 text-slate-600 text-center max-w-3xl mx-auto dark:text-slate-400">
+                                    Introducing Ker Apartment Management System, With Ker PMS, say goodbye to manual paperwork and time-consuming processes. Our user-friendly platform simplifies tasks such as rent collection, maintenance requests, communication with residents, and tracking of financials. From online rent payments to streamlined communication, Ker AMS is your digital hub for efficient apartment management.
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section className="md:px-10 lg:px-20 w-full my-10">
+                    <div className="w-full p-4 text-center bg-transparent border-b dark:border-gray-700 border-gray-300 rounded-lg shadow sm:p-8 dark:bg-transparent">
+                        <h5 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">Manage your apartment with ease</h5>
+                        <p className="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
+                            Stay up to date and move work forward with <span className="text-secondary-400">Betoch Apt Mng</span> on iOS & Android. Download the app today.
+                        </p>
+                        <div className="items-center justify-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4 rtl:space-x-reverse">
+                            <a href="https://play.google.com/store/apps/details?id=com.kertech.betoch" className="w-full sm:w-auto bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700">
+                                <svg className="me-3 w-7 h-7" ariaHidden="true" focusable="false" dataPrefix="fab" dataIcon="google-play" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                    <path fill="currentColor" d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"></path>
+                                </svg>
+                                <div className="text-left rtl:text-right">
+                                    <div className="mb-1 text-xs">Get in on</div>
+                                    <div className="-mt-1 font-sans text-sm font-semibold">Google Play</div>
+                                </div>
+                            </a>
+
+                            <a href="#" className="w-full sm:w-auto bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700">
+                                <svg className="me-3 w-7 h-7" ariaHidden="true" focusable="false" dataPrefix="fab" dataIcon="apple" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                                    <path fill="currentColor" d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"></path>
+                                </svg>
+                                <div className="text-left rtl:text-right">
+                                    <div className="mb-1 text-xs">Download on the</div>
+                                    <div className="-mt-1 font-sans text-sm font-semibold">Mac App Store</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Background gradient elements */}
+                <div className="absolute top-20 left-1/3 w-32 md:w-52 h-[350px] md:h-[500px] lg:h-[900px] rotate-45 bg-gradient-to-t from-secondary-500/40 to-primary-400/40 -z-10 blur-3xl"></div>
+                <div className="absolute top-[1200px] left-1/4 w-32 md:w-52 h-[300px] md:h-[600px] lg:h-[900px] rotate-45 bg-gradient-to-t from-primary-500/40 to-primary-100/40 z-10 blur-3xl"></div>
+            </main>
+        </HomeLayout>
+    );
+}
+

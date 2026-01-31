@@ -31,7 +31,7 @@
     @livewireStyles
     @livewireScripts
     
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css',])
 </head>
 
 <body class="font-sans text-gray-900 dark:bg-[#0F172A] bg-[#EAE9F0] antialiased h-screen overflow-hidden justify-center items-center flex">
