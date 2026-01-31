@@ -75,7 +75,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'storeReact'])->name('v2.register.store');
     
     // React Auth Routes with throttle:10,1 (10 attempts per 1 minutes) - matching auth.php
-    Route::middleware('throttle:10,1')->group(function () {
+    // Route::middleware('throttle:10,1')->group(function () {
         // React Authflow Routes
         Route::prefix('authflow')->group(function () {
             Route::get('/get-otp', [\App\Http\Controllers\VerificationController::class, 'indexReact'])->name('v2.authflow.get-otp');
@@ -83,7 +83,8 @@ Route::middleware('guest')->group(function () {
             Route::get('/verify', [\App\Http\Controllers\VerificationController::class, 'verifyViewReact'])->name('v2.authflow.verify');
             Route::post('/verify', [\App\Http\Controllers\VerificationController::class, 'verifyReact'])->name('v2.authflow.verify.store');
             Route::post('/resend-otp', [\App\Http\Controllers\VerificationController::class, 'resendOtpReact'])->name('v2.authflow.resend-otp');
-        }); 
+            // Route::middleware('auth')->get('/must-verify', [\App\Http\Controllers\VerificationController::class, 'mustVerifyReact'])->name('v2.must-verify-otp');
+        // }); 
         
         // React Login Routes (at root level for SSO compatibility, v2. route name for consistency)
         Route::get('/login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'createReact'])->name('v2.login');
@@ -140,6 +141,10 @@ Route::middleware(['auth', 'must-reset-password', 'verified-auth'])->group(funct
     Route::post('/clients/{client}/regenerate-secret', [OAuthClientController::class, 'regenerateSecretReact'])->name('v2.clients.regenerate-secret');
 });
 
+Route::prefix('authflow')->group(function () {
+    Route::middleware(['auth', 'throttle:10,1'])->get('must-verify', [VerificationController::class, 'mustVerifyReact'])->name('v2.must-verify-otp');
+});
+
 // Old Blade Routes - v1 prefix (route names remain unchanged)
 Route::prefix('v1')->group(function () {
     Route::middleware(['auth', 'throttle:10,5'])->get('authflow/must-verify', [VerificationController::class, 'mustVerify'])->name('must-verify-otp');
@@ -175,7 +180,7 @@ Route::get('logout-sso-client', function (Request $request) {
 });
 
 
-// require __DIR__ . '/auth.php';
+require __DIR__ . '/auth.php';
 
 
 // Old Blade Routes - v1 prefix (route names remain unchanged)

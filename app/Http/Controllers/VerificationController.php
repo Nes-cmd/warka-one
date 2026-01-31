@@ -51,6 +51,72 @@ class VerificationController extends Controller
     }
 
     /**
+     * Display the must-verify OTP view for React/Inertia
+     */
+    public function mustVerifyReact(Request $request)
+    {
+        $user = auth()->user();
+
+        $intendedFallback = $request->fallback;
+        
+        // Check if already verified
+        if($user->phone && $user->phone_verified_at && $request->verify == 'phone'){
+            return $intendedFallback ? redirect($intendedFallback . '?hash=' . $user->id) : back();
+        }
+
+        if($user->email && $user->email_verified_at && $request->verify == 'email'){
+            return $intendedFallback ? redirect($intendedFallback . '?hash=' . $user->id) : back();
+        }
+        
+        // Get country data
+        $countryModel = Country::find($user->country_id);
+        $country = $countryModel ? [
+            'id' => $countryModel->id,
+            'name' => $countryModel->name,
+            'dial_code' => $countryModel->dial_code,
+            'country_code' => $countryModel->country_code,
+            'phone_length' => $countryModel->phone_length,
+            'flag_url' => $countryModel->flag_url ? (str_starts_with($countryModel->flag_url, 'http') ? $countryModel->flag_url : asset($countryModel->flag_url)) : asset('flags/et.svg'),
+        ] : null;
+        
+        $verifyData = [
+            'authwith' => $request->verify,
+            'email'    => $user->email,
+            'otpIsFor' => 'must-verify',
+            'phone'    => $user->phone,
+            'country'  => $country,
+            'country_id' => $user->country_id,
+            'fallback' => $intendedFallback
+        ];
+
+        session()->put('authflow', $verifyData);
+        
+        // Auto-send OTP for must-verify
+        try {
+            $authwith = $request->verify;
+            if ($authwith == 'phone' && $countryModel) {
+                $fullPhone = $countryModel->dial_code . $user->phone;
+                \App\Helpers\SendVerification::make()->via('sms')->receiver($fullPhone)->send();
+            } else if ($authwith == 'email') {
+                \App\Helpers\SendVerification::make()->via('mail')->receiver($user->email)->send();
+            }
+        } catch (\Exception $e) {
+            Log::error("Failed to auto-send OTP for must-verify: " . $e->getMessage());
+        }
+
+        $resendin = 90; // Default countdown
+
+        return Inertia::render('VerifyOtp', [
+            'authwith' => $request->verify,
+            'email' => $user->email,
+            'phone' => $user->phone,
+            'country' => $country,
+            'verificationFor' => 'must-verify',
+            'resendin' => $resendin,
+        ]);
+    }
+
+    /**
      * Show phone verification page for profile update
      */
     public function verifyPhone()

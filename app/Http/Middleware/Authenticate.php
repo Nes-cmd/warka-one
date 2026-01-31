@@ -26,6 +26,6 @@ class Authenticate extends Middleware
         }
         
         // Default to v1 login for Blade routes
-        return $request->expectsJson() ? null : route('v1.login');
+        return $request->expectsJson() ? null : route('v2.login');
     }
 }

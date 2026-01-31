@@ -7,6 +7,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class VerifyAuth
 {
@@ -30,21 +31,9 @@ class VerifyAuth
             else{
                 return $next($request);
             }
-
-            return $request->expectsJson()?null : redirect()->route('must-verify-otp', ['verify' => $verify]);
+            return Inertia::location(route('v2.must-verify-otp', ['verify' => $verify]));
         }
 
-        // For OAuth authorization requests, use React login (v2.login)
-        if ($request->is('oauth/authorize') || $request->fullUrlIs('*oauth/authorize*')) {
-            return $request->expectsJson() ? null : redirect()->route('v2.login');
-        }
-        
-        // Check if coming from React routes (not /v1 or /admin)
-        $path = $request->path();
-        if (!str_starts_with($path, 'v1/') && !str_starts_with($path, 'admin/')) {
-            return $request->expectsJson() ? null : redirect()->route('v2.login');
-        }
-
-        return $request->expectsJson() ? null : redirect()->route('v1.login');
+        return redirect()->route('v2.login');
     }
 }

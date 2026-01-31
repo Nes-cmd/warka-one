@@ -23,28 +23,60 @@ export default function Login({
     const [selectedCountry, setSelectedCountry] = useState(initialSelectedCountry);
     const [countryDropdownOpen, setCountryDropdownOpen] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const [otpRequested, setOtpRequested] = useState(false);
-    const [countdown, setCountdown] = useState(60);
-    const [authTypeMessage, setAuthTypeMessage] = useState('');
-    const [authTypeMessageType, setAuthTypeMessageType] = useState('');
     const [otpMessage, setOtpMessage] = useState('');
     const [otpMessageType, setOtpMessageType] = useState('');
     
     const countryDropdownRef = useRef(null);
     const numberofoptions = options?.length || 2;
 
+    // Get countdown from localStorage or use default
+    const getStoredCountdown = () => {
+        const stored = localStorage.getItem('login_otp_countdown');
+        if (stored) {
+            try {
+                const parsed = JSON.parse(stored);
+                const elapsed = Math.floor((Date.now() - parsed.timestamp) / 1000);
+                const remaining = Math.max(0, parsed.countdown - elapsed);
+                return remaining > 0 ? remaining : 60;
+            } catch (e) {
+                return 60;
+            }
+        }
+        return 60;
+    };
+    
+    const initialCountdown = getStoredCountdown();
+    const [countdown, setCountdown] = useState(initialCountdown);
+    const [otpRequested, setOtpRequested] = useState(initialCountdown < 60);
+    const [authTypeMessage, setAuthTypeMessage] = useState('');
+    const [authTypeMessageType, setAuthTypeMessageType] = useState('');
+
     // Persist authWith to localStorage
     useEffect(() => {
         localStorage.setItem('authwith', authWith);
     }, [authWith]);
 
-    // Handle countdown timer
+    // Handle countdown timer and persist to localStorage
     useEffect(() => {
         if (otpRequested && countdown > 0) {
+            // Store countdown in localStorage
+            localStorage.setItem('login_otp_countdown', JSON.stringify({
+                countdown: countdown,
+                timestamp: Date.now()
+            }));
+            
             const timer = setTimeout(() => {
                 setCountdown(countdown - 1);
             }, 1000);
             return () => clearTimeout(timer);
+        } else if (countdown === 0) {
+            // Countdown finished, reset and clear localStorage
+            setOtpRequested(false);
+            setCountdown(60);
+            localStorage.removeItem('login_otp_countdown');
+        } else if (!otpRequested && countdown === 60) {
+            // Clear stored countdown when not requested
+            localStorage.removeItem('login_otp_countdown');
         }
     }, [otpRequested, countdown]);
 
@@ -118,6 +150,11 @@ export default function Login({
             if (result.success) {
                 setOtpRequested(true);
                 setCountdown(60);
+                // Store countdown in localStorage
+                localStorage.setItem('login_otp_countdown', JSON.stringify({
+                    countdown: 60,
+                    timestamp: Date.now()
+                }));
                 setOtpMessage('Verification code sent successfully');
                 setOtpMessageType('success');
                 setAuthTypeMessage('');
@@ -148,8 +185,11 @@ export default function Login({
     const toggleAuthWith = (newAuthWith) => {
         setAuthWith(newAuthWith);
         setOtpRequested(false);
+        setCountdown(60);
         setAuthTypeMessage('');
         setOtpMessage('');
+        // Clear countdown when switching auth type
+        localStorage.removeItem('login_otp_countdown');
         reset('email', 'phone', 'password', 'otp');
     };
 
@@ -185,7 +225,7 @@ export default function Login({
 
                 {/* Email Address */}
                 {(authWith === 'email' || (numberofoptions === 1 && options[0] === 'email')) && (
-                    <div className="space-y-1">
+                    <div className="space-y-1 mb-4">
                         <div className="flex items-center justify-between">
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 Email Address
@@ -200,15 +240,28 @@ export default function Login({
                                 </button>
                             )}
                         </div>
-                        <input
-                            id="email"
-                            name="email"
-                            type="email"
-                            value={data.email}
-                            onChange={(e) => setData('email', e.target.value)}
-                            className="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                            placeholder="Enter your email address"
-                        />
+                        <div className="relative">
+                            <input
+                                id="email"
+                                name="email"
+                                type="email"
+                                value={data.email}
+                                onChange={(e) => setData('email', e.target.value)}
+                                className="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                                placeholder="Enter your email address"
+                            />
+                            {/* Get Code Button - Only for OTP method, floating above input */}
+                            {authMethod === 'otp' && (
+                                <button
+                                    type="button"
+                                    onClick={requestLoginOTP}
+                                    disabled={otpRequested && countdown > 0}
+                                    className="absolute top-1/2 -translate-y-1/2 right-2 px-3 py-2 flex items-center text-xs font-medium bg-primary-200 dark:bg-primary-900/40 backdrop-blur-sm border border-primary-200/50 dark:border-primary-700/50 text-primary-700 dark:text-primary-300 hover:bg-primary-100/90 dark:hover:bg-primary-900/60 disabled:bg-gray-100/90 dark:disabled:bg-gray-800/90 disabled:text-gray-400 dark:disabled:text-gray-500 disabled:cursor-not-allowed transition-all duration-200 rounded-md shadow-md hover:shadow-lg z-10"
+                                >
+                                    {otpRequested && countdown > 0 ? `Resend (${countdown}s)` : 'Get Code'}
+                                </button>
+                            )}
+                        </div>
                         {errors.email && (
                             <p className="mt-2 text-sm text-red-600 dark:text-red-400">{errors.email}</p>
                         )}
@@ -279,18 +332,43 @@ export default function Login({
                                 )}
                             </div>
 
-                            <input
-                                id="phone"
-                                name="phone"
-                                type="tel"
-                                value={data.phone}
-                                onChange={(e) => setData('phone', e.target.value)}
-                                className="block w-full rounded-r-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                                placeholder="Enter your phone number"
-                            />
+                            <div className="relative flex-1">
+                                <input
+                                    style={{height:'45px'}}
+                                    id="phone"
+                                    name="phone"
+                                    type="tel"
+                                    value={data.phone}
+                                    onChange={(e) => setData('phone', e.target.value)}
+                                    className="block w-full rounded-r-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                                    placeholder="Enter your phone number"
+                                />
+                                {/* Get Code Button - Only for OTP method, floating above input */}
+                                {authMethod === 'otp' && (
+                                    <button
+                                        type="button"
+                                        onClick={requestLoginOTP}
+                                        disabled={otpRequested && countdown > 0}
+                                        className="absolute top-1/2 -translate-y-1/2 right-2 px-3 py-2 flex items-center text-xs font-medium bg-primary-200 dark:bg-primary-900/40 backdrop-blur-sm border border-primary-200/50 dark:border-primary-700/50 text-primary-700 dark:text-primary-300 hover:bg-primary-100/90 dark:hover:bg-primary-900/60 disabled:bg-gray-100/90 dark:disabled:bg-gray-800/90 disabled:text-gray-400 dark:disabled:text-gray-500 disabled:cursor-not-allowed transition-all duration-200 rounded-md shadow-md hover:shadow-lg z-10"
+                                    >
+                                        {otpRequested && countdown > 0 ? `Resend(${countdown}s)` : 'Get Code'}
+                                    </button>
+                                )}
+                            </div>
                         </div>
                         {errors.phone && (
                             <p className="mt-2 text-sm text-red-600 dark:text-red-400">{errors.phone}</p>
+                        )}
+
+                        {/* Authentication Type Status Messages */}
+                        {authTypeMessage && (
+                            <div className={`text-sm p-3 rounded-lg ${
+                                authTypeMessageType === 'success' 
+                                    ? 'bg-green-50 text-green-700 border border-green-200 dark:bg-green-900/20 dark:text-green-400' 
+                                    : 'bg-red-50 text-red-700 border border-red-200 dark:bg-red-900/20 dark:text-red-400'
+                            }`}>
+                                {authTypeMessage}
+                            </div>
                         )}
                     </div>
                 )}
@@ -335,49 +413,36 @@ export default function Login({
                     </div>
                 )}
 
-                {/* OTP Authentication */}
-                {authMethod === 'otp' && (
-                    <div className="space-y-4">
-                        <div className="space-y-2">
-                            <label htmlFor="otp" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                Verification Code
-                            </label>
-                            <div className="flex space-x-3">
-                                <input
-                                    id="otp"
-                                    name="otp"
-                                    type="text"
-                                    value={data.otp}
-                                    onChange={(e) => setData('otp', e.target.value)}
-                                    className="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                                    placeholder="Enter verification code"
-                                    autoComplete="one-time-code"
-                                />
-                                
-                                <button
-                                    type="button"
-                                    onClick={requestLoginOTP}
-                                    disabled={otpRequested && countdown > 0}
-                                    className="px-4 py-2 whitespace-nowrap bg-primary-50 border border-primary-200 text-primary-700 rounded-lg hover:bg-primary-100 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors duration-200 text-sm font-medium"
-                                >
-                                    {otpRequested && countdown > 0 ? `Resend in ${countdown}s` : 'Get Code'}
-                                </button>
-                            </div>
-                            {errors.otp && (
-                                <p className="mt-2 text-sm text-red-600 dark:text-red-400">{errors.otp}</p>
-                            )}
+                {/* OTP Authentication - Verification Code Input */}
+                {authMethod === 'otp' && otpRequested && (
+                    <div className="space-y-2 mt-4">
+                        <label htmlFor="otp" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Verification Code
+                        </label>
+                        <input
+                            id="otp"
+                            name="otp"
+                            type="text"
+                            value={data.otp}
+                            onChange={(e) => setData('otp', e.target.value)}
+                            className="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                            placeholder="Enter verification code"
+                            autoComplete="one-time-code"
+                        />
+                        {errors.otp && (
+                            <p className="mt-2 text-sm text-red-600 dark:text-red-400">{errors.otp}</p>
+                        )}
 
-                            {/* OTP Status Messages */}
-                            {otpMessage && (
-                                <div className={`text-sm p-3 rounded-lg ${
-                                    otpMessageType === 'success' 
-                                        ? 'bg-green-50 text-green-700 border border-green-200 dark:bg-green-900/20 dark:text-green-400' 
-                                        : 'bg-red-50 text-red-700 border border-red-200 dark:bg-red-900/20 dark:text-red-400'
-                                }`}>
-                                    {otpMessage}
-                                </div>
-                            )}
-                        </div>
+                        {/* OTP Status Messages */}
+                        {otpMessage && (
+                            <div className={`text-sm p-3 rounded-lg ${
+                                otpMessageType === 'success' 
+                                    ? 'bg-green-50 text-green-700 border border-green-200 dark:bg-green-900/20 dark:text-green-400' 
+                                    : 'bg-red-50 text-red-700 border border-red-200 dark:bg-red-900/20 dark:text-red-400'
+                            }`}>
+                                {otpMessage}
+                            </div>
+                        )}
                     </div>
                 )}
 
@@ -425,15 +490,17 @@ export default function Login({
 
                 {/* Links Section */}
                 <div className="space-y-4 pt-6">
-                    {/* Forgot Password */}
-                    <div className="text-center">
-                        <Link
-                            href={route('v2.password.request')}
-                            className="text-sm text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 font-medium"
-                        >
-                            Forgot your password?
-                        </Link>
-                    </div>
+                    {/* Forgot Password - Only show for password-based authentication */}
+                    {authMethod === 'password' && (
+                        <div className="text-center">
+                            <Link
+                                href={route('v2.password.request')}
+                                className="text-sm text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 font-medium"
+                            >
+                                Forgot your password?
+                            </Link>
+                        </div>
+                    )}
 
                     {/* Sign Up */}
                     {registrationEnabled && (

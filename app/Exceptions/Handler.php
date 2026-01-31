@@ -47,6 +47,14 @@ class Handler extends ExceptionHandler
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
+        // For Filament/admin routes, let Filament handle its own authentication
+        // Filament will redirect to its own login page
+        if ($request->is('admin*') || $request->is('filament*')) {
+            return $request->expectsJson()
+                ? response()->json(['message' => $exception->getMessage()], 401)
+                : redirect()->guest('/admin/login');
+        }
+        
         // For OAuth authorization requests, always redirect to React login (v2.login)
         // External applications should use the React login page
         if ($request->is('oauth/authorize') || $request->fullUrlIs('*oauth/authorize*')) {
