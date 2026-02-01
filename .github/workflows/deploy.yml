@@ -38,8 +38,14 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd ${{ secrets.SERVER_PROJECT_PATH }}
+            set -e
+            cd /home/kertecgi/kerone
+            echo "Pulling latest code..."
+            git fetch origin
+            git reset --hard origin/main
+            echo "Installing backend deps..."
             composer install --no-dev --optimize-autoloader
+
+            echo "Running Laravel optimizations..."
             php artisan optimize:clear
             php artisan migrate --force
-            php artisan queue:restart
