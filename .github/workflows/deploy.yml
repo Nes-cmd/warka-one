@@ -11,25 +11,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Only include Node.js related steps for assets
-      - name: Install NPM Dependencies
-        run: npm ci
+      # # Only include Node.js related steps for assets
+      # - name: Install NPM Dependencies
+      #   run: npm ci
         
-      - name: Build assets
-        run: npm run build
+      # - name: Build assets
+      #   run: npm run build
 
-      - name: FTP Deploy
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ${{ secrets.FTP_SERVER_DIR }}/
-          exclude: |
-            **/node_modules/**
-            .env
-            .env.example
-            **vendor/**
+      # - name: FTP Deploy
+      #   uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      #   with:
+      #     server: ${{ secrets.FTP_SERVER }}
+      #     username: ${{ secrets.FTP_USERNAME }}
+      #     password: ${{ secrets.FTP_PASSWORD }}
+      #     server-dir: ${{ secrets.FTP_SERVER_DIR }}/
+      #     exclude: |
+      #       **/node_modules/**
+      #       .env
+      #       .env.example
+      #       **vendor/**
             
       - name: SSH into server and run post-deployment commands
         uses: appleboy/ssh-action@master
