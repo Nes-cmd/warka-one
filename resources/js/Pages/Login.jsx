@@ -323,7 +323,7 @@ export default function Login({
                                                 }}
                                                 className="flex items-center w-full px-3 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-600 first:rounded-t-lg last:rounded-b-lg"
                                             >
-                                                <img className="w-5 h-5 mr-3" src={country.flag_url ? `/storage/${country.flag_url}` : '/flags/et.svg'} alt="" />
+                                                <img className="w-5 h-5 mr-3" src={country.flag_url ? `/${country.flag_url}` : '/flags/et.svg'} alt="" />
                                                 <span className="font-medium">{country.dial_code}</span>
                                                 <span className="ml-2 text-gray-500 dark:text-gray-400">{country.name}</span>
                                             </button>
