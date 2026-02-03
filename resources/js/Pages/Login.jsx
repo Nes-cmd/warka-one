@@ -50,6 +50,7 @@ export default function Login({
     const [otpRequested, setOtpRequested] = useState(initialCountdown < 60);
     const [authTypeMessage, setAuthTypeMessage] = useState('');
     const [authTypeMessageType, setAuthTypeMessageType] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Persist authWith to localStorage
     useEffect(() => {
@@ -110,10 +111,16 @@ export default function Login({
 
     const submit = (e) => {
         e.preventDefault();
+        setIsSubmitting(true);
         post(route('v2.login.store'), {
             onSuccess: () => {
                 // Reset form on success
+                // Keep isSubmitting true - component will unmount on redirect
                 reset();
+            },
+            onError: () => {
+                // Reset submission state only on error
+                setIsSubmitting(false);
             },
         });
     };
@@ -464,14 +471,14 @@ export default function Login({
                 <div className="pt-2">
                     <button
                         type="submit"
-                        disabled={processing}
+                        disabled={processing || isSubmitting}
                         className={`w-full py-3 flex items-center justify-center text-lg font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 ${
-                            processing 
+                            processing || isSubmitting
                                 ? 'bg-primary-400 cursor-not-allowed' 
                                 : 'bg-primary-600 hover:bg-primary-700'
                         } text-white`}
                     >
-                        {!processing ? (
+                        {!(processing || isSubmitting) ? (
                             <span className="flex items-center justify-center">
                                 <i className="fas fa-sign-in-alt mr-2"></i>
                                 Sign In
