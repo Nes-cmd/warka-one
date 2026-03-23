@@ -84,8 +84,6 @@ class ContentSecurityPolicy
         $scriptSrc = [
             "'self'",
             "'nonce-{$nonce}'",
-            "'unsafe-eval'", // Required for Alpine.js reactivity and Livewire
-            // Trusted CDNs
             "https://cdnjs.cloudflare.com",
             "https://cdn.jsdelivr.net",
         ];
@@ -93,6 +91,8 @@ class ContentSecurityPolicy
         // Add Vite development server support
         if ($isDevelopment) {
             $scriptSrc[] = "http://nes-live.com:5173"; // Vite dev server
+            // Allow eval for development tools like React DevTools and HMR
+            $scriptSrc[] = "'unsafe-eval'";
         }
         
         // Add specific hashes for known inline scripts
