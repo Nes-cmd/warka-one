@@ -102,9 +102,7 @@ class ContentSecurityPolicy
 
         // Style-src: Allow inline styles for Alpine.js and Livewire compatibility
         $styleSrc = [
-            // "'self'",
-            // "'nonce-{$nonce}'",
-            // "'unsafe-inline'", // Required for Alpine.js and Livewire dynamic styles
+            "'self'",
             // Font and style CDNs
             "https://fonts.googleapis.com",
             "https://fonts.bunny.net",
