@@ -19,7 +19,8 @@ class SecurityHeaders
 
         // Add HSTS header for HTTPS requests (and local testing)
         if ($request->secure() || app()->environment('local')) {
-            $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+            // 6 months minimum per security/audit guidance.
+            $response->headers->set('Strict-Transport-Security', 'max-age=15768000; includeSubDomains');
         }
 
         // Additional security headers (as backup to .htaccess)
