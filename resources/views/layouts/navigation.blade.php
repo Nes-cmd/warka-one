@@ -66,7 +66,7 @@
     
 </nav>
 
-<script>
+<script nonce="{{ csp_nonce() }}">
     // Get the user's name
     var username = "{{ Auth::user()->name }}";
 

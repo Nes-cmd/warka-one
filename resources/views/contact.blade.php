@@ -80,7 +80,7 @@
 
     </section>
 
-    <script>
+    <script nonce="{{ csp_nonce() }}">
         // Form submission handling with loading state
         document.getElementById('contactForm').addEventListener('submit', function() {
             const button = document.getElementById('submitBtn');

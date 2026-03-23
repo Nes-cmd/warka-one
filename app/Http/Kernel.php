@@ -40,8 +40,8 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\HandleInertiaRequests::class,
-            // \App\Http\Middleware\ContentSecurityPolicy::class, // Advanced nonce-based CSP
-            // \App\Http\Middleware\SecurityHeaders::class,
+            \App\Http\Middleware\ContentSecurityPolicy::class, // Advanced nonce-based CSP
+            \App\Http\Middleware\SecurityHeaders::class,
         ],
 
         'api' => [

@@ -48,7 +48,7 @@
         </a>
     </div>
 
-    <script>
+    <script nonce="{{ csp_nonce() }}">
         // Auto format and validate code input
         document.getElementById('code').addEventListener('input', function(e) {
             // Remove any non-numeric characters

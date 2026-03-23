@@ -263,7 +263,7 @@
             </form>
         </x-modal>
 
-        <script>
+        <script nonce="{{ csp_nonce() }}">
             // Tab switching functionality
             function showTab(tabName) {
                 // Hide all tabs

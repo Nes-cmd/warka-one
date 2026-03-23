@@ -190,7 +190,7 @@
     </div>
 </section>
 
-<script>
+<script nonce="{{ csp_nonce() }}">
     function toggleNavbar(open) {
         var navbar = document.getElementById("navbar");
         

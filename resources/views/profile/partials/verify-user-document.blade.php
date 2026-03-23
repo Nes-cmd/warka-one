@@ -93,7 +93,7 @@
     </section>
     <!-- </x-modal> -->
 
-    <script>
+    <script nonce="{{ csp_nonce() }}">
         // When the DOM is loaded
         document.getElementById("ID").classList.remove("hidden");
 

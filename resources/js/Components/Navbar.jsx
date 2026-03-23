@@ -138,7 +138,7 @@ export default function Navbar() {
                         About
                     </NavLink>
                     <NavLink href={route('v2.documentation')} active={isActive(route('v2.documentation'))}>
-                        Documentation
+                        Documentation-v2
                     </NavLink>
                     <NavLink href={route('v2.contact')} active={isActive(route('v2.contact'))}>
                         Contact us

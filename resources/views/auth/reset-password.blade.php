@@ -70,7 +70,7 @@
         </div>
     </form>
 
-    <script>
+    <script nonce="{{ csp_nonce() }}">
         function togglePasswordVisibility(inputId, iconId) {
             var passwordInput = document.getElementById(inputId);
             var toggleIcon = document.getElementById(iconId);

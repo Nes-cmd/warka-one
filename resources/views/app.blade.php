@@ -36,7 +36,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.jsx'])
     @inertiaHead
     @viteReactRefresh
-    @routes
+    {!! app('Tighten\Ziggy\BladeRouteGenerator')->generate(null, csp_nonce()) !!}
 
     <script nonce="{{ csp_nonce() }}">
         // On page load or when changing themes, best to add inline in `head` to avoid FOUC

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Str;
 use App\Services\CspHashGenerator;
+use Illuminate\Support\Facades\Vite;
 
 /**
  * Content Security Policy Middleware
@@ -41,6 +42,10 @@ class ContentSecurityPolicy
         
         // Store nonce in request for use in views
         $request->attributes->set('csp_nonce', $nonce);
+        
+        // Tell Laravel/Vite to attach this nonce to generated <script>/<style> tags
+        // (notably React Refresh preamble inline scripts).
+        Vite::useCspNonce($nonce);
         
         $response = $next($request);
 
@@ -88,7 +93,6 @@ class ContentSecurityPolicy
         // Add Vite development server support
         if ($isDevelopment) {
             $scriptSrc[] = "http://nes-live.com:5173"; // Vite dev server
-            $scriptSrc[] = "ws://nes-live.com:5173"; // Vite HMR WebSocket
         }
         
         // Add specific hashes for known inline scripts
@@ -129,11 +133,14 @@ class ContentSecurityPolicy
         }
         // Allow local development server WebSocket connections
         if ($isDevelopment) {
-            $connectSrc[] = "ws://localhost:*";
-            $connectSrc[] = "ws://127.0.0.1:*";
-            $connectSrc[] = "ws://[::1]:*";
             $connectSrc[] = "ws://nes-live.com:5173"; // Vite HMR
+            // React/Vite dev client may connect to any of these loopback hosts.
+            // CSP does NOT accept wildcard ports like ":*" so we must pin the port.
+            $connectSrc[] = "ws://localhost:5173";
+            $connectSrc[] = "ws://127.0.0.1:5173";
             $connectSrc[] = "http://nes-live.com:5173"; // Vite dev server
+            $connectSrc[] = "http://localhost:5173";
+            $connectSrc[] = "http://127.0.0.1:5173";
         }
 
         $policies[] = "connect-src " . implode(' ', $connectSrc);
