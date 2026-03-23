@@ -80,7 +80,7 @@ Options -Indexes
 
 # Protect against some common exploits
 <IfModule mod_headers.c>
-    Header always set Strict-Transport-Security "max-age=15768000; includeSubDomains"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
     Header set X-XSS-Protection "1; mode=block"
     Header set X-Content-Type-Options "nosniff"
     Header set X-Frame-Options "DENY"

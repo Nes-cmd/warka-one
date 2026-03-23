@@ -17,7 +17,7 @@ class HstsHeader
 
         // Add HSTS header for HTTPS requests (and local testing)
         // 6 months minimum per security/audit guidance.
-        $response->headers->set('Strict-Transport-Security', 'max-age=15768000; includeSubDomains');
+        $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
 
         // Add X-XSS-Protection header
         $response->headers->set('X-XSS-Protection', '1; mode=block');
