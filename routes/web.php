@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OAuthClientController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\Auth\MustResetPasswordController;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Inertia\Inertia;
 
@@ -107,6 +108,14 @@ Route::middleware('guest')->post('/request-login-otp', [\App\Http\Controllers\Au
 // React Logout Route (at root level for SSO compatibility)
 Route::middleware('auth')->post('/logout', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])
     ->name('logout');
+
+// Must-reset-password routes (React/Inertia, root-level, used by middleware + login redirects)
+Route::middleware('auth')->group(function () {
+    Route::get('/must-reset-password', [MustResetPasswordController::class, 'createReact'])
+        ->name('password.must-reset');
+    Route::post('/must-reset-password', [MustResetPasswordController::class, 'storeReact'])
+        ->name('password.must-reset.store');
+});
 
 Route::middleware(['auth', 'must-reset-password', 'verified-auth'])->group(function () {
     // Old Blade Account Routes - v1 prefix (route names remain unchanged)
