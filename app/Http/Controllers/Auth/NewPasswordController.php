@@ -96,7 +96,15 @@ class NewPasswordController extends Controller
     public function storeReact(Request $request)
     {
         $request->validate([
-            'password' => ['required', 'confirmed', RulesPassword::min(6)->letters()->numbers()->uncompromised(10)],
+            'password' => ['required', 'confirmed', 
+                RulesPassword::min(8)
+                    ->max(18) // maximum 18 chars
+                    ->letters() // must contain at least one letter
+                    ->numbers() // must contain at least one number
+                    ->mixedCase() // must contain at least one uppercase and one lowercase letter
+                    ->symbols() // must contain at least one symbol
+                    ->uncompromised(), // check against common/breached passwords
+            ],
         ]);
 
         DB::beginTransaction();

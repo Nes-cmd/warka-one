@@ -76,7 +76,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'storeReact'])->name('v2.register.store');
     
     // React Auth Routes with throttle:10,1 (10 attempts per 1 minutes) - matching auth.php
-    // Route::middleware('throttle:10,1')->group(function () {
+    Route::middleware('throttle:10,5')->group(function () { 
         // React Authflow Routes
         Route::prefix('authflow')->group(function () {
             Route::get('/get-otp', [\App\Http\Controllers\VerificationController::class, 'indexReact'])->name('v2.authflow.get-otp');
@@ -84,8 +84,8 @@ Route::middleware('guest')->group(function () {
             Route::get('/verify', [\App\Http\Controllers\VerificationController::class, 'verifyViewReact'])->name('v2.authflow.verify');
             Route::post('/verify', [\App\Http\Controllers\VerificationController::class, 'verifyReact'])->name('v2.authflow.verify.store');
             Route::post('/resend-otp', [\App\Http\Controllers\VerificationController::class, 'resendOtpReact'])->name('v2.authflow.resend-otp');
-            // Route::middleware('auth')->get('/must-verify', [\App\Http\Controllers\VerificationController::class, 'mustVerifyReact'])->name('v2.must-verify-otp');
-        // }); 
+            Route::middleware('auth')->get('/must-verify', [\App\Http\Controllers\VerificationController::class, 'mustVerifyReact'])->name('v2.must-verify-otp');
+        }); 
         
         // React Login Routes (at root level for SSO compatibility, v2. route name for consistency)
         Route::get('/login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'createReact'])->name('v2.login');
@@ -95,10 +95,10 @@ Route::middleware('guest')->group(function () {
         Route::get('/forgot-password', [\App\Http\Controllers\Auth\PasswordResetLinkController::class, 'createReact'])->name('v2.password.request');
         Route::post('/forgot-password', [\App\Http\Controllers\Auth\PasswordResetLinkController::class, 'storeReact'])->name('v2.password.email');
         Route::get('/reset-password', [\App\Http\Controllers\Auth\NewPasswordController::class, 'createReact'])->name('v2.password.reset');
-    });
     
-    // React Password Reset Store Route (separate throttle group like in auth.php)
-    Route::middleware('throttle:10,5')->post('/reset-password', [\App\Http\Controllers\Auth\NewPasswordController::class, 'storeReact'])->name('v2.password.store');
+        // React Password Reset Store Route (separate throttle group like in auth.php)
+        Route::post('/reset-password', [\App\Http\Controllers\Auth\NewPasswordController::class, 'storeReact'])->name('v2.password.store');
+    });
 });
 
 // React Request Login OTP Route (matching auth.php)
@@ -106,8 +106,7 @@ Route::middleware('guest')->post('/request-login-otp', [\App\Http\Controllers\Au
     ->name('v2.request-login-otp');
 
 // React Logout Route (at root level for SSO compatibility)
-Route::middleware('auth')->post('/logout', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])
-    ->name('logout');
+Route::middleware('auth')->post('/logout', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
 // Must-reset-password routes (React/Inertia, root-level, used by middleware + login redirects)
 Route::middleware('auth')->group(function () {
@@ -150,9 +149,9 @@ Route::middleware(['auth', 'must-reset-password', 'verified-auth'])->group(funct
     Route::post('/clients/{client}/regenerate-secret', [OAuthClientController::class, 'regenerateSecretReact'])->name('v2.clients.regenerate-secret');
 });
 
-Route::prefix('authflow')->group(function () {
-    Route::middleware(['auth', 'throttle:10,1'])->get('must-verify', [VerificationController::class, 'mustVerifyReact'])->name('v2.must-verify-otp');
-});
+// Route::prefix('authflow')->group(function () {
+//     Route::middleware(['auth', 'throttle:10,5'])->get('must-verify', [VerificationController::class, 'mustVerifyReact'])->name('v2.must-verify-otp');
+// });
 
 // Old Blade Routes - v1 prefix (route names remain unchanged)
 Route::prefix('v1')->group(function () {
