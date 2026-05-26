@@ -76,7 +76,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'storeReact'])->name('v2.register.store');
     
     // React Auth Routes with throttle:10,1 (10 attempts per 1 minutes) - matching auth.php
-    Route::middleware('throttle:10,5')->group(function () { 
+    // Route::middleware('throttle:10,5')->group(function () { 
         // React Authflow Routes
         Route::prefix('authflow')->group(function () {
             Route::get('/get-otp', [\App\Http\Controllers\VerificationController::class, 'indexReact'])->name('v2.authflow.get-otp');
@@ -98,7 +98,7 @@ Route::middleware('guest')->group(function () {
     
         // React Password Reset Store Route (separate throttle group like in auth.php)
         Route::post('/reset-password', [\App\Http\Controllers\Auth\NewPasswordController::class, 'storeReact'])->name('v2.password.store');
-    });
+    // });
 });
 
 // React Request Login OTP Route (matching auth.php)
