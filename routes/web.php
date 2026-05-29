@@ -84,14 +84,13 @@ Route::middleware('guest')->group(function () {
             Route::get('/verify', [\App\Http\Controllers\VerificationController::class, 'verifyViewReact'])->name('v2.authflow.verify');
             Route::post('/verify', [\App\Http\Controllers\VerificationController::class, 'verifyReact'])->name('v2.authflow.verify.store');
             Route::post('/resend-otp', [\App\Http\Controllers\VerificationController::class, 'resendOtpReact'])->name('v2.authflow.resend-otp');
-            Route::middleware('auth')->get('/must-verify', [\App\Http\Controllers\VerificationController::class, 'mustVerifyReact'])->name('v2.must-verify-otp');
         }); 
         
         // React Login Routes (at root level for SSO compatibility, v2. route name for consistency)
         Route::get('/login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'createReact'])->name('v2.login');
         Route::post('/login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'storeReact'])->name('v2.login.store');
-        
-        // React Password Reset Request Routes
+       
+        // React Password Reset Request Routles
         Route::get('/forgot-password', [\App\Http\Controllers\Auth\PasswordResetLinkController::class, 'createReact'])->name('v2.password.request');
         Route::post('/forgot-password', [\App\Http\Controllers\Auth\PasswordResetLinkController::class, 'storeReact'])->name('v2.password.email');
         Route::get('/reset-password', [\App\Http\Controllers\Auth\NewPasswordController::class, 'createReact'])->name('v2.password.reset');
@@ -108,12 +107,15 @@ Route::middleware('guest')->post('/request-login-otp', [\App\Http\Controllers\Au
 // React Logout Route (at root level for SSO compatibility)
 Route::middleware('auth')->post('/logout', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-// Must-reset-password routes (React/Inertia, root-level, used by middleware + login redirects)
+// Must-reset-password and must-verify routes (React/Inertia, root-level, require auth — not guest)
 Route::middleware('auth')->group(function () {
     Route::get('/must-reset-password', [MustResetPasswordController::class, 'createReact'])
         ->name('password.must-reset');
     Route::post('/must-reset-password', [MustResetPasswordController::class, 'storeReact'])
         ->name('password.must-reset.store');
+
+    Route::get('/authflow/must-verify', [\App\Http\Controllers\VerificationController::class, 'mustVerifyReact'])
+        ->name('v2.must-verify-otp');
 });
 
 Route::middleware(['auth', 'must-reset-password', 'verified-auth'])->group(function () {

@@ -31,7 +31,8 @@ class EditUser extends EditRecord
 
         $record->email_verified_at = $data['email_verified_at'];
         $record->phone_verified_at = $data['phone_verified_at'];
-        
+
+        $record->must_reset_password = $data['must_reset_password'];
         $record->save();
 
         return $record;

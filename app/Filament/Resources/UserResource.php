@@ -44,6 +44,7 @@ class UserResource extends Resource
                     Forms\Components\TextInput::make('phone')
                         ->requiredWithout('email')
                         ->tel()
+                        ->prefix('+251')
                         ->maxLength(9),
                     Forms\Components\DateTimePicker::make('email_verified_at')->native(false),
                     Forms\Components\DateTimePicker::make('phone_verified_at')->native(false),
@@ -52,6 +53,10 @@ class UserResource extends Resource
                         ->password()
                         ->required($form->getOperation() === "create")
                         ->maxLength(255),
+
+                    Forms\Components\Toggle::make('must_reset_password')
+                        ->label('Must Reset Password')
+                        ->default(false),
 
                 ])->columns(2)
             ]);

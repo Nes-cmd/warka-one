@@ -7,7 +7,6 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
 
 class VerifyAuth
 {
@@ -31,7 +30,7 @@ class VerifyAuth
             else{
                 return $next($request);
             }
-            return Inertia::location(route('v2.must-verify-otp', ['verify' => $verify]));
+            return redirect()->route('v2.must-verify-otp', ['verify' => $verify]);
         }
 
         return redirect()->route('v2.login');

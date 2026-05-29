@@ -19,6 +19,11 @@ class RedirectIfAuthenticated
     {
         $guards = empty($guards) ? [null] : $guards;
 
+        // Authenticated users completing must-verify OTP (verify/resend POST) share guest authflow routes
+        if ($request->routeIs('v2.authflow.verify.store', 'v2.authflow.resend-otp')) {
+            return $next($request);
+        }
+
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
                 return redirect(RouteServiceProvider::HOME);

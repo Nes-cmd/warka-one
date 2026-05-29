@@ -139,15 +139,15 @@ class AuthenticatedSessionController extends Controller
             Auth::login($user);
             $request->session()->regenerate();
 
-            // $authColumn = "{$authwith}_verified_at";
-            
-            // if ($user->{$authColumn} == null) {
-            //     return redirect()->route('must-verify-otp');
-            // }
-            
             // Check if user must reset password
             if ($user->must_reset_password) {
                 return redirect()->route('password.must-reset');
+            }
+
+            $authColumn = "{$authwith}_verified_at";
+
+            if ($user->{$authColumn} == null) {
+                return redirect()->route('v2.must-verify-otp', ['verify' => $authwith]);
             }
             
             // Check if coming from React login (routes are now at root level, not /v2)
