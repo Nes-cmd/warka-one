@@ -35,11 +35,21 @@ export default function VerifyOtp({
     const [canResend, setCanResend] = useState(initialCountdown === 90);
     const [resendMessage, setResendMessage] = useState('');
     const [resendMessageType, setResendMessageType] = useState(''); // 'success' or 'error'
+    const [isVerifying, setIsVerifying] = useState(false);
     const inputRefs = useRef([]);
 
     const { data, setData, post, processing, errors } = useForm({
         verificationCode: '',
     });
+
+    const isBusy = processing || isVerifying;
+
+    // Re-enable submit when validation fails and we stay on this page
+    useEffect(() => {
+        if (isVerifying && !processing && errors.verificationCode) {
+            setIsVerifying(false);
+        }
+    }, [isVerifying, processing, errors.verificationCode]);
 
     // Handle countdown for resend and persist to localStorage
     useEffect(() => {
@@ -139,8 +149,9 @@ export default function VerifyOtp({
 
     const submit = (e) => {
         e.preventDefault();
+        setIsVerifying(true);
         post(route('v2.authflow.verify.store'), {
-            // Backend will handle the redirect, so we don't need onSuccess
+            onError: () => setIsVerifying(false),
         });
     };
 
@@ -262,7 +273,8 @@ export default function VerifyOtp({
                                 value={code[index]}
                                 onChange={(e) => handleCodeInput(index, e)}
                                 onKeyDown={(e) => handleKeyDown(index, e)}
-                                className={`w-12 h-12 text-center text-xl font-semibold border-2 rounded-lg focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 bg-white dark:bg-gray-700 dark:text-white transition-all duration-200 ${
+                                disabled={isBusy}
+                                className={`w-12 h-12 text-center text-xl font-semibold border-2 rounded-lg focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 bg-white dark:bg-gray-700 dark:text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
                                     code[index] !== '' 
                                         ? 'border-primary-500 dark:border-primary-400' 
                                         : 'border-gray-300 dark:border-gray-600'
@@ -281,14 +293,14 @@ export default function VerifyOtp({
                 <div className="pt-4 mt-4">
                     <button
                         type="submit"
-                        disabled={processing || code.join('').length !== 6}
+                        disabled={isBusy || code.join('').length !== 6}
                         className={`w-full py-3 flex items-center justify-center text-lg font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none ${
-                            processing || code.join('').length !== 6
+                            isBusy || code.join('').length !== 6
                                 ? 'bg-primary-400' 
                                 : 'bg-primary-600 hover:bg-primary-700'
                         } text-white`}
                     >
-                        {processing ? (
+                        {isBusy ? (
                             <svg className="animate-spin h-5 w-5 text-white mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>

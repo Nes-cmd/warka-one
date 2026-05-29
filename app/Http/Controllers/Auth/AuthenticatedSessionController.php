@@ -440,15 +440,16 @@ class AuthenticatedSessionController extends Controller
             }
 
             $authColumn = "{$authwith}_verified_at";
-            
+            $intended = session()->get('url.intended');
+            $intendedFallback = $intended;
             if ($user->{$authColumn} == null) {
-                return redirect()->route('v2.must-verify-otp', ['verify' => $authwith]);
+                return redirect()->route('v2.must-verify-otp', ['verify' => $authwith, 'fallback' => $intendedFallback]);
             }
             
             // Check if coming from React login (routes are now at root level, not /v2)
             // React routes: /login, /register, /account, /clients, etc.
             // v1 Blade routes: /v1/login, /v1/account, etc.
-            $intended = session()->get('url.intended');
+            
             $referer = $request->headers->get('referer');
             
             // If there's an intended URL (e.g., OAuth authorization), redirect there

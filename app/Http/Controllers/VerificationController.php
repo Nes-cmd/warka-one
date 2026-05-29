@@ -55,31 +55,37 @@ class VerificationController extends Controller
      */
     public function mustVerifyCapture(Request $request)
     {
-        $intendedFallback = $request->fallback;
+        $request->validate([
+            'verify' => 'required|in:phone,email',
+            'fallback' => 'nullable|string',
+        ]);
+
         session()->put('authflow', [
-            'fallback' => $intendedFallback,
+            'fallback' => $request->fallback,
             'verify' => $request->verify,
             'authwith' => $request->verify,
         ]);
-        info(session('authflow'));
-        return redirect()->route('v2.must-verify-otp');
+
+        if (! auth()->check()) {
+            return redirect()->route('v2.login');
+        }
+
+        return redirect()->route('v2.must-verify-otp', ['verify' => $request->verify]);
     }
+
     public function mustVerifyReact(Request $request)
     {
         $user = auth()->user();
 
         $intendedFallback = session('authflow')['fallback'] ?? $request->fallback;
         $verify = session('authflow')['verify'] ?? $request->verify;
-        
-        info("intendedFallback: $intendedFallback");
-        info("verify: $verify");
-        // Check if already verified
-        if($user->phone && $user->phone_verified_at && $verify == 'phone'){
-            return $intendedFallback ? redirect($intendedFallback . '?hash=' . $user->id) : back();
+
+        if ($user->phone && $user->phone_verified_at && $verify == 'phone') {
+            return $this->redirectAfterMustVerify($user, $intendedFallback);
         }
 
-        if($user->email && $user->email_verified_at && $verify == 'email'){
-            return $intendedFallback ? redirect($intendedFallback . '?hash=' . $user->id) : back();
+        if ($user->email && $user->email_verified_at && $verify == 'email') {
+            return $this->redirectAfterMustVerify($user, $intendedFallback);
         }
         
         // Get country data
@@ -420,11 +426,21 @@ class VerificationController extends Controller
     public function verifyReact(Request $request)
     {
         $authflowData = session('authflow');
-
-        info("authflowData: " . json_encode($authflowData));
        
         if (!$authflowData || !isset($authflowData['authwith'])) {
             return redirect()->route('v2.authflow.get-otp', ['for' => 'register']);
+        }
+
+        $verificationFor = $authflowData['otpIsFor'] ?? 'register';
+
+        if ($verificationFor === 'must-verify' && auth()->check()) {
+            $user = auth()->user();
+            $authwith = $authflowData['authwith'];
+            $verifyColumn = "{$authwith}_verified_at";
+
+            if ($user->{$verifyColumn} != null) {
+                return $this->redirectAfterMustVerify($user, $authflowData['fallback'] ?? null);
+            }
         }
 
         $request->validate([
@@ -469,8 +485,6 @@ class VerificationController extends Controller
                 $verification->status = 'verified';
                 $verification->save();
 
-                $verificationFor = $authflowData['otpIsFor'] ?? 'register';
-
                 if ($verificationFor == 'must-verify' && auth()->check()) {
                     $user = auth()->user();
                     $verifyColumn = "{$authflowData['authwith']}_verified_at";
@@ -478,14 +492,7 @@ class VerificationController extends Controller
                     $user->save();
                     $verification->delete();
 
-                    $intendedFallback = $authflowData['fallback'] ?? null;
-                    session()->forget('authflow');
-                    info("Finally, intendedFallback: $intendedFallback");
-                    if ($intendedFallback) {
-                        return redirect()->away($intendedFallback . '?hash=' . $user->id);
-                    }
-
-                    return redirect()->intended(\App\Providers\RouteServiceProvider::HOME);
+                    return $this->redirectAfterMustVerify($user, $authflowData['fallback'] ?? null);
                 } else if ($verificationFor == 'reset-password') {
                     // Keep session for password reset
                     session()->put('authflow', $authflowData);
@@ -587,6 +594,33 @@ class VerificationController extends Controller
             Log::error("Failed to resend OTP: " . $e->getMessage());
             return response()->json(['success' => false, 'message' => 'Failed to resend verification code: ' . $e->getMessage()]);
         }
+    }
+
+    /**
+     * Redirect after must-verify OTP. Inertia POST cannot follow redirect()->away() —
+     * external / full-URL targets need Inertia::location() for a real browser navigation.
+     */
+    private function redirectAfterMustVerify($user, ?string $returnTo)
+    {
+        session()->forget('authflow');
+        session()->forget('url.intended');
+
+        if (!$returnTo) {
+            return redirect()->intended(\App\Providers\RouteServiceProvider::HOME);
+        }
+
+        if (str_contains($returnTo, 'oauth/authorize')) {
+            return Inertia::location($returnTo);
+        }
+
+        $separator = str_contains($returnTo, '?') ? '&' : '?';
+        $target = $returnTo . $separator . 'hash=' . $user->id;
+
+        if (str_starts_with($returnTo, 'http://') || str_starts_with($returnTo, 'https://')) {
+            return Inertia::location($target);
+        }
+
+        return redirect($target);
     }
 }
 
