@@ -114,9 +114,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/must-reset-password', [MustResetPasswordController::class, 'storeReact'])
         ->name('password.must-reset.store');
 
-    Route::get('/authflow/must-verify', [\App\Http\Controllers\VerificationController::class, 'mustVerifyReact'])
-        ->name('v2.must-verify-otp');
+    Route::get('/authflow/must-verify', [\App\Http\Controllers\VerificationController::class, 'mustVerifyReact'])->name('v2.must-verify-otp');
 });
+
+Route::get('/authflow/must-verify/capture', [\App\Http\Controllers\VerificationController::class, 'mustVerifyCapture'])->name('v2.must-verify-otp.capture');
 
 Route::middleware(['auth', 'must-reset-password', 'verified-auth'])->group(function () {
     // Old Blade Account Routes - v1 prefix (route names remain unchanged)

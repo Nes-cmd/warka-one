@@ -53,18 +53,32 @@ class VerificationController extends Controller
     /**
      * Display the must-verify OTP view for React/Inertia
      */
+    public function mustVerifyCapture(Request $request)
+    {
+        $intendedFallback = $request->fallback;
+        session()->put('authflow', [
+            'fallback' => $intendedFallback,
+            'verify' => $request->verify,
+            'authwith' => $request->verify,
+        ]);
+        info(session('authflow'));
+        return redirect()->route('v2.must-verify-otp');
+    }
     public function mustVerifyReact(Request $request)
     {
         $user = auth()->user();
 
-        $intendedFallback = $request->fallback;
+        $intendedFallback = session('authflow')['fallback'] ?? $request->fallback;
+        $verify = session('authflow')['verify'] ?? $request->verify;
         
+        info("intendedFallback: $intendedFallback");
+        info("verify: $verify");
         // Check if already verified
-        if($user->phone && $user->phone_verified_at && $request->verify == 'phone'){
+        if($user->phone && $user->phone_verified_at && $verify == 'phone'){
             return $intendedFallback ? redirect($intendedFallback . '?hash=' . $user->id) : back();
         }
 
-        if($user->email && $user->email_verified_at && $request->verify == 'email'){
+        if($user->email && $user->email_verified_at && $verify == 'email'){
             return $intendedFallback ? redirect($intendedFallback . '?hash=' . $user->id) : back();
         }
         
@@ -80,7 +94,7 @@ class VerificationController extends Controller
         ] : null;
         
         $verifyData = [
-            'authwith' => $request->verify,
+            'authwith' => $verify,
             'email'    => $user->email,
             'otpIsFor' => 'must-verify',
             'phone'    => $user->phone,
@@ -93,7 +107,7 @@ class VerificationController extends Controller
         
         // Auto-send OTP for must-verify
         try {
-            $authwith = $request->verify;
+            $authwith = $verify;
             if ($authwith == 'phone' && $countryModel) {
                 $fullPhone = $countryModel->dial_code . $user->phone;
                 \App\Helpers\SendVerification::make()->via('sms')->receiver($fullPhone)->send();
@@ -107,7 +121,7 @@ class VerificationController extends Controller
         $resendin = 90; // Default countdown
 
         return Inertia::render('VerifyOtp', [
-            'authwith' => $request->verify,
+            'authwith' => $verify,
             'email' => $user->email,
             'phone' => $user->phone,
             'country' => $country,
@@ -406,6 +420,8 @@ class VerificationController extends Controller
     public function verifyReact(Request $request)
     {
         $authflowData = session('authflow');
+
+        info("authflowData: " . json_encode($authflowData));
        
         if (!$authflowData || !isset($authflowData['authwith'])) {
             return redirect()->route('v2.authflow.get-otp', ['for' => 'register']);
@@ -464,9 +480,9 @@ class VerificationController extends Controller
 
                     $intendedFallback = $authflowData['fallback'] ?? null;
                     session()->forget('authflow');
-
+                    info("Finally, intendedFallback: $intendedFallback");
                     if ($intendedFallback) {
-                        return redirect($intendedFallback . '?hash=' . $user->id);
+                        return redirect()->away($intendedFallback . '?hash=' . $user->id);
                     }
 
                     return redirect()->intended(\App\Providers\RouteServiceProvider::HOME);
