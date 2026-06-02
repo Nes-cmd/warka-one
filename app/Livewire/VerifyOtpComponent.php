@@ -80,10 +80,7 @@ class VerifyOtpComponent extends Component
         $candidate = $this->authwith == 'email'?$this->email: $this->country->dial_code . $this->phone;
 
         
-        $verification = ModelsVerificationCode::where('candidate', $candidate)
-                            ->where('expire_at', '>=', now())
-                            ->latest()
-                            ->first();
+        $verification = ModelsVerificationCode::latestActiveForCandidate($candidate);
 
         if($verification){
             

@@ -475,10 +475,7 @@ class VerificationController extends Controller
             $candidate = $dialCode . ($authflowData['phone'] ?? '');
         }
 
-        $verification = \App\Models\VerificationCode::where('candidate', $candidate)
-            ->where('expire_at', '>=', now())
-            ->latest()
-            ->first();
+        $verification = \App\Models\VerificationCode::latestActiveForCandidate($candidate);
 
         if ($verification) {
             if ($verification->verification_code == $request->verificationCode) {

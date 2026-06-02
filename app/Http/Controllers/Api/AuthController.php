@@ -88,7 +88,7 @@ class AuthController extends Controller
             $country = Country::find($request->country_id);
             $candidate = $request->authwith == 'email' ? $request->email : $country->dial_code . $phone;
 
-            $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
+            $verification = VerificationCode::latestVerifiedForCandidate($candidate);
 
             if ($verification && $verification->status == 'verified') {
                 $userData['phone_verified_at'] = $request->authwith == 'phone' ? now() : null;
@@ -170,8 +170,8 @@ class AuthController extends Controller
             $country = Country::find($request->country_id ? $request->country_id : 1);
             $candidate = $authwith == 'email' ? $request->phoneOrEmail : $country->dial_code . $phone;
 
-            $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
-            if ($verification->status != 'verified') {
+            $verification = VerificationCode::latestVerifiedForCandidate($candidate);
+            if (!$verification || $verification->status != 'verified') {
                 throw new Exception("This {$authwith} was not verified");
             }
 
@@ -254,7 +254,7 @@ class AuthController extends Controller
 
             $country = Country::find($request->country_id);
             $candidate = $country->dial_code . trimPhone($request->phone);
-            $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
+            $verification = VerificationCode::latestActiveForCandidate($candidate);
 
             if ($this->isVerified($verification, $request->verification_code)) {
                 $user->phone = trimPhone($request->phone);
@@ -285,7 +285,7 @@ class AuthController extends Controller
 
         if ($user && isPhoneOrEmail($request->email == 'email')) {
             $candidate = $request->email;
-            $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
+            $verification = VerificationCode::latestActiveForCandidate($candidate);
 
             if ($this->isVerified($verification, $request->verification_code)) {
                 $user->email = $request->email;

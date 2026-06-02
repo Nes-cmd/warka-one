@@ -32,8 +32,12 @@ class SendVerification {
     }
 
     public function send() {
-       
-        $previos = ModelsVerificationCode::where('candidate', $this->receiver)->latest()->first();
+        $sessionId = session()->getId();
+
+        $previos = ModelsVerificationCode::where('candidate', $this->receiver)
+            ->where('session_id', $sessionId)
+            ->latest()
+            ->first();
         
         if($previos && $previos->expire_at->gte(now())){
             return $previos;
@@ -61,6 +65,7 @@ class SendVerification {
             'code_is_for' => $this->via == 'sms'?'phone':'email',
             'verification_code' => $verificationCode,
             'candidate' => $this->receiver,
+            'session_id' => $sessionId,
             'expire_at' => now()->addMinutes(5),
         ]);
         }

@@ -5,13 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\VerificationCode;
-use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
@@ -48,8 +44,8 @@ class NewPasswordController extends Controller
             $candidate = $authflowData['authwith'] == 'email'?$authflowData['email']: $authflowData['country']->dial_code . $authflowData['phone'];
 
             
-            $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
-            if ($verification->status != 'verified') {
+            $verification = VerificationCode::latestVerifiedForCandidate($candidate);
+            if (!$verification || $verification->status != 'verified') {
                 session()->flash('authstatus',['type' => 'error','message'=> 'This email or phone is not verified']);
                 return redirect('login');
             }
@@ -119,7 +115,7 @@ class NewPasswordController extends Controller
                 ? $authflowData['email']
                 : $authflowData['country']->dial_code . $authflowData['phone'];
 
-            $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
+            $verification = VerificationCode::latestVerifiedForCandidate($candidate);
             
             if (!$verification || $verification->status != 'verified') {
                 throw new \Exception('This email or phone is not verified');
@@ -147,24 +143,5 @@ class NewPasswordController extends Controller
             DB::rollBack();
             return back()->withErrors(['general' => $e->getMessage()]);
         }
-        // $status = Password::reset(
-        //     $request->only('email', 'password', 'password_confirmation', 'token'),
-        //     function ($user) use ($request) {
-        //         $user->forceFill([
-        //             'password' => Hash::make($request->password),
-        //             'remember_token' => Str::random(60),
-        //         ])->save();
-
-        //         event(new PasswordReset($user));
-        //     }
-        // );
-
-        // If the password was successfully reset, we will redirect the user back to
-        // the application's home authenticated view. If there is an error we can
-        // redirect them back to where they came from with their error message.
-        // return $status == Password::PASSWORD_RESET
-        //             ? redirect()->route('login')->with('status', __($status))
-        //             : back()->withInput($request->only('email'))
-        //                     ->withErrors(['email' => __($status)]);
     }
 }

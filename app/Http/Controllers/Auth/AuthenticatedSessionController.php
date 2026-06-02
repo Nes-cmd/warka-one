@@ -121,7 +121,9 @@ class AuthenticatedSessionController extends Controller
             }
             
             $verification = \App\Models\VerificationCode::where('candidate', $candidate)
+                ->forCurrentSession()
                 ->where('verification_code', $request->otp)
+                ->where('expire_at', '>=', now())
                 ->latest()
                 ->first();
             
@@ -416,7 +418,9 @@ class AuthenticatedSessionController extends Controller
             }
             
             $verification = \App\Models\VerificationCode::where('candidate', $candidate)
+                ->forCurrentSession()
                 ->where('verification_code', $request->otp)
+                ->where('expire_at', '>=', now())
                 ->latest()
                 ->first();
             

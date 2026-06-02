@@ -97,7 +97,7 @@ class VerificationController extends Controller
 
         $country = Country::find($request->country_id ? $request->country_id : 1);
         $candidate = $authwith == 'email' ? $request->phoneOrEmail : $country->dial_code . trimPhone($request->phoneOrEmail);
-        $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
+        $verification = VerificationCode::latestActiveForCandidate($candidate);
         if ($verification) {
             if ($verification->verification_code == $request->verificationCode) {
                 $verification->status = 'verified';

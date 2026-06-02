@@ -57,8 +57,8 @@ class RegisteredUserController extends Controller
             $candidate = $authflowData['authwith'] == 'email'?$authflowData['email']: $authflowData['country']->dial_code . $authflowData['phone'];
 
             
-            $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
-            if ($verification->status != 'verified') {
+            $verification = VerificationCode::latestVerifiedForCandidate($candidate);
+            if (!$verification || $verification->status != 'verified') {
                 throw new Exception('This email or phone is not verified');
             }
             
@@ -197,7 +197,7 @@ class RegisteredUserController extends Controller
                 $candidate = $dialCode . $authflowData['phone'];
             }
 
-            $verification = VerificationCode::where('candidate', $candidate)->latest()->first();
+            $verification = VerificationCode::latestVerifiedForCandidate($candidate);
             
             if (!$verification || $verification->status != 'verified') {
                 throw new Exception('This email or phone is not verified. Please verify your code first.');
