@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 // use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
 class AuthController extends Controller
@@ -122,6 +123,8 @@ class AuthController extends Controller
             ]);
         } catch (Exception $e) {
             DB::rollBack();
+
+            Log::error('Error in register: ' . $e->getMessage());
 
             return response([
                 'status' => 'error',

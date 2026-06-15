@@ -7,6 +7,10 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
+use Laravel\Passport\Exceptions\OAuthServerException;
+use League\OAuth2\Server\Exception\OAuthServerException as LeagueOAuthServerException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -28,14 +32,41 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
         $this->reportable(function (Throwable $e) {
-            if (env('APP_ENV') == 'production') {
-                $message = 'Error from Kerone System : at file ' . $e->getFile() . ' line number : ' . $e->getLine() . ' message : ' . $e->getMessage();
-                TelegramReport::report($message);
+            if (! $this->shouldReportToTelegram($e)) {
+                return;
             }
+
+            $message = 'Error from Kerone System : at file ' . $e->getFile() . ' line number : ' . $e->getLine() . ' message : ' . $e->getMessage();
+            TelegramReport::report($message);
+
             Log::debug('Error : '. json_encode(request()->all()));
             Log::debug('Error : '. json_encode(request()->ip()));
-            return redirect()->back();
         });
+    }
+
+    /**
+     * Determine if an exception should be sent to Telegram.
+     */
+    protected function shouldReportToTelegram(Throwable $e): bool
+    {
+        if (env('APP_ENV') !== 'production' || ! $this->shouldReport($e)) {
+            return false;
+        }
+
+        if ($e instanceof OAuthServerException || $e instanceof LeagueOAuthServerException) {
+            return false;
+        }
+
+        if ($e instanceof ValidationException || $e instanceof AuthenticationException) {
+            return false;
+        }
+
+        // Skip expected HTTP client errors (4xx).
+        if ($e instanceof HttpExceptionInterface && $e->getStatusCode() < 500) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
