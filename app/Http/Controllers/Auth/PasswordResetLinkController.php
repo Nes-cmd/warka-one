@@ -29,8 +29,8 @@ class PasswordResetLinkController extends Controller
             $options = $client->use_auth_types ?? $options;
         }
 
-        $countries = Country::all();
-        $selectedCountry = Country::first();
+        $countries = Country::all()->map->toFrontendArray();
+        $selectedCountry = Country::first()?->toFrontendArray();
 
         return Inertia::render('ForgotPassword', [
             'countries' => $countries,

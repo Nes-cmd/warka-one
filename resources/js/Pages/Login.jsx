@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Head, useForm, Link } from '@inertiajs/react';
 import { route } from 'ziggy-js';
 import GuestLayout from '../Layouts/GuestLayout';
+import CountryPhoneSelect from '../Components/CountryPhoneSelect';
 
 export default function Login({ 
     authwith: initialAuthWith, 
@@ -21,12 +22,10 @@ export default function Login({
     
     const [authMethod, setAuthMethod] = useState(initialAuthMethod || 'password');
     const [selectedCountry, setSelectedCountry] = useState(initialSelectedCountry);
-    const [countryDropdownOpen, setCountryDropdownOpen] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [otpMessage, setOtpMessage] = useState('');
     const [otpMessageType, setOtpMessageType] = useState('');
-    
-    const countryDropdownRef = useRef(null);
+
     const numberofoptions = options?.length || 2;
 
     // Get countdown from localStorage or use default
@@ -80,17 +79,6 @@ export default function Login({
             localStorage.removeItem('login_otp_countdown');
         }
     }, [otpRequested, countdown]);
-
-    // Close country dropdown when clicking outside
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (countryDropdownRef.current && !countryDropdownRef.current.contains(event.target)) {
-                setCountryDropdownOpen(false);
-            }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
 
     const { data, setData, post, processing, errors, reset } = useForm({
         authwith: authWith,
@@ -304,44 +292,15 @@ export default function Login({
                             )}
                         </div>
                         <div className="flex">
-                            <div className="relative" ref={countryDropdownRef}>
-                                <button
-                                    type="button"
-                                    onClick={() => setCountryDropdownOpen(!countryDropdownOpen)}
-                                    className="flex items-center bg-white dark:bg-gray-700 dark:text-white py-3 pl-3 pr-2 rounded-l-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                                >
-                                    <img className="w-5 h-5 mr-2" src={selectedCountry?.flag_url ? (selectedCountry.flag_url.startsWith('http') ? selectedCountry.flag_url : `/${selectedCountry.flag_url}`) : '/flags/et.svg'} alt="" />
-                                    <span className="text-sm font-medium">{selectedCountry?.dial_code || '+251'}</span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                                    </svg>
-                                </button>
-
-                                {/* Country Dropdown */}
-                                {countryDropdownOpen && (
-                                    <div className="absolute left-0 top-full z-10 mt-1 w-64 bg-white dark:bg-gray-700 shadow-lg rounded-lg border border-gray-200 dark:border-gray-600 max-h-60 overflow-y-auto">
-                                        {countries?.map((country) => (
-                                            <button
-                                                key={country.id}
-                                                type="button"
-                                                onClick={() => {
-                                                    setSelectedCountry(country);
-                                                    setCountryDropdownOpen(false);
-                                                }}
-                                                className="flex items-center w-full px-3 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-600 first:rounded-t-lg last:rounded-b-lg"
-                                            >
-                                                <img className="w-5 h-5 mr-3" src={country.flag_url ? `/${country.flag_url}` : '/flags/et.svg'} alt="" />
-                                                <span className="font-medium">{country.dial_code}</span>
-                                                <span className="ml-2 text-gray-500 dark:text-gray-400">{country.name}</span>
-                                            </button>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
+                            <CountryPhoneSelect
+                                countries={countries}
+                                selectedCountry={selectedCountry}
+                                onSelect={setSelectedCountry}
+                            />
 
                             <div className="relative flex-1">
                                 <input
-                                    style={{height:'45px'}}
+                                    style={{height:'42px'}}
                                     id="phone"
                                     name="phone"
                                     type="tel"

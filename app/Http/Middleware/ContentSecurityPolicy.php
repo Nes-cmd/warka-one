@@ -117,7 +117,7 @@ class ContentSecurityPolicy
         $policies[] = "style-src " . implode(' ', $styleSrc);
         
         // Other directives
-        $policies[] = "img-src 'self' data: https://ui-avatars.com";
+        $policies[] = "img-src 'self' data: https://ui-avatars.com https://flagcdn.com";
         $policies[] = "font-src 'self' https://fonts.gstatic.com https://fonts.bunny.net";
         
         // Connect-src: Allow WebSockets for Livewire and AJAX requests

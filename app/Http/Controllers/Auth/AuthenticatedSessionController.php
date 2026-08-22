@@ -146,10 +146,10 @@ class AuthenticatedSessionController extends Controller
         }
 
         $authwith = count($options) == 1 ? $options[0] : 'email';
-        
-        $countries = Country::all();
-        $selectedCountry = Country::first();
-        
+
+        $countries = Country::all()->map->toFrontendArray();
+        $selectedCountry = Country::first()?->toFrontendArray();
+
         return Inertia::render('Login', [
             'authwith' => $authwith,
             'authMethod' => $authMethod,
