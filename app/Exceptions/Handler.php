@@ -103,9 +103,9 @@ class Handler extends ExceptionHandler
                 : redirect()->guest(route('v2.login'));
         }
         
-        // Default to v1 login for Blade routes
+        // Default to React login (v1 login is no longer served)
         return $request->expectsJson()
             ? response()->json(['message' => $exception->getMessage()], 401)
-            : redirect()->guest(route('v1.login'));
+            : redirect()->guest(route('v2.login'));
     }
 }

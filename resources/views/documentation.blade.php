@@ -63,14 +63,14 @@
                             <div>
                                 <h3 class="text-2xl font-semibold text-slate-900 dark:text-white mb-4">1. Create an Account</h3>
                                 <ol class="list-decimal pl-8 text-lg text-slate-600 dark:text-slate-400 space-y-2">
-                                    <li>Visit <a href="{{ route('login') }}" class="text-primary-600 dark:text-primary-400 hover:underline">Kerone</a> and click on "Register"</li>
+                                    <li>Visit <a href="{{ route('v2.login') }}" class="text-primary-600 dark:text-primary-400 hover:underline">Kerone</a> and click on "Register"</li>
                                     <li>Complete the registration form with your details</li>
                                     <li>Verify your email or phone number</li>
                                     <li>Log in to your account</li>
                                 </ol>
 
                                 <div class="mt-4">
-                                    <a href="{{ route('register') }}" class="inline-flex items-center px-4 py-2 bg-primary-600 dark:bg-primary-700 text-white rounded-lg hover:bg-primary-700 dark:hover:bg-primary-800 transition">
+                                    <a href="{{ url('authflow/get-otp?for=register') }}" class="inline-flex items-center px-4 py-2 bg-primary-600 dark:bg-primary-700 text-white rounded-lg hover:bg-primary-700 dark:hover:bg-primary-800 transition">
                                         Create Your Account
                                     </a>
                                 </div>

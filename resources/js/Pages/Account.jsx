@@ -33,7 +33,7 @@ export default function Account({ user, authorizedApps, sessions, status, flash_
 
     const handleRevokeToken = (tokenId) => {
         if (confirm('Are you sure you want to revoke access for this application?')) {
-            router.post(route('profile.revoke-token'), { token_id: tokenId });
+            router.post(route('v2.profile.revoke-token'), { token_id: tokenId });
         }
     };
 

@@ -5,71 +5,14 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\VerificationCode;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\View\View;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\Password as RulesPassword;
 
 class NewPasswordController extends Controller
 {
-    /**
-     * Display the password reset view.
-     */
-    public function create(Request $request): View
-    {
-        return view('auth.reset-password', ['request' => $request]);
-    }
-
-    /**
-     * Handle an incoming new password request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            // 'email' => ['required', 'email'],
-            'password' => ['required', 'confirmed', RulesPassword::min(6)->letters()->numbers()->uncompromised(10)],
-        ]);
-
-        DB::beginTransaction();
-        try {
-            // Here we will attempt to reset the user's password. If it is successful we
-            // will update the password on an actual user model and persist it to the
-            // database. Otherwise we will parse the error and return the response.
-            $authflowData = session('authflow');
-            $candidate = $authflowData['authwith'] == 'email'?$authflowData['email']: $authflowData['country']->dial_code . $authflowData['phone'];
-
-            
-            $verification = VerificationCode::latestVerifiedForCandidate($candidate);
-            if (!$verification || $verification->status != 'verified') {
-                session()->flash('authstatus',['type' => 'error','message'=> 'This email or phone is not verified']);
-                return redirect('login');
-            }
-        
-            $user = $authflowData['authwith'] == 'email'?User::where('email', $candidate)->first() : User::where('phone',$authflowData['phone'])->first();
-
-            $user->password = Hash::make($request->password);
-            $user->must_reset_password = false; // Clear must_reset_password flag when user resets password voluntarily
-            $user->save();
-            
-            $verification->delete();
-            session()->forget('authflow');
-            session()->flash('authstatus', ['type'=> 'success','message'=> 'Password reseted successfully']);
-
-            DB::commit();
-
-            return redirect('login');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            session()->flash('authstatus', ['type'=> 'error','message'=> 'Password reseted failed']);
-            return redirect('login');
-        }
-    }
-
     /**
      * Display the password reset view for React/Inertia
      */

@@ -73,7 +73,7 @@ export default function EditProfile({ user, genders, countries, status, flash_er
 
     const submitDelete = (e) => {
         e.preventDefault();
-        deleteForm.delete(route('profile.destroy'), {
+        deleteForm.delete(route('v2.profile.destroy'), {
             preserveScroll: true,
             onSuccess: () => {
                 router.visit(route('v2.login'));

@@ -50,7 +50,7 @@ class MustResetPasswordController extends Controller
         $user = Auth::user();
         
         if (!$user) {
-            return redirect()->route('login');
+            return redirect()->route('v2.login');
         }
 
         $request->validate([

@@ -2,37 +2,39 @@
 
 use App\Helpers\SmsSend;
 use App\Http\Controllers\AssumptionController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SmsCallbackController;
 use App\Http\Controllers\VerificationController;
 use App\Models\User;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OAuthClientController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Auth\MustResetPasswordController;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Inertia\Inertia;
 
 // Old Blade Routes - v1 prefix (route names remain unchanged)
-Route::prefix('v1')->group(function () {
-    Route::controller(AssumptionController::class)->group(function(){
-        Route::get('detail', 'fix_all_user_has_detail');
-    });
-
-    Route::get('test', function(){
-        throw new HttpException(429, 'Too many OTP requests. Try again later.');
-    })->name('error.429');
-
-    Route::redirect('et', '/v1');
-    Route::view('privacy-policy', 'privacy-policy')->name('privacy-policy');
-    Route::view('mail', 'emailtemp');
-    Route::view('about', 'about');
-    Route::view('services', 'services');
-    Route::view('contact', 'contact');
-    Route::view('documentation', 'documentation')->name('documentation');
-});
+// Disabled: v1 is fully retired in favor of the React/Inertia routes below.
+// Kept commented (not deleted) until the v1 Blade views/controllers are removed.
+// Route::prefix('v1')->group(function () {
+//     Route::controller(AssumptionController::class)->group(function(){
+//         Route::get('detail', 'fix_all_user_has_detail');
+//     });
+//
+//     Route::get('test', function(){
+//         throw new HttpException(429, 'Too many OTP requests. Try again later.');
+//     })->name('error.429');
+//
+//     Route::redirect('et', '/v1');
+//     Route::view('privacy-policy', 'privacy-policy')->name('privacy-policy');
+//     Route::view('mail', 'emailtemp');
+//     Route::view('about', 'about');
+//     Route::view('services', 'services');
+//     Route::view('contact', 'contact');
+//     Route::view('documentation', 'documentation')->name('documentation');
+// });
 
 // React Pages Routes (previously v2 routes, now at root for SSO compatibility)
 // Note: Route names still use v2. prefix for consistency
@@ -121,27 +123,35 @@ Route::get('/authflow/must-verify/capture', [\App\Http\Controllers\VerificationC
 
 Route::middleware(['auth', 'must-reset-password', 'verified-auth'])->group(function () {
     // Old Blade Account Routes - v1 prefix (route names remain unchanged)
-    Route::prefix('v1')->group(function () {
-        Route::get('account', [ProfileController::class, 'index'])->name('account');
-        Route::get('profile-setting', [ProfileController::class, 'edit'])->name('profile.update-profile');
-        Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-        Route::post('profile/logout-session', [ProfileController::class, 'logoutSession'])->name('profile.logout-session');
-        Route::post('profile/revoke-token', [ProfileController::class, 'revokeToken'])->name('profile.revoke-token');
-        
-        // Phone verification routes
-        Route::get('verify-phone', [VerificationController::class, 'verifyPhone'])->name('verify-phone');
-        Route::post('verify-phone', [VerificationController::class, 'processVerifyPhone'])->name('verify-phone.verify');
-        Route::post('resend-phone-verification', [VerificationController::class, 'resendPhoneVerification'])->name('verify-phone.resend');
-        Route::post('initiate-phone-verification', [VerificationController::class, 'initiatePhoneVerification'])->name('initiate-phone-verification');
-    });
-    
+    // Disabled: v1 is fully retired in favor of the React/Inertia routes below.
+    // profile.destroy / profile.revoke-token / profile.logout-session were reused directly by the
+    // React pages (no *React variant existed) and now have v2.profile.* equivalents registered above instead.
+    // Kept commented (not deleted) until the v1 Blade views/controllers are removed.
+    // Route::prefix('v1')->group(function () {
+    //     Route::get('account', [ProfileController::class, 'index'])->name('account');
+    //     Route::get('profile-setting', [ProfileController::class, 'edit'])->name('profile.update-profile');
+    //     Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
+    //     Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    //     Route::post('profile/logout-session', [ProfileController::class, 'logoutSession'])->name('profile.logout-session');
+    //     Route::post('profile/revoke-token', [ProfileController::class, 'revokeToken'])->name('profile.revoke-token');
+    //
+    //     // Phone verification routes
+    //     Route::get('verify-phone', [VerificationController::class, 'verifyPhone'])->name('verify-phone');
+    //     Route::post('verify-phone', [VerificationController::class, 'processVerifyPhone'])->name('verify-phone.verify');
+    //     Route::post('resend-phone-verification', [VerificationController::class, 'resendPhoneVerification'])->name('verify-phone.resend');
+    //     Route::post('initiate-phone-verification', [VerificationController::class, 'initiatePhoneVerification'])->name('initiate-phone-verification');
+    // });
+
     // React Account Routes (previously v2 routes, now at root for SSO compatibility)
     // Note: Route names still use v2. prefix for consistency
     Route::get('/account', [ProfileController::class, 'indexReact'])->name('v2.account');
     Route::get('/profile-setting', [ProfileController::class, 'editReact'])->name('v2.profile.setting');
     Route::patch('/profile', [ProfileController::class, 'updateReact'])->name('v2.profile.update');
-    
+    // These three don't render a view, so the v1 controller methods are reused as-is (no *React variant needed)
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('v2.profile.destroy');
+    Route::post('/profile/revoke-token', [ProfileController::class, 'revokeToken'])->name('v2.profile.revoke-token');
+    Route::post('/profile/logout-session', [ProfileController::class, 'logoutSession'])->name('v2.profile.logout-session');
+
     // React OAuth Clients Routes (previously v2 routes, now at root for SSO compatibility)
     Route::get('/clients', [OAuthClientController::class, 'indexReact'])->name('v2.clients.index');
     Route::get('/clients/create', [OAuthClientController::class, 'createReact'])->name('v2.clients.create');
@@ -157,9 +167,11 @@ Route::middleware(['auth', 'must-reset-password', 'verified-auth'])->group(funct
 // });
 
 // Old Blade Routes - v1 prefix (route names remain unchanged)
-Route::prefix('v1')->group(function () {
-    Route::middleware(['auth', 'throttle:10,5'])->get('authflow/must-verify', [VerificationController::class, 'mustVerify'])->name('must-verify-otp');
-});
+// Disabled: v1 is fully retired in favor of the React/Inertia routes below (see v2.must-verify-otp above).
+// Kept commented (not deleted) until the v1 Blade views/controllers are removed.
+// Route::prefix('v1')->group(function () {
+//     Route::middleware(['auth', 'throttle:10,5'])->get('authflow/must-verify', [VerificationController::class, 'mustVerify'])->name('must-verify-otp');
+// });
 
 // SSO Logout Route (at root level for SSO compatibility)
 // This route is used by external applications to log out users from SSO
@@ -195,28 +207,30 @@ require __DIR__ . '/auth.php';
 
 
 // Old Blade Routes - v1 prefix (route names remain unchanged)
-Route::prefix('v1')->group(function () {
-    Route::get('test-sms', function () {
-        $op = SmsSend::send("251940678725", "Selam there, Your confirmation code is 4236");
-    
-        dd($op->json());
-    });
-    
-    // OAuth Clients Management Routes
-    Route::middleware(['auth', 'must-reset-password', 'verified-auth'])->prefix('oauth')->group(function () {
-        Route::get('clients', [OAuthClientController::class, 'index'])->name('clients.index');
-        Route::get('clients/create', [OAuthClientController::class, 'create'])->name('clients.create');
-        Route::post('clients', [OAuthClientController::class, 'store'])->name('clients.store');
-        Route::get('clients/{client}/edit', [OAuthClientController::class, 'edit'])->name('clients.edit');
-        Route::post('clients/{client}', [OAuthClientController::class, 'update'])->name('clients.update');
-        Route::delete('clients/{client}', [OAuthClientController::class, 'destroy'])->name('clients.destroy');
-        Route::get('clients/{client}/regenerate-secret', [OAuthClientController::class, 'regenerateSecret'])->name('clients.regenerate-secret');
-    });
-    
-    // Contact Routes
-    Route::get('contact', [ContactController::class, 'index'])->name('contact');
-    Route::post('contact', [ContactController::class, 'submit'])->name('contact.submit');
-});
+// Disabled: v1 is fully retired in favor of the React/Inertia routes below (v2.clients.*, v2.contact, v2.contact.submit).
+// Kept commented (not deleted) until the v1 Blade views/controllers are removed.
+// Route::prefix('v1')->group(function () {
+//     Route::get('test-sms', function () {
+//         $op = SmsSend::send("251940678725", "Selam there, Your confirmation code is 4236");
+//
+//         dd($op->json());
+//     });
+//
+//     // OAuth Clients Management Routes
+//     Route::middleware(['auth', 'must-reset-password', 'verified-auth'])->prefix('oauth')->group(function () {
+//         Route::get('clients', [OAuthClientController::class, 'index'])->name('clients.index');
+//         Route::get('clients/create', [OAuthClientController::class, 'create'])->name('clients.create');
+//         Route::post('clients', [OAuthClientController::class, 'store'])->name('clients.store');
+//         Route::get('clients/{client}/edit', [OAuthClientController::class, 'edit'])->name('clients.edit');
+//         Route::post('clients/{client}', [OAuthClientController::class, 'update'])->name('clients.update');
+//         Route::delete('clients/{client}', [OAuthClientController::class, 'destroy'])->name('clients.destroy');
+//         Route::get('clients/{client}/regenerate-secret', [OAuthClientController::class, 'regenerateSecret'])->name('clients.regenerate-secret');
+//     });
+//
+//     // Contact Routes
+//     Route::get('contact', [ContactController::class, 'index'])->name('contact');
+//     Route::post('contact', [ContactController::class, 'submit'])->name('contact.submit');
+// });
 
 Route::group(['prefix' => 'your-package', 'middleware' => ['web']], function () {
     // Your package routes here

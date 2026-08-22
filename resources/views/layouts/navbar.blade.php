@@ -85,10 +85,10 @@
             </div>
         @else
             <div class="flex items-center gap-3">
-                <x-nav-link :href="route('login')" :active="request()->routeIs('login')" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                <x-nav-link :href="route('v2.login')" :active="request()->routeIs('v2.login')" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
                     Login
                 </x-nav-link>
-                <x-nav-link :href="url('authflow/get-otp?for=register')" :active="request()->routeIs('register')">
+                <x-nav-link :href="url('authflow/get-otp?for=register')" :active="request()->routeIs('v2.register')">
                     <div class="border border-primary bg-primary text-white px-4 py-1.5 rounded-lg hover:bg-primary-600 transition-colors">
                         Register
                     </div>
@@ -179,10 +179,10 @@
             </div>
         @else
             <div class="flex flex-col gap-3">
-                <a href="{{ route('login') }}" class="block w-full py-3 rounded-lg border border-gray-300 dark:border-gray-600 text-center dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition {{ request()->routeIs('login') ? 'bg-gray-100 dark:bg-gray-700 font-medium' : '' }}">
+                <a href="{{ route('v2.login') }}" class="block w-full py-3 rounded-lg border border-gray-300 dark:border-gray-600 text-center dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition {{ request()->routeIs('v2.login') ? 'bg-gray-100 dark:bg-gray-700 font-medium' : '' }}">
                     Login
                 </a>
-                <a href="{{ route('register') }}" class="block w-full py-3 rounded-lg bg-primary border border-primary text-white text-center hover:bg-primary-600 transition {{ request()->routeIs('register') ? 'font-medium' : '' }}">
+                <a href="{{ url('authflow/get-otp?for=register') }}" class="block w-full py-3 rounded-lg bg-primary border border-primary text-white text-center hover:bg-primary-600 transition {{ request()->routeIs('v2.register') ? 'font-medium' : '' }}">
                     Register
                 </a>
             </div>

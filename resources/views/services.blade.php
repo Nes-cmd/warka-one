@@ -29,7 +29,7 @@
                     With our Single Sign-On (SSO) solution, users can access multiple applications with just one set of credentials. No more password juggling or multiple logins. Our system provides seamless authentication across all connected services, enhancing security while dramatically improving user experience. Implementation is simple for developers, with our comprehensive API and SDKs for major platforms.
                 </p>
                 <div>
-                    <a href="{{ route('register') }}" class="dark:text-white/70 text-slate-900 px-4 py-2 rounded-full border border-slate-900 dark:border-white/40 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                    <a href="{{ url('authflow/get-otp?for=register') }}" class="dark:text-white/70 text-slate-900 px-4 py-2 rounded-full border border-slate-900 dark:border-white/40 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
                         Get Started
                     </a>
                 </div>
