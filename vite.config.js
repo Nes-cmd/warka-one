@@ -19,6 +19,6 @@ export default defineConfig({
     ],
 
     server: {
-        host: 'nes-live.com',
+        host: '127.0.0.1',
     },
 });
