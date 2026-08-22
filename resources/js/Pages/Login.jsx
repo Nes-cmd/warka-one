@@ -510,7 +510,7 @@ export default function Login({
                     )}
 
                     {/* Sign Up */}
-                    {registrationEnabled && (
+                    {Boolean(registrationEnabled) && (
                         <div className="text-center">
                             <span className="text-sm text-gray-600 dark:text-gray-400">
                                 Don't have an account?{' '}

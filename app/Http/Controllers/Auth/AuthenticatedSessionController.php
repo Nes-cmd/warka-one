@@ -169,7 +169,7 @@ class AuthenticatedSessionController extends Controller
         if($clientId && $client = Client::find($clientId)){
             $options = $client->use_auth_types ?? $options;
             $authMethod = $client->pass_type ?  $client->pass_type : $authMethod;
-            $registrationEnabled = $client->registration_enabled;
+            $registrationEnabled = (bool) $client->registration_enabled;
         }
 
         $authwith = count($options) == 1 ? $options[0] : 'email';
