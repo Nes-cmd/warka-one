@@ -63,7 +63,7 @@ Route::get('/contact', function () {
     ]);
 })->name('v2.contact');
 
-Route::post('/contact/submit', [ContactController::class, 'submitReact'])->name('v2.contact.submit');
+Route::post('/contact/submit', [ContactController::class, 'submit'])->name('v2.contact.submit');
 
 Route::get('/privacy-policy', function () {
     return Inertia::render('PrivacyPolicy');
@@ -74,31 +74,31 @@ Route::get('/privacy-policy', function () {
 // Route names use v2. prefix for consistency, but URLs are at root level
 Route::middleware('guest')->group(function () {
     // React Register Routes (no throttle on register routes in auth.php)
-    Route::get('/register', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'createReact'])->name('v2.register');
-    Route::post('/register', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'storeReact'])->name('v2.register.store');
+    Route::get('/register', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'create'])->name('v2.register');
+    Route::post('/register', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'store'])->name('v2.register.store');
     
     // React Auth Routes with throttle:10,1 (10 attempts per 1 minutes) - matching auth.php
     // Route::middleware('throttle:10,5')->group(function () { 
         // React Authflow Routes
         Route::prefix('authflow')->group(function () {
-            Route::get('/get-otp', [\App\Http\Controllers\VerificationController::class, 'indexReact'])->name('v2.authflow.get-otp');
-            Route::post('/get-otp', [\App\Http\Controllers\VerificationController::class, 'getOtpReact'])->name('v2.authflow.get-otp.store');
-            Route::get('/verify', [\App\Http\Controllers\VerificationController::class, 'verifyViewReact'])->name('v2.authflow.verify');
-            Route::post('/verify', [\App\Http\Controllers\VerificationController::class, 'verifyReact'])->name('v2.authflow.verify.store');
-            Route::post('/resend-otp', [\App\Http\Controllers\VerificationController::class, 'resendOtpReact'])->name('v2.authflow.resend-otp');
+            Route::get('/get-otp', [\App\Http\Controllers\VerificationController::class, 'index'])->name('v2.authflow.get-otp');
+            Route::post('/get-otp', [\App\Http\Controllers\VerificationController::class, 'getOtp'])->name('v2.authflow.get-otp.store');
+            Route::get('/verify', [\App\Http\Controllers\VerificationController::class, 'verifyView'])->name('v2.authflow.verify');
+            Route::post('/verify', [\App\Http\Controllers\VerificationController::class, 'verify'])->name('v2.authflow.verify.store');
+            Route::post('/resend-otp', [\App\Http\Controllers\VerificationController::class, 'resendOtp'])->name('v2.authflow.resend-otp');
         }); 
         
         // React Login Routes (at root level for SSO compatibility, v2. route name for consistency)
-        Route::get('/login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'createReact'])->name('v2.login');
-        Route::post('/login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'storeReact'])->name('v2.login.store');
-       
+        Route::get('/login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'create'])->name('v2.login');
+        Route::post('/login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'store'])->name('v2.login.store');
+
         // React Password Reset Request Routles
-        Route::get('/forgot-password', [\App\Http\Controllers\Auth\PasswordResetLinkController::class, 'createReact'])->name('v2.password.request');
-        Route::post('/forgot-password', [\App\Http\Controllers\Auth\PasswordResetLinkController::class, 'storeReact'])->name('v2.password.email');
-        Route::get('/reset-password', [\App\Http\Controllers\Auth\NewPasswordController::class, 'createReact'])->name('v2.password.reset');
-    
+        Route::get('/forgot-password', [\App\Http\Controllers\Auth\PasswordResetLinkController::class, 'create'])->name('v2.password.request');
+        Route::post('/forgot-password', [\App\Http\Controllers\Auth\PasswordResetLinkController::class, 'store'])->name('v2.password.email');
+        Route::get('/reset-password', [\App\Http\Controllers\Auth\NewPasswordController::class, 'create'])->name('v2.password.reset');
+
         // React Password Reset Store Route (separate throttle group like in auth.php)
-        Route::post('/reset-password', [\App\Http\Controllers\Auth\NewPasswordController::class, 'storeReact'])->name('v2.password.store');
+        Route::post('/reset-password', [\App\Http\Controllers\Auth\NewPasswordController::class, 'store'])->name('v2.password.store');
     // });
 });
 
@@ -111,12 +111,12 @@ Route::middleware('auth')->post('/logout', [\App\Http\Controllers\Auth\Authentic
 
 // Must-reset-password and must-verify routes (React/Inertia, root-level, require auth — not guest)
 Route::middleware('auth')->group(function () {
-    Route::get('/must-reset-password', [MustResetPasswordController::class, 'createReact'])
+    Route::get('/must-reset-password', [MustResetPasswordController::class, 'create'])
         ->name('password.must-reset');
-    Route::post('/must-reset-password', [MustResetPasswordController::class, 'storeReact'])
+    Route::post('/must-reset-password', [MustResetPasswordController::class, 'store'])
         ->name('password.must-reset.store');
 
-    Route::get('/authflow/must-verify', [\App\Http\Controllers\VerificationController::class, 'mustVerifyReact'])->name('v2.must-verify-otp');
+    Route::get('/authflow/must-verify', [\App\Http\Controllers\VerificationController::class, 'mustVerify'])->name('v2.must-verify-otp');
 });
 
 Route::get('/authflow/must-verify/capture', [\App\Http\Controllers\VerificationController::class, 'mustVerifyCapture'])->name('v2.must-verify-otp.capture');
@@ -144,22 +144,22 @@ Route::middleware(['auth', 'must-reset-password', 'verified-auth'])->group(funct
 
     // React Account Routes (previously v2 routes, now at root for SSO compatibility)
     // Note: Route names still use v2. prefix for consistency
-    Route::get('/account', [ProfileController::class, 'indexReact'])->name('v2.account');
-    Route::get('/profile-setting', [ProfileController::class, 'editReact'])->name('v2.profile.setting');
-    Route::patch('/profile', [ProfileController::class, 'updateReact'])->name('v2.profile.update');
+    Route::get('/account', [ProfileController::class, 'index'])->name('v2.account');
+    Route::get('/profile-setting', [ProfileController::class, 'edit'])->name('v2.profile.setting');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('v2.profile.update');
     // These three don't render a view, so the v1 controller methods are reused as-is (no *React variant needed)
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('v2.profile.destroy');
     Route::post('/profile/revoke-token', [ProfileController::class, 'revokeToken'])->name('v2.profile.revoke-token');
     Route::post('/profile/logout-session', [ProfileController::class, 'logoutSession'])->name('v2.profile.logout-session');
 
     // React OAuth Clients Routes (previously v2 routes, now at root for SSO compatibility)
-    Route::get('/clients', [OAuthClientController::class, 'indexReact'])->name('v2.clients.index');
-    Route::get('/clients/create', [OAuthClientController::class, 'createReact'])->name('v2.clients.create');
-    Route::post('/clients', [OAuthClientController::class, 'storeReact'])->name('v2.clients.store');
-    Route::get('/clients/{client}/edit', [OAuthClientController::class, 'editReact'])->name('v2.clients.edit');
-    Route::post('/clients/{client}', [OAuthClientController::class, 'updateReact'])->name('v2.clients.update');
-    Route::delete('/clients/{client}', [OAuthClientController::class, 'destroyReact'])->name('v2.clients.destroy');
-    Route::post('/clients/{client}/regenerate-secret', [OAuthClientController::class, 'regenerateSecretReact'])->name('v2.clients.regenerate-secret');
+    Route::get('/clients', [OAuthClientController::class, 'index'])->name('v2.clients.index');
+    Route::get('/clients/create', [OAuthClientController::class, 'create'])->name('v2.clients.create');
+    Route::post('/clients', [OAuthClientController::class, 'store'])->name('v2.clients.store');
+    Route::get('/clients/{client}/edit', [OAuthClientController::class, 'edit'])->name('v2.clients.edit');
+    Route::post('/clients/{client}', [OAuthClientController::class, 'update'])->name('v2.clients.update');
+    Route::delete('/clients/{client}', [OAuthClientController::class, 'destroy'])->name('v2.clients.destroy');
+    Route::post('/clients/{client}/regenerate-secret', [OAuthClientController::class, 'regenerateSecret'])->name('v2.clients.regenerate-secret');
 });
 
 // Route::prefix('authflow')->group(function () {

@@ -11,9 +11,9 @@ use Inertia\Inertia;
 class PasswordResetLinkController extends Controller
 {
     /**
-     * Display the password reset link request view for React/Inertia
+     * Display the password reset link request view.
      */
-    public function createReact()
+    public function create()
     {
         $intended = session()->get('url.intended');
         $clientId = null;
@@ -40,9 +40,9 @@ class PasswordResetLinkController extends Controller
     }
 
     /**
-     * Handle an incoming password reset link request for React/Inertia
+     * Handle an incoming password reset link request.
      */
-    public function storeReact(Request $request)
+    public function store(Request $request)
     {
         $authwith = $request->authwith;
         $country = null;

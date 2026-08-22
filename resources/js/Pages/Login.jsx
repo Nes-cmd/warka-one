@@ -474,7 +474,7 @@ export default function Login({
                         disabled={processing || isSubmitting}
                         className={`w-full py-3 flex items-center justify-center text-lg font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 ${
                             processing || isSubmitting
-                                ? 'bg-primary-400 cursor-not-allowed' 
+                                ? 'bg-primary-500 cursor-not-allowed'
                                 : 'bg-primary-600 hover:bg-primary-700'
                         } text-white`}
                     >

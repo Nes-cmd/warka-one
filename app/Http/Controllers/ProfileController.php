@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enum\GenderEnum;
-use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Country;
 use App\Models\User;
 use App\Models\UserDetail;
@@ -20,100 +19,7 @@ class ProfileController extends Controller
     /**
      * Display the user's profile form.
      */
-    public function index(Request $request): View
-    {
-        // Get current user with details
-        $user = User::with('userDetail', 'country')->where('id', auth()->id())->first();
-
-        // Create at least one session entry for the current session
-        $currentSession = [
-            'id' => $request->session()->getId(),
-            'ip_address' => $request->ip(),
-            'user_agent' => $request->userAgent(),
-            'last_active' => now()->toDateTimeString(),
-        ];
-
-        // Parse user agent (temporary solution without Agent package)
-        $userAgent = $currentSession['user_agent'];
-
-        // Simple user agent parsing
-        $browser = 'Unknown Browser';
-        $platform = 'Unknown Platform';
-
-        if (strpos($userAgent, 'Chrome') !== false) {
-            $browser = 'Chrome';
-        } elseif (strpos($userAgent, 'Firefox') !== false) {
-            $browser = 'Firefox';
-        } elseif (strpos($userAgent, 'Safari') !== false) {
-            $browser = 'Safari';
-        } elseif (strpos($userAgent, 'Edge') !== false) {
-            $browser = 'Edge';
-        } elseif (strpos($userAgent, 'MSIE') !== false || strpos($userAgent, 'Trident') !== false) {
-            $browser = 'Internet Explorer';
-        }
-
-        if (strpos($userAgent, 'Windows') !== false) {
-            $platform = 'Windows';
-        } elseif (strpos($userAgent, 'Mac') !== false) {
-            $platform = 'Mac';
-        } elseif (strpos($userAgent, 'Linux') !== false) {
-            $platform = 'Linux';
-        } elseif (strpos($userAgent, 'iPhone') !== false) {
-            $platform = 'iPhone';
-        } elseif (strpos($userAgent, 'iPad') !== false) {
-            $platform = 'iPad';
-        } elseif (strpos($userAgent, 'Android') !== false) {
-            $platform = 'Android';
-        }
-
-        $sessions = collect([$currentSession])->map(function ($session) use ($request, $browser, $platform) {
-            return [
-                'id' => $session['id'],
-                'ip_address' => $session['ip_address'],
-                'is_current_device' => $session['id'] === $request->session()->getId(),
-                'browser' => $browser,
-                'platform' => $platform,
-                'last_active' => $session['last_active'],
-                'location' => 'Unknown', // You could integrate with a geolocation API here
-                'user_agent' => $session['user_agent'],
-            ];
-        });
-
-        // Store in session for view
-        $request->session()->put('sessions', $sessions);
-
-        // Get unique authorized applications
-        $uniqueTokens = $request->user()->tokens()
-            ->with('client')
-            ->get()
-            ->groupBy('client_id')
-            ->map(function ($clientTokens) {
-                // Return the most recently used token for each client
-                return $clientTokens->sortByDesc('last_used_at')->first();
-            })
-            ->values();
-
-        // Paginate the collection manually
-        $perPage = 5; // Number of apps per page
-        $currentPage = $request->input('page', 1);
-        $pagedTokens = new \Illuminate\Pagination\LengthAwarePaginator(
-            $uniqueTokens->forPage($currentPage, $perPage),
-            $uniqueTokens->count(),
-            $perPage,
-            $currentPage,
-            ['path' => $request->url(), 'query' => $request->query()]
-        );
-
-        return view('profile.index', [
-            'user' => $user,
-            'authorizedApps' => $pagedTokens,
-        ]);
-    }
-
-    /**
-     * Display the user's profile form for React/Inertia.
-     */
-    public function indexReact(Request $request)
+    public function index(Request $request)
     {
         // Get current user with details
         $user = User::with([
@@ -237,9 +143,9 @@ class ProfileController extends Controller
     }
 
     /**
-     * Display the user's profile edit form for React/Inertia.
+     * Display the user's profile edit form.
      */
-    public function editReact(Request $request)
+    public function edit(Request $request)
     {
         $user = User::with('userDetail')->where('id', auth()->id())->first();
         $genders = GenderEnum::cases();
@@ -274,9 +180,9 @@ class ProfileController extends Controller
     }
 
     /**
-     * Update the user's profile information for React/Inertia.
+     * Update the user's profile information.
      */
-    public function updateReact(Request $request)
+    public function update(Request $request)
     {
         $user = $request->user();
         $userDetail = UserDetail::where('user_id', $user->id)->first();
@@ -361,62 +267,6 @@ class ProfileController extends Controller
             Log::error('Stack trace: ' . $e->getTraceAsString());
             return back()->with('flash_error', 'Unable to update profile. Please try again.');
         }
-    }
-
-    public function edit(): View
-    {
-        $user = User::with('userDetail')->where('id', auth()->id())->first();
-        $genders = GenderEnum::cases();
-
-        $countries = Country::all();
-
-
-        return view('profile.update-profile', [
-            'user' => $user,
-            'genders' => $genders,
-            'countries' => $countries,
-        ]);
-    }
-
-    /**
-     * Update the user's profile information.
-     */
-
-    public function update(ProfileUpdateRequest $request): RedirectResponse
-    {
-        $user = $request->user();
-        $userDetail = UserDetail::where('user_id', $user->id)->first();
-
-        $user->fill([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone ? trimPhone($request->phone) : null,
-            'country_id' => $request->country_id,
-        ]);
-
-        if ($user->isDirty('email')) {
-            $user->email_verified_at = null;
-        }
-
-        if ($user->isDirty('phone')) {
-            $user->phone_verified_at = null;
-        }
-
-        if (!$userDetail) {
-            $userDetail = new UserDetail(['user_id' => $user->id]);
-        }
-
-        try {
-            $user->save();
-
-            $userDetail->gender = $request->gender;
-            $userDetail->birth_date = $request->birth_date;
-            $userDetail->save();
-        } catch (\Exception $e) {
-            return back()->with('flash_error', 'Unable to update profile. Please try again.');
-        }
-
-        return back()->with('status', 'Profile updated successfully.');
     }
 
     /**

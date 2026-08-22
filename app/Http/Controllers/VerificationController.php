@@ -10,35 +10,8 @@ use Inertia\Inertia;
 
 class VerificationController extends Controller
 {
-    public function mustVerify(Request $request){
-        
-        $user = auth()->user();
-
-        $intendedFallback = $request->fallback;
-        if($user->phone && $user->phone_verified_at && $request->verify == 'phone'){
-            return $intendedFallback? redirect($intendedFallback. '?hash='.$user->id):back();
-        }
-
-        if($user->email && $user->email_verified_at && $request->verify == 'email'){
-            return $intendedFallback? redirect($intendedFallback. '?hash='.$user->id):back();
-        }
-        
-        $verifyData = [
-            'authwith' => $request->verify,
-            'email'    => $user->email,
-            'otpIsFor' => 'must-verify',
-            'phone'    => $user->phone,
-            'country'  => Country::find($user->country_id),
-            'fallback' => $intendedFallback
-        ];
-
-        session()->put('authflow', $verifyData);
-
-        return view('auth.verify-otp');
-    }
-
     /**
-     * Display the must-verify OTP view for React/Inertia
+     * Display the must-verify OTP view.
      */
     public function mustVerifyCapture(Request $request)
     {
@@ -60,7 +33,7 @@ class VerificationController extends Controller
         return redirect()->route('v2.must-verify-otp', ['verify' => $request->verify]);
     }
 
-    public function mustVerifyReact(Request $request)
+    public function mustVerify(Request $request)
     {
         $user = auth()->user();
 
@@ -276,9 +249,9 @@ class VerificationController extends Controller
     }
 
     /**
-     * Display the get OTP view for React/Inertia
+     * Display the get OTP view.
      */
-    public function indexReact(Request $request)
+    public function index(Request $request)
     {
         $request->validate([
             'for' => 'required|in:register,reset-password'
@@ -330,9 +303,9 @@ class VerificationController extends Controller
     }
 
     /**
-     * Handle OTP request for React/Inertia
+     * Handle OTP request.
      */
-    public function getOtpReact(Request $request)
+    public function getOtp(Request $request)
     {
         // Get 'for' from query string or request body
         $otpIsFor = $request->input('for') ?? $request->query('for');
@@ -385,9 +358,9 @@ class VerificationController extends Controller
     }
 
     /**
-     * Display the verify OTP view for React/Inertia
+     * Display the verify OTP view.
      */
-    public function verifyViewReact()
+    public function verifyView()
     {
         $authflowData = session('authflow');
        
@@ -408,9 +381,9 @@ class VerificationController extends Controller
     }
 
     /**
-     * Handle OTP verification for React/Inertia
+     * Handle OTP verification.
      */
-    public function verifyReact(Request $request)
+    public function verify(Request $request)
     {
         $authflowData = session('authflow');
        
@@ -503,9 +476,9 @@ class VerificationController extends Controller
     }
 
     /**
-     * Handle OTP resend for React/Inertia
+     * Handle OTP resend.
      */
-    public function resendOtpReact(Request $request)
+    public function resendOtp(Request $request)
     {
         $authflowData = session('authflow');
        

@@ -14,9 +14,9 @@ use Illuminate\Validation\Rules\Password as RulesPassword;
 class NewPasswordController extends Controller
 {
     /**
-     * Display the password reset view for React/Inertia
+     * Display the password reset view.
      */
-    public function createReact(Request $request)
+    public function create(Request $request)
     {
         $authflowData = session('authflow');
         
@@ -30,9 +30,9 @@ class NewPasswordController extends Controller
     }
 
     /**
-     * Handle an incoming new password request for React/Inertia
+     * Handle an incoming new password request.
      */
-    public function storeReact(Request $request)
+    public function store(Request $request)
     {
         $request->validate([
             'password' => ['required', 'confirmed', 

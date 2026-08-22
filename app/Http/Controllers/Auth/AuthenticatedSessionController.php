@@ -102,34 +102,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        // Check if the request came from a React route
-        // React logout route is at root level (/logout), Blade logout is at /v1/logout
-        $currentPath = $request->path();
-        $referer = $request->headers->get('referer');
-        
-        // If logout was called from root level (/logout), it's a React route
-        $isReactRoute = $currentPath === 'logout';
-        
-        // Also check referer as fallback
-        if (!$isReactRoute && $referer) {
-            $refererPath = parse_url($referer, PHP_URL_PATH);
-            // React routes are at root level and don't start with /v1 or /admin
-            if ($refererPath && 
-                !str_starts_with($refererPath, '/v1') && 
-                !str_starts_with($refererPath, '/admin') &&
-                (str_contains($refererPath, '/account') ||
-                 str_contains($refererPath, '/clients') ||
-                 str_contains($refererPath, '/profile-setting'))) {
-                $isReactRoute = true;
-            }
-        }
-        
-        if ($isReactRoute || $request->expectsJson()) {
-            return redirect()->route('v2.login');
-        }
-        
-        // Default: redirect to home for Blade routes
-        return redirect('/');
+        return redirect()->route('v2.login');
     }
 
     public function logoutFromOtherSessions($user)
@@ -149,9 +122,9 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Display the login view for React/Inertia
+     * Display the login view.
      */
-    public function createReact(Request $request)
+    public function create(Request $request)
     {
         $intended = session()->get('url.intended');
         $clientId = null;
@@ -190,9 +163,9 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Handle an incoming authentication request for React/Inertia
+     * Handle an incoming authentication request.
      */
-    public function storeReact(Request $request)
+    public function store(Request $request)
     {
         $authwith = $request->authwith;
         $authMethod = $request->auth_method ?? 'password';
@@ -281,12 +254,8 @@ class AuthenticatedSessionController extends Controller
                 return redirect()->route('v2.must-verify-otp', ['verify' => $authwith, 'fallback' => $intendedFallback]);
             }
             
-            // Check if coming from React login (routes are now at root level, not /v2)
-            // React routes: /login, /register, /account, /clients, etc.
-            // v1 Blade routes: /v1/login, /v1/account, etc.
-            
             $referer = $request->headers->get('referer');
-            
+
             // If there's an intended URL (e.g., OAuth authorization), redirect there
             // This is important for OAuth flows - after login, redirect back to authorization
             if ($intended) {
@@ -295,30 +264,29 @@ class AuthenticatedSessionController extends Controller
                     session()->forget('url.intended');
                     return Inertia::location($intended);
                 }
-                
-                // Check if intended URL is a React route (not /v1 or /admin)
-                if (!str_starts_with($intended, '/v1') && !str_starts_with($intended, '/admin')) {
+
+                // Not an admin-only URL: safe to hand back to the SPA
+                if (!str_starts_with($intended, '/admin')) {
                     session()->forget('url.intended');
                     return Inertia::location($intended);
                 }
             }
-            
-            // Check if login came from React route (root level, not /v1)
-            $isReactRoute = false;
+
+            // If the request came from the login/register page itself, a plain redirect
+            // (which Inertia follows as an XHR) is enough to land on the account page.
+            $isFromLoginOrRegister = false;
             if ($referer) {
                 $refererPath = parse_url($referer, PHP_URL_PATH);
-                // React routes are at root level and don't start with /v1
-                $isReactRoute = $refererPath && 
-                    !str_starts_with($refererPath, '/v1') && 
+                $isFromLoginOrRegister = $refererPath &&
                     !str_starts_with($refererPath, '/admin') &&
                     (str_contains($refererPath, '/login') || str_contains($refererPath, '/register'));
             }
-            
-            if ($isReactRoute) {
+
+            if ($isFromLoginOrRegister) {
                 return redirect(route('v2.account'));
             }
-            
-            // Default: redirect to v1 account (Blade) or intended URL
+
+            // Otherwise (e.g. an unrecognized referer) force a full browser navigation
             return Inertia::location(route('v2.account'));
         }
 

@@ -19,31 +19,30 @@ use Inertia\Inertia;
 class RegisteredUserController extends Controller
 {
     /**
-     * Display the registration view for React/Inertia
+     * Display the registration view.
      */
-    public function createReact()
+    public function create()
     {
         $authflowData = session('authflow');
-        
+
         if ($authflowData == null) {
             return redirect()->route('v2.authflow.get-otp', ['for' => 'register']);
         }
-        
+
         if (($authflowData['authwith'] ?? null) == null) {
             return redirect()->route('v2.authflow.get-otp', ['for' => 'register']);
         }
 
-        // Match Blade version - just check if authflowData exists
-        // Verification status is checked in storeReact() method
+        // Verification status is checked in store()
         return Inertia::render('Register', [
             'authflowData' => $authflowData,
         ]);
     }
 
     /**
-     * Handle an incoming registration request for React/Inertia
+     * Handle an incoming registration request.
      */
-    public function storeReact(Request $request)
+    public function store(Request $request)
     {
         $authflowData = session('authflow');
        
