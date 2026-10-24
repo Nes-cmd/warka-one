@@ -56,7 +56,7 @@ class PhoneVerification extends Component
             ]);
 
             // Send the verification code via SMS
-            \App\Helpers\SmsSend::send($this->user->phone, "Your verification code is: $verificationCode");
+            \App\Helpers\SmsSend::send($this->user->phone, "Here is your OTP: $verificationCode");
 
             $this->verificationSent = true;
             $this->verificationMessage = 'We sent a verification code to your phone.';

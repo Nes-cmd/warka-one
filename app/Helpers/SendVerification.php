@@ -51,7 +51,7 @@ class SendVerification {
             $status = Mail::to($this->receiver)->send(new VerificationCode($verificationCode));
         }
         elseif($this->via == 'sms'){
-            $status = SmsSend::send($this->receiver, "Your verification code is $verificationCode");
+            $status = SmsSend::send($this->receiver, "Here is your OTP $verificationCode");
            
            
             }
