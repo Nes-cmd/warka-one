@@ -5,11 +5,15 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ClientResource\Pages;
 use App\Filament\Resources\ClientResource\RelationManagers;
 use App\Models\Passport\Client as PassportClient;
+use Filament\Actions\Action;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Forms;
-use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -23,18 +27,18 @@ class ClientResource extends Resource
 {
     protected static ?string $model = PassportClient::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-group';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-group';
 
     public static function canEdit(Model $record): bool
     {
         return true;
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
-                Forms\Components\Section::make()->schema([
+                Section::make()->schema([
                     Forms\Components\TextInput::make('name')->required(),
                     Forms\Components\TextInput::make('redirect')->required()->url(),
                     Forms\Components\Select::make('use_auth_types')->multiple()->options(['phone' => 'Phone', 'email' => 'Email'])->required()->label('Auth with'),
@@ -60,8 +64,8 @@ class ClientResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\Action::make('regenerate_secret')
+                EditAction::make(),
+                Action::make('regenerate_secret')
                     ->label('Regenerate Secret')
                     ->icon('heroicon-o-arrow-path-rounded-square')
                     ->color('warning')
@@ -98,8 +102,8 @@ class ClientResource extends Resource
                     }),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

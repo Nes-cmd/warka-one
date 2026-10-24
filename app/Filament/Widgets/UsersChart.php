@@ -9,7 +9,7 @@ use Flowframe\Trend\Trend;
 class UsersChart extends ChartWidget
 {
 
-    protected static ?string $heading = 'Users';
+    protected ?string $heading = 'Users';
 
     protected int | string | array $columnSpan = 2;
 

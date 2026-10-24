@@ -9,25 +9,30 @@ use App\Jobs\SendBatchSmsJob;
 use App\Models\Country;
 use App\Models\SmsMessage;
 use App\Models\User;
+use Filament\Actions\Action;
+use Filament\Actions\BulkAction;
+use Filament\Actions\EditAction;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Actions\DeleteBulkAction;
 use Illuminate\Support\Collection;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-users';
 
-    public static function form(Form $form): Form 
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
-                Forms\Components\Section::make()->schema([
+                Section::make()->schema([
                     Forms\Components\TextInput::make('name')
                         ->required()
                         ->maxLength(255),
@@ -51,7 +56,7 @@ class UserResource extends Resource
                     
                     Forms\Components\TextInput::make('password')
                         ->password()
-                        ->required($form->getOperation() === "create")
+                        ->required($schema->getOperation() === 'create')
                         ->maxLength(255),
 
                     Forms\Components\Toggle::make('must_reset_password')
@@ -66,7 +71,7 @@ class UserResource extends Resource
     {
         return $table
             ->headerActions([
-                Tables\Actions\Action::make('send_sms_all')
+                Action::make('send_sms_all')
                     ->label('Send SMS to All Users')
                     ->icon('heroicon-o-megaphone')
                     ->color('warning')
@@ -182,8 +187,8 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\Action::make('send_sms')
+                EditAction::make(),
+                Action::make('send_sms')
                     ->label('Send SMS')
                     ->icon('heroicon-o-chat-bubble-left-right')
                     ->color('info')
@@ -233,9 +238,9 @@ class UserResource extends Resource
                     ->visible(fn (User $record): bool => !is_null($record->phone)),
             ])
             ->bulkActions([
-                    Tables\Actions\ExportBulkAction::make()->exporter(UserExporter::class),
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\BulkAction::make('send_bulk_sms')
+                    // ExportBulkAction::make()->exporter(UserExporter::class),
+                    DeleteBulkAction::make(),
+                    BulkAction::make('send_bulk_sms')
                         ->label('Send Bulk SMS')
                         ->icon('heroicon-o-chat-bubble-left-right')
                         ->color('info')

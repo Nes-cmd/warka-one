@@ -8,11 +8,16 @@ use App\Helpers\SmsSend;
 use App\Jobs\SendBatchSmsJob;
 use App\Models\SmsMessage;
 use App\Models\User;
+use Filament\Actions\Action;
+use Filament\Actions\BulkAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Support\Enums\MaxWidth;
+use Filament\Support\Enums\Width;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -24,7 +29,7 @@ class SmsMessageResource extends Resource
 {
     protected static ?string $model = SmsMessage::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-right';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-chat-bubble-left-right';
     
     protected static ?string $navigationLabel = 'SMS Messages';
     
@@ -32,9 +37,9 @@ class SmsMessageResource extends Resource
     
     protected static ?string $pluralModelLabel = 'SMS Messages';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 //
             ]);
@@ -45,7 +50,7 @@ class SmsMessageResource extends Resource
         return $table
             ->modifyQueryUsing(fn (Builder $query) => $query->with('smsable'))
             ->headerActions([
-                Tables\Actions\Action::make('send_sms_all')
+                Action::make('send_sms_all')
                     ->label('Send SMS to All Users')
                     ->icon('heroicon-o-megaphone')
                     ->color('warning')
@@ -323,10 +328,10 @@ class SmsMessageResource extends Resource
                             );
                     }),
             ])
-            ->filtersFormWidth(MaxWidth::Medium)
+            ->filtersFormWidth(Width::Medium)
             ->filtersFormColumns(2)
             ->actions([
-                Tables\Actions\Action::make('retry')
+                Action::make('retry')
                     ->label('Retry')
                     ->icon('heroicon-o-arrow-path')
                     ->color('warning')
@@ -379,11 +384,11 @@ class SmsMessageResource extends Resource
                         }
                     }),
                     
-                Tables\Actions\ViewAction::make(),
+                ViewAction::make(),
                 
             ])
             ->bulkActions([
-                Tables\Actions\BulkAction::make('send_bulk_sms')
+                BulkAction::make('send_bulk_sms')
                     ->label('Send Bulk SMS')
                     ->icon('heroicon-o-chat-bubble-left-right')
                     ->color('info')
@@ -531,7 +536,7 @@ class SmsMessageResource extends Resource
                     })
                     ->deselectRecordsAfterCompletion(),
                 
-                Tables\Actions\BulkAction::make('retry_selected')
+                BulkAction::make('retry_selected')
                         ->label('Retry Selected')
                         ->icon('heroicon-o-arrow-path')
                         ->color('warning')
@@ -646,7 +651,7 @@ class SmsMessageResource extends Resource
                                     ->send();
                             }
                         }),
-                    Tables\Actions\DeleteBulkAction::make(),
+                    DeleteBulkAction::make(),
             ])
             ->defaultSort('created_at', 'desc');
     }

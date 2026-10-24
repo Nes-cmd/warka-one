@@ -6,8 +6,8 @@ use App\Filament\Resources\SmsMessageResource;
 use App\Models\SmsMessage;
 use Filament\Actions;
 use Filament\Infolists;
-use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Log;
 
 class ViewSmsMessage extends ViewRecord
@@ -22,9 +22,9 @@ class ViewSmsMessage extends ViewRecord
         $this->record->load('smsable');
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
-        return $infolist
+        return $schema
             ->schema([
                 Infolists\Components\Section::make('SMS Details')
                     ->schema([

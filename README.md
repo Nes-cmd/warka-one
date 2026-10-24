@@ -17,6 +17,7 @@ A modern authentication service that provides seamless Single Sign-On (SSO) capa
     - [Step 3: Handle the Callback](#step-3-handle-the-callback)
     - [Step 4: Using the User Data](#step-4-using-the-user-data)
   - [Authentication Flow](#authentication-flow)
+  - [Laravel 12 Development and Troubleshooting](#laravel-12-development-and-troubleshooting)
   - [Troubleshooting](#troubleshooting)
 
 ## Key Features
@@ -147,6 +148,32 @@ After successful authentication, you can use the returned data to:
 4. Kerone redirects to callback route with an authorization code
 5. Callback route handles the response
 6. User is redirected to intended application
+
+## Laravel 12 Development and Troubleshooting
+
+This project uses Laravel 12 and requires PHP 8.2 or newer. Check the PHP version used by the command line (`php -v`) as well as the version configured for your web server.
+
+Install the locked dependencies with:
+
+```bash
+composer install
+```
+
+If Composer reports incompatible package constraints while updating dependencies, verify the PHP version and update the dependency set together:
+
+```bash
+composer update --with-all-dependencies
+```
+
+The test suite uses the database connection configured for the test environment and expects a database named `testing` by default. Configure a disposable test database before running `php artisan test`. To run locally with an in-memory SQLite database instead:
+
+```bash
+# PowerShell
+$env:DB_CONNECTION = 'sqlite'; $env:DB_DATABASE = ':memory:'; php artisan test
+
+# Bash
+DB_CONNECTION=sqlite DB_DATABASE=:memory: php artisan test
+```
 
 ## Troubleshooting
 
