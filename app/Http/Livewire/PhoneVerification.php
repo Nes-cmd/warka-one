@@ -100,7 +100,7 @@ class PhoneVerification extends Component
             ]);
             
             // Send the verification code via SMS
-            \App\Helpers\SmsSend::send($user->phone, "Here is your OTP: $verificationCode");
+            \App\Helpers\SmsSend::send($user->phone, "Your Semayline OTP code is $verificationCode For security reasons, this code must not be shared with anyone.");
             
             $this->verificationSent = true;
             $this->verificationMessage = 'We sent a verification code to your phone.';

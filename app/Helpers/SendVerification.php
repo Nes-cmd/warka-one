@@ -51,7 +51,7 @@ class SendVerification {
             $status = Mail::to($this->receiver)->send(new VerificationCode($verificationCode));
         }
         elseif($this->via == 'sms'){
-            $status = SmsSend::send($this->receiver, "Here is your OTP $verificationCode");
+            $status = SmsSend::send($this->receiver, "Your Semayline OTP code is $verificationCode For security reasons, this code must not be shared with anyone.");
            
            
             }
